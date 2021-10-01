@@ -4,3 +4,6 @@
 \name{mosdef-pkg}
 \alias{mosdef-pkg}
 \title{mosdef: mostly useful differential expression functions}
+\description{
+mostly useful differential expression functions
+}
