@@ -17,3 +17,29 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(mosdef)
 ```
+
+
+```{r tryout, asis=TRUE}
+htmltools::HTML(mosdef:::.link2ncbi("ACTB"))
+```
+
+# Functions that beautify an interactive table
+
+Yadda yadda
+
+```{r}
+
+
+
+```
+
+
+
+# Functions that create gene-centric content
+
+buttons, links, yadda
+
+```{r}
+
+```
+
