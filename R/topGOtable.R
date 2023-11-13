@@ -1,7 +1,81 @@
 
-
-
-
+#' Extract functional terms enriched in the DE genes, based on topGO
+#'
+#' A wrapper for extracting functional GO terms enriched in the DE genes, based on
+#' the algorithm and the implementation in the topGO package
+#' 
+#' Allowed values assumed by the \code{topGO_method2} parameter are one of the
+#' following: \code{elim}, \code{weight}, \code{weight01}, \code{lea}, 
+#' \code{parentchild}. For more details on this, please refer to the original 
+#' documentation of the \code{topGO} package itself
+#'
+#' @param DEgenes A vector of (differentially expressed) genes
+#' @param BGgenes A vector of background genes, e.g. all (expressed) genes in the assays
+#' @param dds A DESeqDataset object created using \code{DESeq2} 
+#' @param res_de A DESeqResults object created using \code{DESeq2} 
+#' @param ontology Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)
+#' @param annot Which function to use for annotating genes to GO terms. Defaults to \code{annFUN.org}
+#' @param annot_to_map_to A temporary parameter allowing the use of AnnotationDBs mapIds function
+#' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
+#' @param geneID Which format the genes are provided. Defaults to \code{symbol}, could also be
+#' \code{entrez} or \code{ENSEMBL}
+#' @param topTablerows How many rows to report before any filtering
+#' @param fullNamesInRows Logical, whether to display or not the full names for the GO terms
+#' @param addGeneToTerms Logical, whether to add a column with all genes annotated to each GO term
+#' @param plotGraph Logical, if TRUE additionally plots a graph on the identified GO terms
+#' @param plotNodes Number of nodes to plot
+#' @param writeOutput Logical, if TRUE additionally writes out the result to a file
+#' @param outputFile Name of the file the result should be written into
+#' @param topGO_method2 Character, specifying which of the methods implemented by \code{topGO} should be used, in addition to the \code{classic} algorithm. Defaults to \code{elim}
+#' @param do_padj Logical, whether to perform the adjustment on the p-values from the specific
+#' topGO method, based on the FDR correction. Defaults to FALSE, since the assumption of 
+#' independent hypotheses is somewhat violated by the intrinsic DAG-structure of the Gene
+#' Ontology Terms
+#'
+#' @import topGO
+#'
+#' @return A table containing the computed GO Terms and related enrichment scores
+#'
+#' @examples
+#' library(airway)
+#' library(DESeq2)
+#' data(airway)
+#' airway
+#' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+#' # Example, performing extraction of enriched functional categories in
+#' # detected significantly expressed genes
+#' \dontrun{
+#' dds_airway <- DESeq(dds_airway)
+#' res_airway <- results(dds_airway)
+#' library("AnnotationDbi")
+#' library("org.Hs.eg.db")
+#' res_airway$symbol <- mapIds(org.Hs.eg.db,
+#'                             keys = row.names(res_airway),
+#'                             column = "SYMBOL",
+#'                             keytype = "ENSEMBL",
+#'                             multiVals = "first")
+#' res_airway$entrez <- mapIds(org.Hs.eg.db,
+#'                             keys = row.names(res_airway),
+#'                             column = "ENTREZID",
+#'                             keytype = "ENSEMBL",
+#'                             multiVals = "first")
+#' resOrdered <- as.data.frame(res_airway[order(res_airway$padj),])
+#' de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
+#' de_symbols <- de_df$symbol
+#' bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
+#' bg_symbols <- mapIds(org.Hs.eg.db,
+#'                      keys = bg_ids,
+#'                      column = "SYMBOL",
+#'                      keytype = "ENSEMBL",
+#'                      multiVals = "first")
+#' library(topGO)
+#' topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
+#'                              ontology = "BP",
+#'                              mapping = "org.Hs.eg.db",
+#'                              geneID = "symbol")
+#' }
+#'
+#' @export
 topGOtable <- function(DEgenes = NULL,                  # Differentially expressed genes
                        BGgenes = NULL,                 # background genes
                        dds = NULL,
