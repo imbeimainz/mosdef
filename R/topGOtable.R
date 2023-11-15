@@ -125,8 +125,6 @@ topGOtable <- function(DEgenes = NULL,                  # Differentially express
   library("topGO") # see above
   #library(package=mapping) This doesn't work but again: do we just put these packages as dependencies?
   
-
-  
   
    if(!is.null(res_de)&& !is.null(dds)) {
     
