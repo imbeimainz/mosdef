@@ -56,8 +56,8 @@
 #' myde <- res_subset$id
 #' myassayed <- rownames(res_airway)
 #' \dontrun{
-#' mygo <- goseqTable(myde,
-#'   myassayed,
+#' mygo <- goseqTable(de.genes = myde,
+#'   assayed.genes = myassayed,
 #'   testCats = "GO:BP",
 #'   addGeneToTerms = FALSE
 #' )
