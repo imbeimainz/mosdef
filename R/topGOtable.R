@@ -87,7 +87,7 @@ topGOtable <- function(DEgenes = NULL,                  # Differentially express
                                                   # into the annotation needed for mapIds 
                                                   # also the name is shit
                        geneID = "symbol",       # could also beID = "entrez"
-                       topTablerows = 200,
+                       #topTablerows = 200,     was used to limit table size. Now just use nrows
                        fullNamesInRows = TRUE,
                        addGeneToTerms = TRUE,
                        plotGraph = FALSE, 
@@ -126,19 +126,19 @@ topGOtable <- function(DEgenes = NULL,                  # Differentially express
   #library(package=mapping) This doesn't work but again: do we just put these packages as dependencies?
   
   
-   if(!is.null(res_de)&& !is.null(dds)) {
+  if(!is.null(res_de)&& !is.null(dds)) {
     
     
     res_de$symbol <- AnnotationDbi::mapIds(annot_to_map_to,
-                                        keys = row.names(res_de),
-                                        column = "SYMBOL",
-                                        keytype = "ENSEMBL",
-                                        multiVals = "first")
+                                           keys = row.names(res_de),
+                                           column = "SYMBOL",
+                                           keytype = "ENSEMBL",
+                                           multiVals = "first")
     res_de$entrez <- AnnotationDbi::mapIds(annot_to_map_to, 
-                                        keys = row.names(res_de),
-                                        column = "ENTREZID",
-                                        keytype = "ENSEMBL",
-                                        multiVals = "first")
+                                           keys = row.names(res_de),
+                                           column = "ENTREZID",
+                                           keytype = "ENSEMBL",
+                                           multiVals = "first")
     resOrdered <- as.data.frame(res_de[order(res_de$padj),])
     de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
     de_symbols <- de_df$symbol
@@ -152,24 +152,24 @@ topGOtable <- function(DEgenes = NULL,                  # Differentially express
     # creating the vectors
     DEgenes_input <- factor(as.integer(bg_symbols %in% de_symbols))
     names(DEgenes_input) <- bg_symbols
-   } 
+  } 
   
   else if (! is.null(dds)){
-
-
+    
+    
     dds <- DESeq(dds)
     res <- results(dds)
-
+    
     res$symbol <- AnnotationDbi::mapIds(annot_to_map_to,
-                                 keys = row.names(res),
-                                 column = "SYMBOL",
-                                 keytype = "ENSEMBL",
-                                 multiVals = "first")
+                                        keys = row.names(res),
+                                        column = "SYMBOL",
+                                        keytype = "ENSEMBL",
+                                        multiVals = "first")
     res$entrez <- AnnotationDbi::mapIds(annot_to_map_to, 
-                                 keys = row.names(res),
-                                 column = "ENTREZID",
-                                 keytype = "ENSEMBL",
-                                 multiVals = "first")
+                                        keys = row.names(res),
+                                        column = "ENTREZID",
+                                        keytype = "ENSEMBL",
+                                        multiVals = "first")
     resOrdered <- as.data.frame(res[order(res$padj),])
     de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
     de_symbols <- de_df$symbol
@@ -184,14 +184,14 @@ topGOtable <- function(DEgenes = NULL,                  # Differentially express
     DEgenes_input <- factor(as.integer(bg_symbols %in% de_symbols))
     names(DEgenes_input) <- bg_symbols
   }
-
+  
   else if(!is.null(c(DEgenes,BGgenes))){
     # creating the vectors
     DEgenes_input <- factor(as.integer(BGgenes %in% DEgenes))
     names(DEgenes_input) <- BGgenes
   }
-    
- 
+  
+  
   # instantiating the topGOdata object
   GOdata <- new("topGOdata",
                 ontology = ontology,
@@ -220,7 +220,8 @@ topGOtable <- function(DEgenes = NULL,                  # Differentially express
     sTab[[paste0("padj_BY_", topGO_method2)]] <- p.adjust(sTab[[paste0("p.value_", topGO_method2)]], method = "BY")
   
   # subset to specified number of rows
-  topTablerows <- min(nrow(sTab), topTablerows)
+  ### topTablerows <- min(nrow(sTab), topTablerows)
+  topTablerows <- nrow(sTab)
   sTab <- sTab[seq_len(topTablerows), ]
   
   if (fullNamesInRows) {
