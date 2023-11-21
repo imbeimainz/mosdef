@@ -8,11 +8,11 @@
 #' following: \code{elim}, \code{weight}, \code{weight01}, \code{lea}, 
 #' \code{parentchild}. For more details on this, please refer to the original 
 #' documentation of the \code{topGO} package itself
-#'
-#' @param DEgenes A vector of (differentially expressed) genes
-#' @param BGgenes A vector of background genes, e.g. all (expressed) genes in the assays
-#' @param dds A DESeqDataset object created using \code{DESeq2} 
+#' 
 #' @param res_de A DESeqResults object created using \code{DESeq2} 
+#' @param dds A DESeqDataset object created using \code{DESeq2} 
+#' @param de_genes A vector of (differentially expressed) genes
+#' @param bg_genes A vector of background genes, e.g. all (expressed) genes in the assays
 #' @param ontology Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)
 #' @param annot Which function to use for annotating genes to GO terms. Defaults to \code{annFUN.org}
 #' @param annot_to_map_to A temporary parameter allowing the use of AnnotationDBs mapIds function
@@ -76,16 +76,13 @@
 #' }
 #'
 #' @export
-topGOtable <- function(DEgenes = NULL,                  # Differentially expressed genes
-                       BGgenes = NULL,                 # background genes
-                       dds = NULL,
-                       res_de = NULL,
+topGOtable <- function(res_de = NULL,                  # Differentially expressed genes
+                       dds = NULL,                 # background genes
+                       de_genes = NULL,
+                       bg_genes = NULL,
                        ontology = "BP",            # could use also "MF"
                        annot = annFUN.org,       # parameters for creating topGO object
                        mapping = "org.Mm.eg.db",
-                       annot_to_map_to = org.Mm.eg.db, # can't figure out how to turn the string from mapping 
-                                                  # into the annotation needed for mapIds 
-                                                  # also the name is shit
                        geneID = "symbol",       # could also beID = "entrez"
                        #topTablerows = 200,     was used to limit table size. Now just use nrows
                        fullNamesInRows = TRUE,
@@ -97,7 +94,7 @@ topGOtable <- function(DEgenes = NULL,                  # Differentially express
                        topGO_method2 = "elim",
                        do_padj = FALSE) {
   # Check if there is any input at all
-  if(is.null(c(DEgenes,BGgenes,dds, res_de)))
+  if(is.null(c(de_genes,bg_genes,dds, res_de)))
     # and a res_de? In theory we can generate the res_de insinde topGOtable
     stop("Please provide one of the following forms of input: \n",
          "A vector of differentially expressed genes and a vector of backgoud genes \n",
@@ -106,13 +103,47 @@ topGOtable <- function(DEgenes = NULL,                  # Differentially express
   # Check if there only a res_de is given
   if(!is.null(res_de)& is.null(dds))
     
-    stop("Please also provide a DESeq2 (dds) object")
+    stop("Please also provide a DESeq2Dataset (dds) object")
   
-  # Check if there only a bg or de genes is given
-  if((!is.null(BGgenes)& is.null(DEgenes))|| (!is.null(DEgenes)& is.null(BGgenes)))
+  #check if only dds is given
+  if(!is.null(dds)& is.null(res_de))
     
-    stop("Please also provide both a vector of background genes and of differentially expressed genes")
+    stop("Please also provide a DESeq2 result object")
   
+  # Check if there only a bg but no de genes is given
+  if(!is.null(bg_genes)& is.null(de_genes))
+    
+    stop("Please also provide a vector of  differentially expressed genes")
+  
+  # Check if there is only a de but no bg genes given
+  if (!is.null(de_genes)& is.null(bg_genes))
+      
+    stop("Please also provide  a vector of background genes")
+  
+  #Check if the inputs are the propper type
+  
+  if (!is(dds, "DESeqDataSet")) {
+    stop("The provided `dds` is not a DESeqDataSet object, please check your input parameters")
+  }
+  
+  if (!is(res_de, "DESeqResults")) {
+    stop("The provided `res_de` is not a DESeqResults object, please check your input parameters")
+  }
+  
+  # checking that results and dds are related
+  ## at least a subset of dds should be in res
+  if (!all(rownames(res_de) %in% rownames(dds))) {
+    warning(
+      "It is likely that the provided `dds` and `res_de` objects are not related ",
+      "to the same dataset (the row names of the results are not all in the dds). ",
+      "Are you sure you want to proceed?"
+    )
+  }
+  
+  if("results" %in% mcols(mcols(values$dds_obj))$type){
+    stop("I couldn't find results in your dds. You should first run DESeq2::DESeq() on your dds")
+    
+  }
   
   # checking the additional topGO_method2
   topgo_methods <- c("elim", "weight", "weight01", "lea", "parentchild")
@@ -123,8 +154,8 @@ topGOtable <- function(DEgenes = NULL,                  # Differentially express
   #Dependencies
   library("AnnotationDbi")# for the dependencies I don't know how to set them :D
   library("topGO") # see above
-  #library(package=mapping) This doesn't work but again: do we just put these packages as dependencies?
-  
+  library(get(mapping))
+  annot_to_map_to <- get(mapping)
   
   if(!is.null(res_de)&& !is.null(dds)) {
     
@@ -150,52 +181,21 @@ topGOtable <- function(DEgenes = NULL,                  # Differentially express
                          multiVals = "first")
     
     # creating the vectors
-    DEgenes_input <- factor(as.integer(bg_symbols %in% de_symbols))
-    names(DEgenes_input) <- bg_symbols
-  } 
-  
-  else if (! is.null(dds)){
+    de_genes_input <- factor(as.integer(bg_symbols %in% de_symbols))
+    names(de_genes_input) <- bg_symbols
     
-    
-    dds <- DESeq(dds)
-    res <- results(dds)
-    
-    res$symbol <- AnnotationDbi::mapIds(annot_to_map_to,
-                                        keys = row.names(res),
-                                        column = "SYMBOL",
-                                        keytype = "ENSEMBL",
-                                        multiVals = "first")
-    res$entrez <- AnnotationDbi::mapIds(annot_to_map_to, 
-                                        keys = row.names(res),
-                                        column = "ENTREZID",
-                                        keytype = "ENSEMBL",
-                                        multiVals = "first")
-    resOrdered <- as.data.frame(res[order(res$padj),])
-    de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
-    de_symbols <- de_df$symbol
-    bg_ids <- rownames(dds)[rowSums(counts(dds)) > 0]
-    bg_symbols <- mapIds(org.Hs.eg.db,
-                         keys = bg_ids,
-                         column = "SYMBOL",
-                         keytype = "ENSEMBL",
-                         multiVals = "first")
-    
+  }   else if(!is.null(c(de_genes,bg_genes))){
     # creating the vectors
-    DEgenes_input <- factor(as.integer(bg_symbols %in% de_symbols))
-    names(DEgenes_input) <- bg_symbols
-  }
-  
-  else if(!is.null(c(DEgenes,BGgenes))){
-    # creating the vectors
-    DEgenes_input <- factor(as.integer(BGgenes %in% DEgenes))
-    names(DEgenes_input) <- BGgenes
+    de_genes_input <- factor(as.integer(bg_genes %in% de_genes))
+    names(de_genes_input) <- bg_genes
+    
   }
   
   
   # instantiating the topGOdata object
   GOdata <- new("topGOdata",
                 ontology = ontology,
-                allGenes = DEgenes_input,
+                allGenes = de_genes_input,
                 nodeSize = 10,
                 annot = annot,
                 mapping = mapping,

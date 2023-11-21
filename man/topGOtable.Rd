@@ -14,7 +14,6 @@ topGOtable(
   mapping = "org.Mm.eg.db",
   annot_to_map_to = org.Mm.eg.db,
   geneID = "symbol",
-  topTablerows = 200,
   fullNamesInRows = TRUE,
   addGeneToTerms = TRUE,
   plotGraph = FALSE,
@@ -45,8 +44,6 @@ topGOtable(
 \item{geneID}{Which format the genes are provided. Defaults to \code{symbol}, could also be
 \code{entrez} or \code{ENSEMBL}}
 
-\item{topTablerows}{How many rows to report before any filtering}
-
 \item{fullNamesInRows}{Logical, whether to display or not the full names for the GO terms}
 
 \item{addGeneToTerms}{Logical, whether to add a column with all genes annotated to each GO term}
@@ -65,6 +62,8 @@ topGOtable(
 topGO method, based on the FDR correction. Defaults to FALSE, since the assumption of
 independent hypotheses is somewhat violated by the intrinsic DAG-structure of the Gene
 Ontology Terms}
+
+\item{topTablerows}{How many rows to report before any filtering}
 }
 \value{
 A table containing the computed GO Terms and related enrichment scores
