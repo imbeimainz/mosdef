@@ -93,6 +93,7 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
                        outputFile = "",
                        topGO_method2 = "elim",
                        do_padj = FALSE) {
+  
   # Check if there is any input at all
   if(is.null(c(de_genes,bg_genes,dds, res_de)))
     # and a res_de? In theory we can generate the res_de insinde topGOtable
