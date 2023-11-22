@@ -122,31 +122,6 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
     
     stop("Please also provide  a vector of background genes.")
   
-  #Check if the inputs are the correct type
-  
-  if (!is(dds, "DESeqDataSet")) {
-    stop("The provided `dds` is not a DESeqDataSet object, please check your input parameters.")
-  }
-  
-  if (!is(res_de, "DESeqResults")) {
-    stop("The provided `res_de` is not a DESeqResults object, please check your input parameters.")
-  }
-  
-  # checking that results and dds are related
-  ## at least a subset of dds should be in res
-  if (!all(rownames(res_de) %in% rownames(dds))) {
-    warning(
-      "It is likely that the provided `dds` and `res_de` objects are not related ",
-      "to the same dataset (the row names of the results are not all in the dds). ",
-      "Are you sure you want to proceed?"
-    )
-  }
-  
-  # Check if DESeq was run on the dds
-  if("results" %in% mcols(mcols(values$dds_obj))$type){
-    stop("I couldn't find results in your dds. You should first run DESeq2::DESeq() on your dds.")
-    
-  }
   
   # checking the additional topGO_method2
   topgo_methods <- c("elim", "weight", "weight01", "lea", "parentchild")
@@ -157,10 +132,35 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
   #Dependencies
   library("AnnotationDbi")# for the dependencies I don't know how to set them :D
   library("topGO") # see above
-  library(get(mapping))
   annot_to_map_to <- get(mapping)
   
   if(!is.null(res_de)&& !is.null(dds)) {
+    
+    #Check if the inputs are the correct type
+    
+    if (!is(dds, "DESeqDataSet")) {
+      stop("The provided `dds` is not a DESeqDataSet object, please check your input parameters.")
+    }
+    
+    if (!is(res_de, "DESeqResults")) {
+      stop("The provided `res_de` is not a DESeqResults object, please check your input parameters.")
+    }
+    
+    # checking that results and dds are related
+    ## at least a subset of dds should be in res
+    if (!all(rownames(res_de) %in% rownames(dds))) {
+      warning(
+        "It is likely that the provided `dds` and `res_de` objects are not related ",
+        "to the same dataset (the row names of the results are not all in the dds). ",
+        "Are you sure you want to proceed?"
+      )
+    }
+    
+    # Check if DESeq was run on the dds
+    if(!"results" %in% mcols(mcols(dds))$type){
+      stop("I couldn't find results in your dds. You should first run DESeq2::DESeq() on your dds.")
+      
+    }
     
     
     res_de$symbol <- AnnotationDbi::mapIds(annot_to_map_to,
