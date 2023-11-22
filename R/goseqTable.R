@@ -153,7 +153,7 @@ goseqTable <- function(res_de = NULL,
     }
     
     res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj < 0.05, ] 
-                    # in example top 100 but this makes more sense no?
+    # in example top 100 but this makes more sense no?
     de_genes <- res_de_subset$id
     bg_genes <- rownames(res_de)
     
@@ -167,7 +167,7 @@ goseqTable <- function(res_de = NULL,
     gene.vector <- as.integer(bg_genes %in% de_genes)
     names(gene.vector) <- bg_genes
   }
-
+  
   
   fdr <- FDR_GO_cutoff
   
@@ -181,7 +181,7 @@ goseqTable <- function(res_de = NULL,
   
   # removing nTop to allow for more evaluated genes
   # to reduce the load for adding the genes
-   goseq_out <- goseq_out[seq_len(nTop), ]
+  goseq_out <- goseq_out[seq_len(nTop), ]
   
   if (addGeneToTerms) {
     # for adding the gene ids/names...
