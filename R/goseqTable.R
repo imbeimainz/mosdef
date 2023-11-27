@@ -33,6 +33,8 @@
 #' \code{\link{goseq}} function
 #' @param id A string identifying the gene identifier used by genes, as in the
 #' \code{\link{goseq}} function
+#' @param de_type One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
+#'  upregulated, downregulated or both
 #' @param testCats A vector specifying which categories to test for over representation amongst DE genes - can be any combination of "GO:CC", "GO:BP", "GO:MF" & "KEGG"
 #' @param FDR_GO_cutoff Numeric value for subsetting the results
 #' @param nTop Number of categories to extract, and optionally process for adding
@@ -76,6 +78,7 @@ goseqTable <- function(res_de = NULL,
                        #  with at least 1 read - could also be ls(org.Mm.egGO)
                        genome = "hg38",
                        id = "ensGene",
+                       de_type = "up_and_down",
                        testCats = c("GO:BP", "GO:MF", "GO:CC"),
                        FDR_GO_cutoff = 1,
                        nTop = 200,
@@ -95,6 +98,10 @@ goseqTable <- function(res_de = NULL,
   library(DESeq2)
   
   ##Checks:
+  
+  if(!(de_type %in% c("up_and_down","up", "down")))
+    
+    stop("The de_type argument must be one of: 'up_and_down', 'up', 'down'")
   
   # Check if there is any input at all
   if(is.null(c(de_genes,bg_genes,dds, res_de)))
@@ -151,8 +158,24 @@ goseqTable <- function(res_de = NULL,
       stop("I couldn't find results in your dds. You should first run DESeq2::DESeq() on your dds.")
       
     }
-    
+        
+    if(de_type == "up_and_down"){
+      
+      res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj < 0.05, ] 
+      
+    } else if( de_type == "up") {
+      
+      res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj < 0.05, ] 
+      res_de_subset <- res_de_subset[res_de_subset$log2FoldChange >= 0,]
+      
+    } else if( de_type == "down"){
+      
+      res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj < 0.05, ] 
+      res_de_subset <- res_de_subset[res_de_subset$log2FoldChange <= 0,]
+      
+    }
     res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj < 0.05, ] 
+    
     # in example top 100 but this makes more sense no?
     de_genes <- res_de_subset$id
     bg_genes <- rownames(res_de)
