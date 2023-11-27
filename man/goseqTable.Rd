@@ -5,12 +5,13 @@
 \title{Extract functional terms enriched in the DE genes, based on goseq}
 \usage{
 goseqTable(
-  de.genes = NULL,
-  assayed.genes = NULL,
-  dds = NULL,
   res_de = NULL,
+  dds = NULL,
+  de_genes = NULL,
+  bg_genes = NULL,
   genome = "hg38",
   id = "ensGene",
+  de_type = "up_and_down",
   testCats = c("GO:BP", "GO:MF", "GO:CC"),
   FDR_GO_cutoff = 1,
   nTop = 200,
@@ -19,14 +20,14 @@ goseqTable(
 )
 }
 \arguments{
-\item{de.genes}{A vector of (differentially expressed) genes}
-
-\item{assayed.genes}{A vector of background genes, e.g. all (expressed) genes
-in the assays}
+\item{res_de}{A DESeqResults object created using \code{DESeq2}}
 
 \item{dds}{A DESeqDataset object created using \code{DESeq2}}
 
-\item{res_de}{A DESeqResults object created using \code{DESeq2}}
+\item{de_genes}{A vector of (differentially expressed) genes}
+
+\item{bg_genes}{A vector of background genes, e.g. all (expressed) genes
+in the assays}
 
 \item{genome}{A string identifying the genome that genes refer to, as in the
 \code{\link{goseq}} function}
@@ -74,8 +75,8 @@ res_subset <- deseqresult2DEgenes(res_airway)[1:100, ]
 myde <- res_subset$id
 myassayed <- rownames(res_airway)
 \dontrun{
-mygo <- goseqTable(de.genes = myde,
-  assayed.genes = myassayed,
+mygo <- goseqTable(de_genes = myde,
+  bg_genes = myassayed,
   testCats = "GO:BP",
   addGeneToTerms = FALSE
 )

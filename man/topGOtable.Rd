@@ -5,17 +5,17 @@
 \title{Extract functional terms enriched in the DE genes, based on topGO}
 \usage{
 topGOtable(
-  DEgenes = NULL,
-  BGgenes = NULL,
-  dds = NULL,
   res_de = NULL,
+  dds = NULL,
+  de_genes = NULL,
+  bg_genes = NULL,
   ontology = "BP",
   annot = annFUN.org,
   mapping = "org.Mm.eg.db",
-  annot_to_map_to = org.Mm.eg.db,
   geneID = "symbol",
   fullNamesInRows = TRUE,
   addGeneToTerms = TRUE,
+  de_type = "up_and_down",
   plotGraph = FALSE,
   plotNodes = 10,
   writeOutput = FALSE,
@@ -25,13 +25,13 @@ topGOtable(
 )
 }
 \arguments{
-\item{DEgenes}{A vector of (differentially expressed) genes}
-
-\item{BGgenes}{A vector of background genes, e.g. all (expressed) genes in the assays}
+\item{res_de}{A DESeqResults object created using \code{DESeq2}}
 
 \item{dds}{A DESeqDataset object created using \code{DESeq2}}
 
-\item{res_de}{A DESeqResults object created using \code{DESeq2}}
+\item{de_genes}{A vector of (differentially expressed) genes}
+
+\item{bg_genes}{A vector of background genes, e.g. all (expressed) genes in the assays}
 
 \item{ontology}{Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)}
 
@@ -39,14 +39,15 @@ topGOtable(
 
 \item{mapping}{Which \code{org.XX.eg.db} to use for annotation - select according to the species}
 
-\item{annot_to_map_to}{A temporary parameter allowing the use of AnnotationDBs mapIds function}
-
 \item{geneID}{Which format the genes are provided. Defaults to \code{symbol}, could also be
 \code{entrez} or \code{ENSEMBL}}
 
 \item{fullNamesInRows}{Logical, whether to display or not the full names for the GO terms}
 
 \item{addGeneToTerms}{Logical, whether to add a column with all genes annotated to each GO term}
+
+\item{de_type}{One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
+upregulated, downregulated or both}
 
 \item{plotGraph}{Logical, if TRUE additionally plots a graph on the identified GO terms}
 
@@ -62,6 +63,8 @@ topGOtable(
 topGO method, based on the FDR correction. Defaults to FALSE, since the assumption of
 independent hypotheses is somewhat violated by the intrinsic DAG-structure of the Gene
 Ontology Terms}
+
+\item{annot_to_map_to}{A temporary parameter allowing the use of AnnotationDBs mapIds function}
 
 \item{topTablerows}{How many rows to report before any filtering}
 }
