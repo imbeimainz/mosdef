@@ -21,6 +21,8 @@
 #' \code{entrez} or \code{ENSEMBL}
 #' @param topTablerows How many rows to report before any filtering
 #' @param fullNamesInRows Logical, whether to display or not the full names for the GO terms
+#' @param de_type One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
+#'  upregulated, downregulated or both
 #' @param addGeneToTerms Logical, whether to add a column with all genes annotated to each GO term
 #' @param plotGraph Logical, if TRUE additionally plots a graph on the identified GO terms
 #' @param plotNodes Number of nodes to plot
@@ -87,6 +89,7 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
                        #topTablerows = 200,     was used to limit table size. Now just use nrows
                        fullNamesInRows = TRUE,
                        addGeneToTerms = TRUE,
+                       de_type = "up_and_down",
                        plotGraph = FALSE, 
                        plotNodes = 10,
                        writeOutput = FALSE, 
@@ -94,6 +97,11 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
                        topGO_method2 = "elim",
                        do_padj = FALSE) {
   ##Checks:
+  
+  # Check if de-type is correct
+  if(!(de_type %in% c("up_and_down","up", "down")))
+    
+    stop("The de_type argument must be one of: 'up_and_down', 'up', 'down'")
   
   # Check if there is any input at all
   if(is.null(c(de_genes,bg_genes,dds, res_de)))
@@ -174,7 +182,25 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
                                            keytype = "ENSEMBL",
                                            multiVals = "first")
     resOrdered <- as.data.frame(res_de[order(res_de$padj),])
-    de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
+    
+    
+    if(de_type == "up_and_down"){
+      
+      de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
+      
+    } else if( de_type == "up") {
+      
+      de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
+      de_df <- de_df[de_df$log2FoldChange >= 0,]
+      
+    } else if( de_type == "down"){
+      
+      de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
+      de_df <- de_df[de_df$log2FoldChange <= 0,]
+      
+    }
+    
+    
     de_symbols <- de_df$symbol
     bg_ids <- rownames(dds)[rowSums(counts(dds)) > 0]
     bg_symbols <- mapIds(org.Hs.eg.db,
