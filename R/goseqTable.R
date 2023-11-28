@@ -99,9 +99,7 @@ goseqTable <- function(res_de = NULL,
   
   ##Checks:
   
-  if(!(de_type %in% c("up_and_down","up", "down")))
-    
-    stop("The de_type argument must be one of: 'up_and_down', 'up', 'down'")
+  match.arg(de_type, choices = c("up_and_down","up", "down"), several.ok = FALSE)
   
   # Check if there is any input at all
   if(is.null(c(de_genes,bg_genes,dds, res_de)))
@@ -161,20 +159,20 @@ goseqTable <- function(res_de = NULL,
         
     if(de_type == "up_and_down"){
       
-      res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj < 0.05, ] 
+      res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj <= 0.05, ] 
       
     } else if( de_type == "up") {
       
-      res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj < 0.05, ] 
+      res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj <= 0.05, ] 
       res_de_subset <- res_de_subset[res_de_subset$log2FoldChange >= 0,]
       
     } else if( de_type == "down"){
       
-      res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj < 0.05, ] 
+      res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj <= 0.05, ] 
       res_de_subset <- res_de_subset[res_de_subset$log2FoldChange <= 0,]
       
     }
-    res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj < 0.05, ] 
+   
     
     # in example top 100 but this makes more sense no?
     de_genes <- res_de_subset$id
