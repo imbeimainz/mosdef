@@ -262,25 +262,144 @@ geneinfo_2_html <- function(gene_id,
 
 
 
-# geneinfo_2_html <- function(gene_id) {
-#   gene_ncbi_button <- .link2ncbi(gene_id)
-#   gene_gtex_button <- .link2gtex(gene_id)
-#   gene_uniprot_button <- .link2uniprot(gene_id)
-#   gene_dbptm_button <- .link2dbptm(gene_id)
-#   gene_hpa_button <- .link2hpa(gene_id)
-#
-#   mycontent <- paste0(
-#     shiny::tags$b(gene_id), shiny::tags$br(),
-#     "Link to the NCBI Gene database: ", gene_ncbi_button, shiny::tags$br(),
-#     "Link to the GTEx Portal: ", gene_gtex_button, shiny::tags$br(),
-#     "Link to the Uniprot Portal: ", gene_uniprot_button, shiny::tags$br(),
-#     "Link to the dbPTM Portal: ", gene_dbptm_button, shiny::tags$br(),
-#     "Link to the Human Protein Atlas: ", gene_hpa_button, shiny::tags$br()
-#   )
-#
-#   return(HTML(mycontent))
-# }
+#' Information on a gene
+#'
+#' Assembles information, in HTML format, regarding a gene symbol identifier
+#'
+#' Creates links to the NCBI and the GeneCards databases
+#'
+#' @param gene_id Character specifying the gene identifier for which to retrieve
+#' information
+#' @param res_de A `DESeqResults` object, storing the result of the differential
+#' expression analysis. If not provided, the experiment-related information is not
+#' shown, and only some generic info on the identifier is displayed.
+#' The information about the gene is retrieved by matching on the `SYMBOL` column,
+#' which should be provided in `res_de`.
+#'
+#' @return HTML content related to a gene identifier, to be displayed in
+#' web applications (or inserted in Rmd documents)
+#' @export
+#'
+#' @examples
+#' geneinfo_2_html("ACTB")
+#' geneinfo_2_html("Pf4")
+geneinfo_2_html <- function(gene_id,
+                            res_de = NULL) {
+  gene_ncbi_button <- .link2ncbi(gene_id)
+  gene_genecards_button <- .link2genecards(gene_id)
+  gene_gtex_button <- .link2gtex(gene_id)
+  
+  if (!is.null(res_de)) {
+    gid <- match(gene_id, res_de$SYMBOL)
+    if (is.na(gid)) {
+      message(
+        "Could not find the specified gene (`", gene_id,
+        "`) in the `res_de` object. \n",
+        "Still, the general HTML content has been generated."
+      )
+      gene_adjpvalue <- tags$em("not found")
+      gene_logfc <- tags$em("not found")
+    } else {
+      gene_adjpvalue <- format(res_de[gid, "padj"])
+      gene_logfc <- format(round(res_de[gid, "log2FoldChange"], 2), nsmall = 2)
+    }
+  }
+  
+  mycontent <- paste0(
+    tags$b(gene_id), tags$br(),
+    "Link to the NCBI Gene database: ", gene_ncbi_button, tags$br(),
+    "Link to the GeneCards database: ", gene_genecards_button, tags$br(),
+    "Link to the GTEx Portal: ", gene_gtex_button, tags$br(),
+    ifelse(
+      !is.null(res_de),
+      paste0(tags$b("DE p-value (adjusted): "), gene_adjpvalue, tags$br(),
+             tags$b("DE log2FoldChange: "), gene_logfc,
+             collapse = ""
+      ),
+      ""
+    )
+  )
+  return(HTML(mycontent))
+}
 
+#' Information on a GeneOntology identifier
+#'
+#' Assembles information, in HTML format, regarding a Gene Ontology identifier
+#'
+#' Also creates a link to the AmiGO database
+#'
+#' @param go_id Character, specifying the GeneOntology identifier for which
+#' to retrieve information
+#' @param res_enrich A `data.frame` object, storing the result of the functional
+#' enrichment analysis. If not provided, the experiment-related information is not
+#' shown, and only some generic info on the identifier is displayed.
+#' See more in the main function, [GeneTonic()], to check the
+#' formatting requirements (a minimal set of columns should be present).
+#'
+#' @return HTML content related to a GeneOntology identifier, to be displayed in
+#' web applications (or inserted in Rmd documents)
+#' @export
+#'
+#' @examples
+#' go_2_html("GO:0002250")
+#' go_2_html("GO:0043368")
+go_2_html <- function(go_id,
+                      res_enrich = NULL) {
+  fullinfo <- GOTERM[[go_id]]
+  if (is.null(fullinfo)) {
+    return(HTML("Gene Ontology term not found!"))
+  }
+  # extracting the field/component values
+  go_linkbutton <- .link2amigo(GOID(fullinfo))
+  go_term <- Term(fullinfo)
+  go_ontology <- Ontology(fullinfo)
+  go_definition <- Definition(fullinfo)
+  go_synonims <- paste0(
+    unlist(
+      lapply(Synonym(fullinfo), function(arg) {
+        paste0(tags$b("Synonym: "), arg, tags$br())
+      })
+    ),
+    collapse = ""
+  )
+  go_secondary <- Secondary(fullinfo)
+  if (!is.null(res_enrich)) {
+    go_pvalue <- res_enrich[(res_enrich$gs_id == go_id), "gs_pvalue"]
+    go_zscore <- ifelse(
+      "z_score" %in% colnames(res_enrich),
+      format(round(res_enrich[(res_enrich$gs_id == go_id), "z_score"], 2), nsmall = 2),
+      "NA - not yet computed"
+    )
+    go_aggrscore <- ifelse(
+      "aggr_score" %in% colnames(res_enrich),
+      format(round(res_enrich[(res_enrich$gs_id == go_id), "aggr_score"], 2), nsmall = 2),
+      "NA - not yet computed"
+    )
+  }
+  # assembling them together
+  mycontent <- paste0(
+    tags$b("GO ID: "), go_linkbutton, tags$br(),
+    tags$b("Term: "), go_term, tags$br(),
+    ifelse(
+      !is.null(res_enrich),
+      paste0(tags$b("p-value: "), go_pvalue, tags$br(),
+             tags$b("Z-score: "), go_zscore, tags$br(),
+             tags$b("Aggregated score: "), go_aggrscore, tags$br(),
+             collapse = ""
+      ),
+      ""
+    ),
+    tags$b("Ontology: "), go_ontology, tags$br(), tags$br(),
+    tags$b("Definition: "), go_definition, tags$br(),
+    go_synonims,
+    ifelse(
+      length(go_secondary) > 0,
+      paste0(tags$b("Secondary: "), go_secondary, collapse = ""),
+      ""
+    )
+  )
+  return(HTML(mycontent))
+}
 # Some constant values ----------------------------------------------------
 
 .actionbutton_biocstyle <- "color: #ffffff; background-color: #0092AC"
