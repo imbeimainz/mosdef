@@ -14,6 +14,7 @@
 #'
 #' @examples
 
+#' library(dplyr)
 #' data("gse", package = "macrophage")
 #' 
 #' dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
@@ -118,5 +119,5 @@ gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = 
   return(df)
 }
 
-.actionbutton_biocstyle <- "color: #ffffff; background-color: #0092AC"
+
 
