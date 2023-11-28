@@ -14,7 +14,6 @@ goseqTable(
   de_type = "up_and_down",
   testCats = c("GO:BP", "GO:MF", "GO:CC"),
   FDR_GO_cutoff = 1,
-  nTop = 200,
   orgDbPkg = "org.Hs.eg.db",
   addGeneToTerms = TRUE
 )
@@ -35,18 +34,21 @@ in the assays}
 \item{id}{A string identifying the gene identifier used by genes, as in the
 \code{\link{goseq}} function}
 
+\item{de_type}{One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
+upregulated, downregulated or both}
+
 \item{testCats}{A vector specifying which categories to test for over representation amongst DE genes - can be any combination of "GO:CC", "GO:BP", "GO:MF" & "KEGG"}
 
 \item{FDR_GO_cutoff}{Numeric value for subsetting the results}
-
-\item{nTop}{Number of categories to extract, and optionally process for adding
-genes to the respective terms}
 
 \item{orgDbPkg}{Character string, named as the \code{org.XX.eg.db}
 package which should be available in Bioconductor}
 
 \item{addGeneToTerms}{Logical, whether to add a column with all genes annotated
 to each GO term}
+
+\item{nTop}{Number of categories to extract, and optionally process for adding
+genes to the respective terms}
 }
 \value{
 A table containing the computed GO Terms and related enrichment scores

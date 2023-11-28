@@ -4,12 +4,14 @@
 \alias{gene_symbol_buttons}
 \title{Create a button for genesymbols in an RMD}
 \usage{
-gene_symbol_buttons(df, new_cols = c("GC", "UNIPROT"))
+gene_symbol_buttons(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL")
 }
 \arguments{
 \item{df}{A dataframe with at least on coloumn with gene Symbols named: SYMBOL}
 
 \item{new_cols}{At least one of: "GC", "NCBI", "GTEX", "UNIPROT"; "dbPTM", "HPA"}
+
+\item{col_to_use}{name of the coloumns were the gene symbols are stored. Default is SYMBOL}
 }
 \description{
 A function to turn Gene Symbols into buttons in an RMD linking to various Portals for further info
