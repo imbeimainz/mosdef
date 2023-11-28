@@ -99,9 +99,11 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
   ##Checks:
   
   # Check if de-type is correct
-  if(!(de_type %in% c("up_and_down","up", "down")))
+  #if(!(de_type %in% c("up_and_down","up", "down")))
     
-    stop("The de_type argument must be one of: 'up_and_down', 'up', 'down'")
+     match.arg(de_type, choices = c("up_and_down","up", "down"), several.ok = FALSE)
+    
+    #stop("The de_type argument must be one of: 'up_and_down', 'up', 'down'")
   
   # Check if there is any input at all
   if(is.null(c(de_genes,bg_genes,dds, res_de)))
@@ -186,16 +188,16 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
     
     if(de_type == "up_and_down"){
       
-      de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
+      de_df <- resOrdered[resOrdered$padj <= .05 & !is.na(resOrdered$padj),]
       
     } else if( de_type == "up") {
       
-      de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
+      de_df <- resOrdered[resOrdered$padj <= .05 & !is.na(resOrdered$padj),]
       de_df <- de_df[de_df$log2FoldChange >= 0,]
       
     } else if( de_type == "down"){
       
-      de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
+      de_df <- resOrdered[resOrdered$padj <= .05 & !is.na(resOrdered$padj),]
       de_df <- de_df[de_df$log2FoldChange <= 0,]
       
     }
@@ -269,6 +271,7 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
     # coerce the list to a comma separated vector
     sTab$genes <- unlist(lapply(sTab$genes, function(arg) paste(arg, collapse = ",")))
   }
+  #message for filters or a summary here
   
   # write all entries of the table
   if (writeOutput) write.table(sTab, file = outputFile, sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
