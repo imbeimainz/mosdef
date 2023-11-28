@@ -6,6 +6,7 @@
 #'
 #' @param df A dataframe with at least on coloumn with gene Symbols named: SYMBOL
 #' @param new_cols At least one of: "GC", "NCBI", "GTEX", "UNIPROT"; "dbPTM", "HPA" 
+#' @param col_to_use name of the coloumns were the gene symbols are stored. Default is SYMBOL
 #' 
 #'
 #' @return
@@ -33,11 +34,10 @@
 #' res_df <- buttons(res_df)
 #' DT::datatable(res_df)
 
-gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT")){
+gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL"){
   
-  .actionbutton_biocstyle <- "color: #ffffff; background-color: #0092AC"
   
-  val <- df$SYMBOL
+  val <- df[[col_to_use]]
   
   #GeneCards
   if( "GC" %in% new_cols){
@@ -117,3 +117,6 @@ gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT")){
     select(-SYMBOL)
   return(df)
 }
+
+.actionbutton_biocstyle <- "color: #ffffff; background-color: #0092AC"
+
