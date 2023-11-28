@@ -81,7 +81,7 @@ goseqTable <- function(res_de = NULL,
                        de_type = "up_and_down",
                        testCats = c("GO:BP", "GO:MF", "GO:CC"),
                        FDR_GO_cutoff = 1,
-                       nTop = 200,
+                       #nTop = 200,
                        orgDbPkg = "org.Hs.eg.db",
                        # testKegg=TRUE,
                        # keggObject=mapPathwayToName("mmu"), # need the dedicated function!!
@@ -204,7 +204,7 @@ goseqTable <- function(res_de = NULL,
   
   # removing nTop to allow for more evaluated genes
   # to reduce the load for adding the genes
-  goseq_out <- goseq_out[seq_len(nTop), ]
+  # goseq_out <- goseq_out[seq_len(nTop), ]
   
   if (addGeneToTerms) {
     # for adding the gene ids/names...
