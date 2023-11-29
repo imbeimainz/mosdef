@@ -272,6 +272,11 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
     sTab$genes <- unlist(lapply(sTab$genes, function(arg) paste(arg, collapse = ",")))
   }
   #message for filters or a summary here
+  message(paste0("We analyzed ", nrow(sTab), 
+                 " GO terms. Not all of them are significantly enriched.\n",
+                 "We suggest further subsetting the output list by for example: \n",
+                 "using a pvalue cutoff in the coloumn\n",
+                 "'p.value_elim'."))
   
   # write all entries of the table
   if (writeOutput) write.table(sTab, file = outputFile, sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
