@@ -9,9 +9,6 @@
 #' `mosdef` package
 #' @param annotation_obj A `data.frame` object with the feature annotation
 #' information, with at least two columns, `gene_id` and `gene_name`.
-#' @param gtl A `GeneTonic`-list object, containing in its slots the arguments
-#' specified above: `dds`, `res_de`, `res_enrich`, and `annotation_obj` - the names
-#' of the list _must_ be specified following the content they are expecting.
 #' @param geneset_id Character specifying the gene set identifier to be plotted.
 #' @param genelist A vector of character strings, specifying the identifiers
 #' contained in the `rownames` of the `res_de` input object.
@@ -85,7 +82,6 @@
 signature_volcano <- function(res_de,
                              # res_enrich,
                               annotation_obj = NULL,
-                              gtl = NULL,
                               geneset_id = NULL,
                               genelist = NULL,
                               FDR = 0.05,
