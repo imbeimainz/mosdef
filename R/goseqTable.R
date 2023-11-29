@@ -59,7 +59,7 @@
 #' dds_airway <- DESeq2::DESeq(dds_airway)
 #' res_airway <- DESeq2::results(dds_airway)
 #'
-#' res_subset <- deseqresult2DEgenes(res_airway)[1:100, ]
+#' res_subset <- deseqresult2df(res_airway)[1:100, ]
 #' myde <- res_subset$id
 #' myassayed <- rownames(res_airway)
 #' \dontrun{
@@ -159,16 +159,16 @@ goseqTable <- function(res_de = NULL,
         
     if(de_type == "up_and_down"){
       
-      res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj <= 0.05, ] 
+      res_de_subset <- deseqresult2df(res_de)[res_de$padj <= 0.05, ] 
       
     } else if( de_type == "up") {
       
-      res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj <= 0.05, ] 
+      res_de_subset <- deseqresult2df(res_de)[res_de$padj <= 0.05, ] 
       res_de_subset <- res_de_subset[res_de_subset$log2FoldChange >= 0,]
       
     } else if( de_type == "down"){
       
-      res_de_subset <- deseqresult2DEgenes(res_de)[res_de$padj <= 0.05, ] 
+      res_de_subset <- deseqresult2df(res_de)[res_de$padj <= 0.05, ] 
       res_de_subset <- res_de_subset[res_de_subset$log2FoldChange <= 0,]
       
     }
