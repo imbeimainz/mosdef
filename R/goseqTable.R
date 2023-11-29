@@ -41,7 +41,7 @@
 #' genes to the respective terms
 #' @param orgDbPkg Character string, named as the \code{org.XX.eg.db}
 #' package which should be available in Bioconductor
-#' @param addGeneToTerms Logical, whether to add a column with all genes annotated
+#' @param add_gene_to_terms Logical, whether to add a column with all genes annotated
 #' to each GO term
 #'
 #' @return A table containing the computed GO Terms and related enrichment scores
@@ -66,7 +66,7 @@
 #' mygo <- goseqTable(de_genes = myde,
 #'   bg_genes = myassayed,
 #'   testCats = "GO:BP",
-#'   addGeneToTerms = FALSE
+#'   add_gene_to_terms = FALSE
 #' )
 #' head(mygo)
 #' }
@@ -86,7 +86,7 @@ goseqTable <- function(res_de = NULL,
                        # testKegg=TRUE,
                        # keggObject=mapPathwayToName("mmu"), # need the dedicated function!!
                        # writeOutput=FALSE,
-                       addGeneToTerms = TRUE # ,
+                       add_gene_to_terms = TRUE # ,
                        # outputFiles_goseq="",outputFiles_goseq_kegg=""
                        ## TODO TODO: bring back in action the function
                        ## add genes annotated to each term
@@ -204,7 +204,7 @@ goseqTable <- function(res_de = NULL,
   # to reduce the load for adding the genes
   # goseq_out <- goseq_out[seq_len(nTop), ]
   
-  if (addGeneToTerms) {
+  if (add_gene_to_terms) {
     # for adding the gene ids/names...
     gene2cat <- getgo(de_genes, genome = genome, id = id, fetch.cats = testCats)
     names(gene2cat) <- de_genes

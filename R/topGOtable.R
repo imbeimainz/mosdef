@@ -20,14 +20,14 @@
 #' @param geneID Which format the genes are provided. Defaults to \code{symbol}, could also be
 #' \code{entrez} or \code{ENSEMBL}
 #' @param topTablerows How many rows to report before any filtering
-#' @param fullNamesInRows Logical, whether to display or not the full names for the GO terms
+#' @param full_names_in_rows Logical, whether to display or not the full names for the GO terms
 #' @param de_type One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
 #'  upregulated, downregulated or both
-#' @param addGeneToTerms Logical, whether to add a column with all genes annotated to each GO term
-#' @param plotGraph Logical, if TRUE additionally plots a graph on the identified GO terms
-#' @param plotNodes Number of nodes to plot
-#' @param writeOutput Logical, if TRUE additionally writes out the result to a file
-#' @param outputFile Name of the file the result should be written into
+#' @param add_gene_to_terms Logical, whether to add a column with all genes annotated to each GO term
+#' @param plot_graph Logical, if TRUE additionally plots a graph on the identified GO terms
+#' @param plot_nodes Number of nodes to plot
+#' @param write_output Logical, if TRUE additionally writes out the result to a file
+#' @param output_file Name of the file the result should be written into
 #' @param topGO_method2 Character, specifying which of the methods implemented by \code{topGO} should be used, in addition to the \code{classic} algorithm. Defaults to \code{elim}
 #' @param do_padj Logical, whether to perform the adjustment on the p-values from the specific
 #' topGO method, based on the FDR correction. Defaults to FALSE, since the assumption of 
@@ -87,13 +87,13 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
                        mapping = "org.Mm.eg.db",
                        geneID = "symbol",       # could also beID = "entrez"
                        #topTablerows = 200,     was used to limit table size. Now just use nrows
-                       fullNamesInRows = TRUE,
-                       addGeneToTerms = TRUE,
+                       full_names_in_rows = TRUE,
+                       add_gene_to_terms = TRUE,
                        de_type = "up_and_down",
-                       plotGraph = FALSE, 
-                       plotNodes = 10,
-                       writeOutput = FALSE, 
-                       outputFile = "",
+                       plot_graph = FALSE, 
+                       plot_nodes = 10,
+                       write_output = FALSE, 
+                       output_file = "",
                        topGO_method2 = "elim",
                        do_padj = FALSE) {
   ##Checks:
@@ -255,13 +255,13 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
   topTablerows <- nrow(sTab)
   sTab <- sTab[seq_len(topTablerows), ]
   
-  if (fullNamesInRows) {
+  if (full_names_in_rows) {
     sTab$Term <- sapply(sTab$GO.ID, function(go) {
       Term(GOTERM[[go]])
     })
   }
   
-  if (addGeneToTerms) {
+  if (add_gene_to_terms) {
     # adapted from an elegant one liner found here: https://support.bioconductor.org/p/65856/
     SignificantGenes <- sigGenes(GOdata)
     sTab$genes <- sapply(sTab$GO.ID, function(x) {
@@ -275,12 +275,12 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
   message(paste0( nrow(sTab), 
                  " GO terms were analyzed. Not all of them are significantly enriched.\n",
                  "We suggest further subsetting the output list by for example: \n",
-                 "using a pvalue cutoff in the coloumn:\n",
+                 "using a pvalue cutoff in the coloumn: \n",
                  "'p.value_elim'."))
   
   # write all entries of the table
-  if (writeOutput) write.table(sTab, file = outputFile, sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
-  if (plotGraph) showSigOfNodes(GOdata, topGO::score(result_method2), firstSigNodes = plotNodes, useInfo = "all")
+  if (write_output) write.table(sTab, file = output_file, sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+  if (plot_graph) showSigOfNodes(GOdata, topGO::score(result_method2), firstSigNodes = plot_nodes, useInfo = "all")
   #   if(outputToLatex) sTabSig <- xtable(apply(sTabSig[1:15,], 2, as.character)) # take a smaller subset
   
   # and returns the significant ones # or all, like here
