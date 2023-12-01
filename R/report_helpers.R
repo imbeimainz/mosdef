@@ -96,20 +96,7 @@ go_2_html <- function(go_id,
   return(HTML(mycontent))
 }
 
-#' Link to the AmiGO database
-#'
-#' @param val A string, with the GO identifier
-#'
-#' @return HTML for an action button
-#' @noRd
-.link2amigo <- function(val) {
-  sprintf(
-    '<a href = "http://amigo.geneontology.org/amigo/term/%s" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
-    val,
-    .actionbutton_biocstyle,
-    val
-  )
-}
+
 
 #' Information on a gene
 #'
