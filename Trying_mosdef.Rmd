@@ -1,0 +1,442 @@
+---
+title: "Testing the new mosdef functions on an existing report"
+author: "Leon"
+date: "2023-12-04"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: show
+    number_sections: true
+    theme: cosmo
+date: "`r BiocStyle::doc_date()`"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r loadLibraries,results='hide'}
+library("DESeq2")
+library("edgeR")
+library("hexbin")
+library("latticeExtra")
+library("gplots")
+library("RColorBrewer")
+library("topGO")
+library("org.Mm.eg.db")
+library("gplots")
+library("genefilter")
+library("rtracklayer")
+library("xtable")
+library("GO.db")
+library("goseq")
+library("GenomicFeatures")
+library("ReactomePA")
+library("dplyr")
+library("NMF")
+library("pheatmap")
+library("GOplot")
+library("knitr")
+library("pcaExplorer")
+library("DT")
+library("ideal")
+library("GeneTonic")
+library("clusterProfiler")
+library("mosdef")
+
+```
+
+
+```{r loadsalmondds}
+dds_lisamarie <- readRDS("dds_lisamarie_salmon.RDS")
+```
+
+# Sample overview
+**All samples in one interactive table**
+
+RNA-seq samples were derived from 18 different experiments, for a total of 6 experimental groups (given by the combination of cells AND treatment)
+
+For each group, biological replicates were sequenced (2-4 each).
+
+For more information and an overview, see the tables in the main text.
+
+All samples were sequenced with reads of XX nucleotides, using a paired-end library preparation (approx. XX reads per sample). 
+
+This report provides a detailed overview of the steps taken to perform a comprehensive exploratory data analysis.
+```{r}
+DT::datatable(as.data.frame(dds_lisamarie@colData))
+```
+
+
+
+
+# QC on the samples
+**the same as in the example report**
+
+See multiQC report for overview.
+
+# Quantification and exploration
+
+**the same as in the example report**
+We proceed from the salmon-based approach.
+
+Let's check the number of assigned reads per sample as a proxy of the sequencing depth
+
+```{r samplesummary}
+myd <- data.frame(
+  counts = colSums(counts(dds_lisamarie)),
+  group = dds_lisamarie$group,
+  sample = colnames(dds_lisamarie))
+ggplot(myd, aes(x = sample,weight = counts, fill = group)) + geom_bar() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + theme_bw() + coord_flip()
+```
+
+
+```{r setfdr}
+FDR <- 0.05
+```
+
+```{r helperfuncs, echo=FALSE}
+# removed helper funcs but not sure what the point of alltheresults is
+#used mosdef helperfunctions
+alltheresults <- function(resuSet, dds_obj, contrast, FDR, anno_df, anns, species) {
+  
+  # id_contrast <- paste0(contrast[2],"_vs_",contrast[3])
+  id_contrast <- contrast
+  resuSet[[id_contrast]] <- list()
+  
+  # mycoef <- resultsNames(dds_obj)[2]
+  mycoef <- contrast
+  
+  message("Extracting results...")
+  resuSet[[id_contrast]][["res_DESeq"]] <- results(dds_obj,name = mycoef, alpha = FDR)
+  message("Performing LFC shrinkage...")
+  resuSet[[id_contrast]][["res_DESeq"]] <- lfcShrink(dds_obj,coef = mycoef,res = resuSet[[id_contrast]][["res_DESeq"]], type = "apeglm") 
+  resuSet[[id_contrast]][["res_DESeq"]]$SYMBOL <- anno_df$gene_name[match(rownames(resuSet[[id_contrast]][["res_DESeq"]]), anno_df$gene_id)]
+  
+  message("Summary MAplot...")
+  summary(resuSet[[id_contrast]][["res_DESeq"]])
+  resuSet[[id_contrast]][["maplot_res"]] <- 
+    ideal::plot_ma(resuSet[[id_contrast]][["res_DESeq"]], ylim = c(-2,2), title = id_contrast)
+  
+  message("Extracting tables...")
+  resuSet[[id_contrast]][["tbl_res_all"]] <- deseqresult2df(resuSet[[id_contrast]][["res_DESeq"]])
+  resuSet[[id_contrast]][["tbl_res_all"]]$geneSymbol <- anno_df$gene_name[match(resuSet[[id_contrast]][["tbl_res_all"]]$id, anno_df$gene_id)]
+  resuSet[[id_contrast]][["tbl_res_all"]]$description <- anns$description[match(resuSet[[id_contrast]][["tbl_res_all"]]$id, anns$ensembl_gene_id)]
+  
+  message("Extracting DEtables...")
+  resuSet[[id_contrast]][["tbl_res_DE"]] <- deseqresult2df(resuSet[[id_contrast]][["res_DESeq"]],FDR = FDR)
+  resuSet[[id_contrast]][["tbl_res_DE"]]$geneSymbol <- anno_df$gene_name[match(resuSet[[id_contrast]][["tbl_res_DE"]]$id, anno_df$gene_id)]
+  resuSet[[id_contrast]][["tbl_res_DE"]]$description <- anns$description[match(resuSet[[id_contrast]][["tbl_res_DE"]]$id, anns$ensembl_gene_id)]
+  resuSet[[id_contrast]][["tbl_res_DE"]]$chromosome_name <- anns$chromosome_name[match(resuSet[[id_contrast]][["tbl_res_DE"]]$id, anns$ensembl_gene_id)]
+  
+  if(nrow(resuSet[[id_contrast]][["tbl_res_DE"]]) > 0) {
+    message("Generating interactive DEtable...")
+    resuSet[[id_contrast]][["etbl_res_DE"]] <- resuSet[[id_contrast]][["tbl_res_DE"]]
+    resuSet[[id_contrast]][["etbl_res_DE"]]$id <- create_link_ENS(resuSet[[id_contrast]][["etbl_res_DE"]]$id, species = species)
+    resuSet[[id_contrast]][["etbl_res_DE"]]$geneSymbol <- create_link_NCBI(resuSet[[id_contrast]][["etbl_res_DE"]]$geneSymbol)
+  }
+  
+  mybuttons <- c('copy', 'csv', 'excel', 'pdf', 'print')
+  datatable(resuSet[[id_contrast]][["etbl_res_DE"]],caption = paste0(id_contrast,", DE genes"),escape=F, extensions = 'Buttons', options = list(dom = 'Bfrtip',buttons = mybuttons))
+  
+  return(resuSet)
+}
+```
+
+# Gene annotation 
+
+**same as in the example report**
+This information comes in very handy to aovid having just ensembl ids, which are not so friendly to the eye of the scientist, but are nicely unique and stable over time
+
+```{r annobiomart, eval=FALSE}
+library("org.Hs.eg.db")
+# anno_df <- pcaExplorer::get_annotation_orgdb(dds_lisamarie, "org.Hs.eg.db", "SYMBOL")
+anno_df <- pcaExplorer::get_annotation_orgdb(dds_lisamarie, "org.Hs.eg.db", "ENSEMBL")
+
+library("biomaRt")
+mart <- useMart(biomart="ENSEMBL_MART_ENSEMBL", dataset="hsapiens_gene_ensembl")
+anns <- getBM(attributes = c("ensembl_gene_id", "external_gene_name", "description"), 
+              filters = "ensembl_gene_id",
+              # filters = "external_gene_name",
+              values = rownames(dds_lisamarie), 
+              mart = mart)
+# anns <- anns[match(rownames(dds_lisamarie), anns$external_gene_name), ]
+anns <- anns[match(rownames(dds_lisamarie), anns$ensembl_gene_id), ]
+save(anns,file="biomart_anno_lisamarie.RData")
+# then will be re-sorted according to the table to attach it to
+```
+
+```{r loadanno}
+library("org.Hs.eg.db")
+anno_df <- pcaExplorer::get_annotation_orgdb(dds_lisamarie, "org.Hs.eg.db", "ENSEMBL")
+
+ load("biomart_anno_lisamarie.RData")
+anns_df <- anns
+# for taking over from biomart
+
+# colnames(anns_df) <- c("gene_id", "gene_name", "description")
+rownames(anno_df) <- rownames(dds_lisamarie)
+```
+
+# EDA & DE
+**same as example report**
+## Data exploration
+
+We first check how the whole set of samples looks like - the control sample included is a singleton, so there is not too much to do about it...
+
+```{r vstcompute, cache=TRUE}
+rld_lisamarie <- rlog(dds_lisamarie)
+```
+
+```{r pcaVstRlt}
+pcaplot(rld_lisamarie, "group", ellipse = FALSE, text_labels = TRUE)
+```
+
+To appreciate the individual differences, we do split up the into individual subsets, for each cell type.
+*removed the vst parts here because the pcakge wouldn't install*
+
+```{r splitupdds}
+dds_NK <- dds_lisamarie[, dds_lisamarie$cells == "NK"]
+dds_NKRH30 <- dds_lisamarie[, dds_lisamarie$cells == "NK_RH30"]
+dds_RH30 <- dds_lisamarie[, dds_lisamarie$cells == "RH30"]
+
+```
+
+We see a lot of variability associated to the donors, and some separation in the RH30 set.
+
+We set up the design and adjust the factor levels after subsetting
+
+```{r designproper}
+design(dds_NK) <- ~sample_id + treatment
+design(dds_NKRH30) <- ~sample_id + treatment
+design(dds_RH30) <- ~sample_id + treatment
+
+dds_NK$sample_id <- droplevels(dds_NK$sample_id)
+dds_NK$group <- droplevels(dds_NK$group)
+
+dds_NKRH30$sample_id <- droplevels(dds_NKRH30$sample_id)
+dds_NKRH30$group <- droplevels(dds_NKRH30$group)
+
+dds_RH30$sample_id <- droplevels(dds_RH30$sample_id)
+dds_RH30$group <- droplevels(dds_RH30$group)
+```
+
+This is the key step basically - accounting for the donor of origin!
+
+
+
+
+
+## Data DE
+
+```{r rundeseq}
+dds_NK <- DESeq(dds_NK)
+dds_NKRH30 <- DESeq(dds_NKRH30)
+dds_RH30 <- DESeq(dds_RH30)
+
+summary(results(dds_NK), alpha = FDR)
+summary(results(dds_NKRH30), alpha = FDR)
+summary(results(dds_RH30), alpha = FDR)
+
+resultsNames(dds_NK)
+resultsNames(dds_NKRH30)
+resultsNames(dds_RH30)
+```
+
+compare with "the caveman approach"
+
+```{r cavemande}
+dds_lisamarie
+design(dds_lisamarie)
+
+dds_lisamarie <- DESeq(dds_lisamarie)
+
+resultsNames(dds_lisamarie)
+
+summary(results(dds_lisamarie, contrast = c("group", "NK_BV6", "NK_untrt"), alpha = FDR))
+summary(results(dds_lisamarie, contrast = c("group", "NK_RH30_BV6", "NK_RH30_untrt"), alpha = FDR))
+summary(results(dds_lisamarie, contrast = c("group", "RH30_BV6", "RH30_untrt"), alpha = FDR))
+```
+
+<-- this one does not account for the donor of origin!
+ 
+ ### Generating the results
+
+```{r createreslist}
+myresuSet_lisamarie <- list()
+```
+
+
+```{r runfullde, cache=TRUE}
+myresuSet_lisamarie <- alltheresults(
+  myresuSet_lisamarie, dds_NK,
+  contrast = c("treatment_BV6_vs_untrt"), FDR = FDR,
+  anno_df = anno_df, anns = anns_df, species = "Homo_sapiens")
+names(myresuSet_lisamarie)[1] <- "NK_BV6_vs_untrt"
+
+myresuSet_lisamarie <- alltheresults(
+  myresuSet_lisamarie, dds_NKRH30,
+  contrast = c("treatment_BV6_vs_untrt"), FDR = FDR,
+  anno_df = anno_df, anns = anns_df, species = "Homo_sapiens")
+names(myresuSet_lisamarie)[2] <- "NKRH30_BV6_vs_untrt"
+
+myresuSet_lisamarie <- alltheresults(
+  myresuSet_lisamarie, dds_RH30,
+  contrast = c("treatment_BV6_vs_untrt"), FDR = FDR,
+  anno_df = anno_df, anns = anns_df, species = "Homo_sapiens")
+names(myresuSet_lisamarie)[3] <- "RH30_BV6_vs_untrt"
+```
+
+
+
+
+```{r maresults}
+myresuSet_lisamarie$NK_BV6_vs_untrt$maplot_res
+
+DT::datatable(myresuSet_lisamarie$NK_BV6_vs_untrt$etbl_res_DE, escape = FALSE, rownames = FALSE)
+```
+
+### Spot checks - some genes more in detail
+
+... at some genes specified in the presentation
+
+but using the whole dataset to plot
+
+```{r spotcheck}
+gene_plot(dds_NK, "ENSG00000111537", annotation_obj = anno_df, intgroup = "group")
+gene_plot(dds_NK, "ENSG00000100906", annotation_obj = anno_df, intgroup = "group")
+```
+
+
+Keep in mind - we do not have so many replicates to "substantiate" a visual trend :)
+
+
+<!-- ```{r gsheats, eval=FALSE} -->
+<!-- gs_heatmap(vst_lisamarie_clean, -->
+<!--            annotation_obj = anno_df, -->
+<!--            genelist = ms_genes_up_ens) -->
+<!-- gs_heatmap(vst_lisamarie_clean, -->
+<!--            annotation_obj = anno_df, -->
+<!--            genelist = ms_genes_down_ens) -->
+<!-- gs_heatmap(vst_lisamarie_clean, -->
+<!--            annotation_obj = anno_df, -->
+<!--            genelist = c(ms_genes_down_ens, ms_genes_up_ens)) -->
+
+<!-- lapply(ms_genes_up_ens, function(arg) { -->
+<!--   gene_plot(dds_lisamarie_clean, arg, annotation_obj = anno_df, intgroup = "condition") -->
+<!-- }) -->
+
+<!-- lapply(ms_genes_down_ens, function(arg) { -->
+<!--   gene_plot(dds_lisamarie_clean, arg, annotation_obj = anno_df, intgroup = "condition") -->
+<!-- }) -->
+<!-- ``` -->
+
+<!-- All in all, the shortlisted targets do not seem to be that informative.   -->
+<!-- We proceed with the "more formal" functional enrichment analysis, to do this in a more unbiased manner, including all DE genes from the experiment. -->
+
+
+# Results functional annotation
+
+We try now to answer the question: "what functions are often associated with the genes that are detected as DE in our experiment"?
+## Annotation via topGO
+
+We do this with `topGO`...
+
+```{r topgoprep}
+expressedInAssay <- (rowSums(assay(dds_lisamarie))>0)
+geneUniverseExprENS <- rownames(dds_lisamarie)[expressedInAssay]
+geneUniverseExpr <- anno_df$gene_name[match(geneUniverseExprENS, anno_df$gene_id)]
+```
+
+We iterate on all contrasts in the `myresuSet` object
+**Here mosdef begins**
+
+
+```{r topgorun, results="hide", cache=TRUE}
+#wanted to use res_de and dds here but the list doesn't include the dds does it?
+for(i in names(myresuSet_lisamarie)) {
+  message(i)
+  if(nrow(myresuSet_lisamarie[[i]][["tbl_res_DE"]]) > 0) {
+  myresuSet_lisamarie[[i]][["topGO_tbl"]] <- 
+    topGOtable(de_genes = myresuSet_lisamarie[[i]][["tbl_res_DE"]]$geneSymbol, 
+               bg_genes  = geneUniverseExpr, 
+               ontology = "BP",
+               geneID = "symbol",
+               add_gene_to_terms = TRUE,
+               mapping = "org.Hs.eg.db")
+  }
+}
+```
+
+```{r topgorun, results="hide", cache=TRUE}
+#for fun look at upreg only
+for(i in names(myresuSet_lisamarie)) {
+  message(i)
+  if(nrow(myresuSet_lisamarie[[i]][["tbl_res_DE"]]) > 0) {
+  myresuSet_lisamarie[[i]][["topGO_tbl_upreg"]] <- 
+    topGOtable(de_genes = myresuSet_lisamarie[[i]][["tbl_res_DE"]]$geneSymbol, 
+               bg_genes  = geneUniverseExpr, 
+               ontology = "BP",
+               geneID = "symbol",
+               add_gene_to_terms = TRUE,
+               mapping = "org.Hs.eg.db",
+               de_type = "up")
+  }
+}
+```
+
+The overviews in the different contrasts are displayed in the interactive tables below. first we filter for terms with padj < 0.05
+
+```{r dtenrich}
+for(i in names(myresuSet_lisamarie)){
+    myresuSet_lisamarie[[i]][["topGO_tbl"]] <- 
+   myresuSet_lisamarie[[i]][["topGO_tbl"]]%>%
+     filter(p.value_elim <= 0.05)
+    myresuSet_lisamarie[[i]][["topGO_tbl_upreg"]] <- 
+   myresuSet_lisamarie[[i]][["topGO_tbl_upreg"]]%>%
+     filter(p.value_elim <= 0.05)
+    
+        myresuSet_lisamarie[[i]][["topGO_tbl"]]$GO_button <- create_link_GO(myresuSet_lisamarie[[i]][["topGO_tbl"]]$GO.ID)
+myresuSet_lisamarie[[i]][["topGO_tbl"]] <-
+  myresuSet_lisamarie[[i]][["topGO_tbl"]] %>%
+  relocate(GO_button, .before = GO.ID)
+        myresuSet_lisamarie[[i]][["topGO_tbl_upreg"]]$GO_button <- create_link_GO(myresuSet_lisamarie[[i]][["topGO_tbl_upreg"]]$GO.ID)
+myresuSet_lisamarie[[i]][["topGO_tbl_upreg"]] <-
+  myresuSet_lisamarie[[i]][["topGO_tbl_upreg"]] %>%
+  relocate(GO_button, .before = GO.ID)
+  
+}
+DT::datatable(myresuSet_lisamarie$NK_BV6_vs_untrt$topGO_tbl)
+DT::datatable(myresuSet_lisamarie$RH30_BV6_vs_untrt$topGO_tbl)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
