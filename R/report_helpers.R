@@ -1,12 +1,18 @@
-createLinkGO <- function(val) {
+create_link_GO <- function(val) {
   sprintf('<a href="http://amigo.geneontology.org/amigo/term/%s" target="_blank" class="btn btn-primary">%s</a>',val,val)
 }
 
-createLinkENS  <- function(val, species="Mus_musculus") {
+create_link_ENS  <- function(val, species="Mus_musculus") {
   paste0('<a href="http://www.ensembl.org/',species,'/Gene/Summary?g=',val,'" target="_blank" class="btn btn-primary">',val,'</a>')
 }
 
-createLinkGeneSymbol <- function(val) {
+#' Link to NCBI database
+#'
+#' @param val Character, the gene symbol
+#'
+#' @return HTML for an action button
+#' @noRd
+create_link_NCBI <- function(val) {
   # possibilities:
   # ncbi
   # genecards
@@ -158,20 +164,7 @@ geneinfo_2_html <- function(gene_id,
   return(HTML(mycontent))
 }
 
-#' Link to NCBI database
-#'
-#' @param val Character, the gene symbol
-#'
-#' @return HTML for an action button
-#' @noRd
-.link2ncbi <- function(val) {
-  sprintf(
-    '<a href = "http://www.ncbi.nlm.nih.gov/gene/?term=%s[sym]" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
-    val,
-    .actionbutton_biocstyle,
-    val
-  )
-}
+
 
 #' Link to the GeneCards database
 #'
@@ -179,7 +172,7 @@ geneinfo_2_html <- function(gene_id,
 #'
 #' @return HTML for an action button
 #' @noRd
-.link2genecards <- function(val) {
+create_link_GC <- function(val) {
   sprintf(
     '<a href = "https://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
     val,
@@ -194,7 +187,7 @@ geneinfo_2_html <- function(gene_id,
 #'
 #' @return HTML for an action button
 #' @noRd
-.link2gtex <- function(val) {
+create_link_GTEX <- function(val) {
   sprintf(
     '<a href = "https://www.gtexportal.org/home/gene/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-dna"></i>%s</a>',
     val,
@@ -207,24 +200,10 @@ geneinfo_2_html <- function(gene_id,
 
 
 
-#' Link to NCBI database
-.link2ncbi <- function(val) {
-  sprintf('<a href = "http://www.ncbi.nlm.nih.gov/gene/?term=%s[sym]" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-database"></i>%s</a>',
-          val,
-          .actionbutton_biocstyle,
-          val)
-}
 
-#' Link to the GTEx Portal
-.link2gtex <- function(val) {
-  sprintf('<a href = "https://www.gtexportal.org/home/gene/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-dna"></i>%s</a>',
-          val,
-          .actionbutton_biocstyle,
-          val)
-}
 
 #' Link to the Uniprot Portal
-.link2uniprot <- function(val) {
+create_link_UniProt <- function(val) {
   sprintf('<a href = "https://www.uniprot.org/uniprot/?query=%s&sort=score" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-spinner"></i>%s</a>',
           val,
           .actionbutton_biocstyle,
@@ -232,7 +211,7 @@ geneinfo_2_html <- function(gene_id,
 }
 
 #' Link to the dbPTM Portal
-.link2dbptm <- function(val) {
+create_link_dbPTM <- function(val) {
   sprintf('<a href = "http://dbptm.mbc.nctu.edu.tw/info.php?id=%s_HUMAN" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-edit"></i>%s</a>',
           val,
           .actionbutton_biocstyle,
@@ -240,7 +219,7 @@ geneinfo_2_html <- function(gene_id,
 }
 
 #' Link to the human protein atlas Portal
-.link2hpa <- function(val) {
+create_link_HPA <- function(val) {
   sprintf('<a href = "https://www.proteinatlas.org/search/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-cubes"></i>%s</a>',
           val,
           .actionbutton_biocstyle,
