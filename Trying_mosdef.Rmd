@@ -307,7 +307,7 @@ but using the whole dataset to plot
 gene_plot(dds_NK, "ENSG00000111537", annotation_obj = anno_df, intgroup = "group")
 gene_plot(dds_NK, "ENSG00000100906", annotation_obj = anno_df, intgroup = "group")
 ```
-
+maybe add a dt table here showing results with the buttonifier fuctions?
 
 Keep in mind - we do not have so many replicates to "substantiate" a visual trend :)
 
@@ -416,6 +416,85 @@ DT::datatable(myresuSet_lisamarie$RH30_BV6_vs_untrt$topGO_tbl)
 
 
 
+
+# DE, plan A2: focus on nk vs nk-rh30
+
+```{r plan_a2}
+dds_plan_a2 <- dds_lisamarie[ , dds_lisamarie$group %in% c("NK_untrt", "NK_RH30_untrt")]
+
+design(dds_plan_a2) <- ~sample_id + group
+
+dds_plan_a2$sample_id <- droplevels(dds_plan_a2$sample_id)
+dds_plan_a2$group <- droplevels(dds_plan_a2$group)
+dds_plan_a2$treatment <- droplevels(dds_plan_a2$treatment)
+
+vst_plan_a2 <- vst(dds_plan_a2)
+pcaplot(vst_plan_a2, "group", ellipse = FALSE, text_labels = TRUE)
+
+dds_plan_a2 <- estimateSizeFactors(dds_plan_a2)
+dds_plan_a2 <- DESeq(dds_plan_a2)
+
+resultsNames(dds_plan_a2)
+
+summary(results(dds_plan_a2), alpha = FDR)
+
+design(dds_lisamarie)
+
+summary(results(dds_lisamarie, contrast = c("group", "NK_RH30_untrt", "NK_untrt"), alpha = FDR))
+
+myresuSet_lisamarie <- alltheresults(
+  myresuSet_lisamarie, dds_plan_a2,
+  contrast = c("group_NK_untrt_vs_NK_RH30_untrt"), FDR = FDR,
+  anno_df = anno_df, anns = anns_df, species = "Homo_sapiens")
+names(myresuSet_lisamarie)[4] <- "NK_vs_NK_RH30"
+
+myresuSet_lisamarie$NK_vs_NK_RH30$maplot_res
+
+DT::datatable(myresuSet_lisamarie$NK_vs_NK_RH30$etbl_res_DE, escape = FALSE, rownames = FALSE)
+
+i <- "NK_vs_NK_RH30"
+myresuSet_lisamarie[[i]][["topGO_tbl"]] <- 
+  topGOtable(de_genes = myresuSet_lisamarie[[i]][["tbl_res_DE"]]$geneSymbol, 
+             bg_genes = geneUniverseExpr, 
+             ontology = "BP",
+             geneID = "symbol",
+             add_gene_to_terms =TRUE,
+             mapping = "org.Hs.eg.db")
+
+DT::datatable(myresuSet_lisamarie$NK_vs_NK_RH30$topGO_tbl)
+
+message(i)
+myresuSet_lisamarie[[i]][["clupro_tbl"]] <- 
+  enrichGO(
+    gene = myresuSet_lisamarie[[i]][["tbl_res_DE"]]$geneSymbol,
+    universe      = geneUniverseExpr,
+    keyType       = "SYMBOL",
+    OrgDb         = org.Hs.eg.db,
+    ont           = "BP",
+    pAdjustMethod = "BH",
+    pvalueCutoff  = 0.01,
+    qvalueCutoff  = 0.05,
+    readable      = FALSE)
+
+DT::datatable(as.data.frame(myresuSet_lisamarie$NK_vs_NK_RH30$clupro_tbl), rownames = FALSE)
+
+emapplot(enrichplot::pairwise_termsim(myresuSet_lisamarie$NK_vs_NK_RH30$clupro_tbl))
+
+de_genes <- myresuSet_lisamarie[[i]][["tbl_res_DE"]]$id
+de_entrez <- clusterProfiler::bitr(de_genes, "ENSEMBL", "ENTREZID", org.Hs.eg.db)$ENTREZID
+universe_entrez <- clusterProfiler::bitr(geneUniverseExprENS, "ENSEMBL", "ENTREZID", org.Hs.eg.db)$ENTREZID
+
+myresuSet_lisamarie[[i]][["reactome_tbl"]] <- 
+  enrichPathway(gene = de_entrez, 
+                universe = universe_entrez,
+                pvalueCutoff = 0.1, 
+                organism = "human",
+                readable=TRUE)
+
+DT::datatable(as.data.frame(myresuSet_lisamarie$NK_vs_NK_RH30$reactome_tbl), rownames = FALSE)
+
+emapplot(enrichplot::pairwise_termsim(myresuSet_lisamarie$NK_vs_NK_RH30$reactome_tbl))
+```
 
 
 
