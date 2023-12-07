@@ -15,7 +15,6 @@
 #' @export
 #'
 #' @examples
-
 #' library(dplyr)
 #' library(DESeq2)
 #' data("gse", package = "macrophage")
@@ -87,10 +86,11 @@ gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = 
     
     
     for (i in 1:length(df$SYMBOL)) {
-      df$SYMBOL_UniProt[i] <- sprintf('<a href = "https://www.uniprot.org/uniprot/?query=%s&sort=score" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-spinner"></i>%s</a>',
+      df$SYMBOL_UniProt[i] <- sprintf('<a href = "https://www.uniprot.org/uniprot/?query=%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-spinner"></i>%s</a>',
                                       val[i],
                                       .actionbutton_biocstyle,
-                                      val[i])
+                                      paste0(val[i], "@UNIPROT")
+      )
     }
   }
   

@@ -172,7 +172,7 @@ geneinfo_2_html <- function(gene_id,
 #'
 #' @return HTML for an action button
 #' @noRd
-create_link_GC <- function(val) {
+create_link_genecards <- function(val) {
   sprintf(
     '<a href = "https://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
     val,
@@ -204,7 +204,7 @@ create_link_GTEX <- function(val) {
 
 #' Link to the Uniprot Portal
 create_link_UniProt <- function(val) {
-  sprintf('<a href = "https://www.uniprot.org/uniprot/?query=%s&sort=score" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-spinner"></i>%s</a>',
+  sprintf('<a href = "https://www.uniprot.org/uniprot/?query=%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-spinner"></i>%s</a>',
           val,
           .actionbutton_biocstyle,
           val)
@@ -212,10 +212,15 @@ create_link_UniProt <- function(val) {
 
 #' Link to the dbPTM Portal
 create_link_dbPTM <- function(val) {
-  sprintf('<a href = "http://dbptm.mbc.nctu.edu.tw/info.php?id=%s_HUMAN" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-edit"></i>%s</a>',
-          val,
-          .actionbutton_biocstyle,
-          val)
+  base_link_old <- "http://dbptm.mbc.nctu.edu.tw/"
+  base_link_new <- "https://awi.cuhk.edu.cn/dbPTM/"
+  
+  
+  sprintf('<a href = "%s/info.php?id=%s_HUMAN" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-edit"></i>%s</a>',
+          base_link_new,     # main link to website
+          val,               # link portion related to the gene
+          .actionbutton_biocstyle, # button style
+          val)               # content of the button label
 }
 
 #' Link to the human protein atlas Portal
