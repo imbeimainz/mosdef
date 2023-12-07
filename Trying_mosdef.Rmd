@@ -98,7 +98,7 @@ ggplot(myd, aes(x = sample,weight = counts, fill = group)) + geom_bar() + theme(
 FDR <- 0.05
 ```
 
-```{r helperfuncs, echo=FALSE}
+```{r helperfuncs, echo=TRUE}
 # removed helper funcs but not sure what the point of alltheresults is
 #used mosdef helperfunctions
 alltheresults <- function(resuSet, dds_obj, contrast, FDR, anno_df, anns, species) {
@@ -232,7 +232,7 @@ This is the key step basically - accounting for the donor of origin!
 
 ## Data DE
 
-```{r rundeseq}
+```{r rundeseq, cache = TRUE}
 dds_NK <- DESeq(dds_NK)
 dds_NKRH30 <- DESeq(dds_NKRH30)
 dds_RH30 <- DESeq(dds_RH30)
