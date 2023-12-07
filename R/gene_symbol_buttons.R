@@ -7,7 +7,9 @@
 #' @param df A dataframe with at least on coloumn with gene Symbols named: SYMBOL
 #' @param new_cols At least one of: "GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA" 
 #' @param col_to_use name of the coloumns were the gene symbols are stored. Default is SYMBOL
-#' 
+#' @param output_format a parameter deciding which output format to return, either a DT:datatable (recommended)
+#' or a simple dataframe (DF).In the latter case it is important that if the data is visualized with the
+#'  \code {datatable} function the parameter escape must be set to FALSE
 #'
 #' @return
 #' @export
@@ -15,6 +17,7 @@
 #' @examples
 
 #' library(dplyr)
+#' library(DESeq2)
 #' data("gse", package = "macrophage")
 #' 
 #' dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
@@ -32,14 +35,15 @@
 #' res_macrophage_IFNg_vs_naive$SYMBOL <- rowData(dds_macrophage)$SYMBOL
 #' res_df <- as.data.frame(res_macrophage_IFNg_vs_naive@listData)
 #' res_df <-res_df[1:100,]
-#' res_df <- gene_symbol_buttons(res_df)
-#' DT::datatable(res_df)
+#' gene_symbol_buttons(res_df)
 
-gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL"){
+
+gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL", output_format = "DT"){
   
   .actionbutton_biocstyle <- "color: #ffffff; background-color: #0092AC"
   val <- df[[col_to_use]]
   match.arg(new_cols,choices = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA"), several.ok = TRUE)
+  match.arg(output_format, choices = c("DT", "DF"))
   #GeneCards
   if( "GC" %in% new_cols){
     for (i in 1:length(df$SYMBOL)) {
@@ -113,10 +117,16 @@ gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = 
                                   val[i])
     }
   }
-  
   df <- df %>%
     select(-SYMBOL)
+  if (output_format == "DT"){
+  return(DT::datatable(df, escape = FALSE))
+  
+  }else if (output_format == "DF"){
+ 
   return(df)
+  }
+  
 }
 
 
