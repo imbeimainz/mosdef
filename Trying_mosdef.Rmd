@@ -324,9 +324,9 @@ myresuSet_lisamarie[[3]][["etbl_res_DE_test"]] <- gene_symbol_buttons(myresuSet_
 Now for the display:
 
 ```{r}
-DT::datatable(myresuSet_lisamarie[[1]][["etbl_res_DE_test"]] )
-DT::datatable(myresuSet_lisamarie[[2]][["etbl_res_DE_test"]] )
-DT::datatable(myresuSet_lisamarie[[3]][["etbl_res_DE_test"]] )
+DT::datatable(myresuSet_lisamarie[[1]][["etbl_res_DE_test"]],escape=FALSE, rownames=FALSE )
+DT::datatable(myresuSet_lisamarie[[2]][["etbl_res_DE_test"]] ,escape=FALSE, rownames=FALSE)
+DT::datatable(myresuSet_lisamarie[[3]][["etbl_res_DE_test"]] ,escape=FALSE, rownames=FALSE)
 ```
 
 Keep in mind - we do not have so many replicates to "substantiate" a visual trend :)
@@ -434,8 +434,8 @@ myresuSet_lisamarie[[i]][["topGO_tbl_upreg"]] <-
   relocate(GO_button, .before = GO.ID)
   
 }
-DT::datatable(myresuSet_lisamarie$NK_BV6_vs_untrt$topGO_tbl)
-DT::datatable(myresuSet_lisamarie$RH30_BV6_vs_untrt$topGO_tbl)
+DT::datatable(myresuSet_lisamarie$NK_BV6_vs_untrt$topGO_tbl,escape=FALSE, rownames=FALSE)
+DT::datatable(myresuSet_lisamarie$RH30_BV6_vs_untrt$topGO_tbl,escape=FALSE, rownames=FALSE)
 
 
 ```
