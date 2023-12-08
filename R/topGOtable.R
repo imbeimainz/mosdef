@@ -105,6 +105,7 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
     
     #stop("The de_type argument must be one of: 'up_and_down', 'up', 'down'")
   
+  
   # Check if there is any input at all
   if(is.null(c(de_genes,bg_genes,dds, res_de)))
     
@@ -138,6 +139,12 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
   if (!(topGO_method2 %in% topgo_methods))
     stop("Please provide one of the following topGO methods in addition to the classic method:\n",
          paste(topgo_methods, collapse = ", "))
+  
+  if((de_type == "up" | de_type == "down")&& !is.null(de_genes))
+    stop("The argument de_type can only be used if a dds and a res_de object are provided:\n",
+         "please either provide these objects or if you want to work with gene vectors set de_type to: 'up_and_down'")
+  
+  
   
   #Dependencies
   library("AnnotationDbi")# for the dependencies I don't know how to set them :D
