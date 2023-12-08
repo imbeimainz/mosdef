@@ -52,7 +52,7 @@ gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = 
         '<a href = "https://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" target = "_blank" class = "btn     btn-primary" style = "%s">%s</a>',
         val[i],
         .actionbutton_biocstyle,
-        val[i]
+        paste0(val[i], "@GeneCards")
       )
     }
   }
@@ -63,7 +63,8 @@ gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = 
     
     for (i in 1:length(df$SYMBOL)) {
       
-      df$SYMBOL_NCBI[i] <- paste0('<a href="http://www.ncbi.nlm.nih.gov/gene/?term=',val[i],'[sym]" target="_blank" class="btn btn-primary">',val[i],'</a>')
+      df$SYMBOL_NCBI[i] <- paste0('<a href="http://www.ncbi.nlm.nih.gov/gene/?term=',val[i],'[sym]" target="_blank" class="btn btn-primary">',
+                                  paste0(val[i], "@NCBI"),'</a>')
     }
   }
   
@@ -76,7 +77,7 @@ gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = 
         '<a href = "https://www.gtexportal.org/home/gene/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-dna"></i>%s</a>',
         val[i],
         .actionbutton_biocstyle,
-        val[i]
+        paste0(val[i], "@GTEX")
       )
     }
   }
@@ -96,13 +97,15 @@ gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = 
   
   #dbPTM 
   if( "dbPTM" %in% new_cols){
-    
+    base_link_old <- "http://dbptm.mbc.nctu.edu.tw/"
+    base_link_new <- "https://awi.cuhk.edu.cn/dbPTM/"
     
     for (i in 1:length(df$SYMBOL)) {
-      df$SYMBOL_dbPTM[i] <- sprintf('<a href = "http://dbptm.mbc.nctu.edu.tw/info.php?id=%s_HUMAN" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-edit"></i>%s</a>',
-                                    val[i],
-                                    .actionbutton_biocstyle,
-                                    val[i])
+      df$SYMBOL_dbPTM[i] <-   sprintf('<a href = "%s/info.php?id=%s_HUMAN" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-edit"></i>%s</a>',
+                                      base_link_new,     # main link to website
+                                      val [i],               # link portion related to the gene
+                                      .actionbutton_biocstyle, # button style
+                                      paste0(val[i], "@dbPTM")) # content of the button label
     }
   }
   
@@ -114,7 +117,7 @@ gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = 
       df$SYMBOL_HPA[i] <- sprintf('<a href = "https://www.proteinatlas.org/search/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-cubes"></i>%s</a>',
                                   val[i],
                                   .actionbutton_biocstyle,
-                                  val[i])
+                                  paste0(val[i],"@Human Protein Atlas"))
     }
   }
   df <- df %>%
