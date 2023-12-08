@@ -16,7 +16,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r loadLibraries,results='hide'}
+```{r loadLibraries,results='hide', message =FALSE}
 library("DESeq2")
 library("edgeR")
 library("hexbin")
@@ -270,7 +270,7 @@ myresuSet_lisamarie <- list()
 ```
 
 
-```{r runfullde, cache=TRUE}
+```{r runfullde, cache=TRUE, message =FALSE}
 myresuSet_lisamarie <- alltheresults(
   myresuSet_lisamarie, dds_NK,
   contrast = c("treatment_BV6_vs_untrt"), FDR = FDR,
@@ -313,13 +313,13 @@ Example of the buttonifiers
 **Here mosdef begins**
 
 ```{r}
-myresuSet_lisamarie[[1]][["etbl_res_DE_test"]] <- gene_symbol_buttons(myresuSet_lisamarie[[1]][["etbl_res_DE"]])
+myresuSet_lisamarie[[1]][["etbl_res_DE_test"]] <- buttonifier(myresuSet_lisamarie[[1]][["etbl_res_DE"]], output_format = "DF")
 
-myresuSet_lisamarie[[2]][["etbl_res_DE_test"]] <- gene_symbol_buttons(myresuSet_lisamarie[[1]][["etbl_res_DE"]], new_cols =c("NCBI", "HPA"))
+myresuSet_lisamarie[[2]][["etbl_res_DE_test"]] <- buttonifier(myresuSet_lisamarie[[1]][["etbl_res_DE"]], new_cols =c("NCBI", "HPA"), output_format = "DF")
 
 
 #showing all the buttons in one
-myresuSet_lisamarie[[3]][["etbl_res_DE_test"]] <- gene_symbol_buttons(myresuSet_lisamarie[[1]][["etbl_res_DE"]], new_cols =c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA"))
+myresuSet_lisamarie[[3]][["etbl_res_DE_test"]] <- buttonifier(myresuSet_lisamarie[[1]][["etbl_res_DE"]], new_cols =c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA"), output_format = "DF")
 ```
 Now for the display:
 
@@ -396,21 +396,38 @@ for(i in names(myresuSet_lisamarie)) {
 }
 ```
 
-```{r topgorun-upreg, results="hide", cache=TRUE}
+```{r topgorun-upreg, results="hide", cache=TRUE, message = FALSE}
 #for fun look at upreg only
-for(i in names(myresuSet_lisamarie)) {
-  message(i)
-  if(nrow(myresuSet_lisamarie[[i]][["tbl_res_DE"]]) > 0) {
-  myresuSet_lisamarie[[i]][["topGO_tbl_upreg"]] <- 
-    topGOtable(de_genes = myresuSet_lisamarie[[i]][["tbl_res_DE"]]$geneSymbol, 
-               bg_genes  = geneUniverseExpr, 
+
+  
+  myresuSet_lisamarie[[1]][["topGO_tbl_upreg"]] <- 
+    topGOtable(res_de = myresuSet_lisamarie[[1]][["res_DESeq"]], 
+               dds = dds_NK, 
                ontology = "BP",
                geneID = "symbol",
                add_gene_to_terms = TRUE,
                mapping = "org.Hs.eg.db",
                de_type = "up")
-  }
-}
+
+  myresuSet_lisamarie[[2]][["topGO_tbl_upreg"]] <- 
+    topGOtable(res_de = myresuSet_lisamarie[[1]][["res_DESeq"]], 
+               dds = dds_NKRH30, 
+               ontology = "BP",
+               geneID = "symbol",
+               add_gene_to_terms = TRUE,
+               mapping = "org.Hs.eg.db",
+               de_type = "up")
+  
+
+    myresuSet_lisamarie[[3]][["topGO_tbl_upreg"]] <- 
+    topGOtable(res_de = myresuSet_lisamarie[[1]][["res_DESeq"]], 
+               dds = dds_RH30, 
+               ontology = "BP",
+               geneID = "symbol",
+               add_gene_to_terms = TRUE,
+               mapping = "org.Hs.eg.db",
+               de_type = "up")
+  
 ```
 
 The overviews in the different contrasts are displayed in the interactive tables below. first we filter for terms with padj < 0.05
