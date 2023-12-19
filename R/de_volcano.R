@@ -24,10 +24,11 @@
 #' ## Not run: 
 #' dds_airway <- DESeq(dds_airway)
 #' res_airway <- results(dds_airway)
-#' de_volcano(res_airway, 
-#'            L2FC_cutoff = 2,
+#' p <- de_volcano(res_airway, 
+#'            L2FC_cutoff = 1,
 #'            labeled_genes = 20,
 #'            mapping = "org.Hs.eg.db")
+#' p
 
 
 de_volcano <- function(res_de,
@@ -45,38 +46,41 @@ de_volcano <- function(res_de,
                       multiVals = "first")
   
   df <-  deseqresult2df(res_de)
+  # 
+  # if(max(df$log2FoldChange, na.rm = TRUE) >= abs(min(df$log2FoldChange, na.rm = TRUE))){
+  #   #checking which absolute value is bigger to set xlim
+  #   
+  #   x_limit = ceiling(max(df$log2FoldChange, na.rm = TRUE))
+  #   
+  # }else if(max(df$log2FoldChange, na.rm = TRUE) < abs(min(df$log2FoldChange, na.rm = TRUE))){
+  #   
+  #   x_limit = ceiling(abs(min(df$log2FoldChange, na.rm = TRUE)))
+  #   
+  # }
+  x_limit = ceiling(max(abs(range(df$log2FoldChange, na.rm = TRUE))))
   
-  if(max(df$log2FoldChange, na.rm = TRUE) >= abs(min(df$log2FoldChange, na.rm = TRUE))){
-    #checking which absolute value is bigger to set xlim
-    
-    x_limit = ceiling(max(df$log2FoldChange, na.rm = TRUE))
-    
-  }else if(max(df$log2FoldChange, na.rm = TRUE) < abs(min(df$log2FoldChange, na.rm = TRUE))){
-    
-    x_limit = ceiling(abs(min(df$log2FoldChange, na.rm = TRUE)))
-    
-  }
+  
   
   df$diffexpressed <- "NO"
   # if log2Foldchange > 0.6 and pvalue < 0.05, set as "UP"
-  df$diffexpressed[df$log2FoldChange > L2FC_cutoff & df$padj < 0.05] <- "UP"
+  df$diffexpressed[df$log2FoldChange > L2FC_cutoff & df$pvalue < 0.05] <- "UP"
   # if log2Foldchange < -0.6 and pvalue < 0.05, set as "DOWN"
-  df$diffexpressed[df$log2FoldChange < -L2FC_cutoff & df$padj < 0.05] <- "DOWN"
+  df$diffexpressed[df$log2FoldChange < -L2FC_cutoff & df$pvalue < 0.05] <- "DOWN"
   
-  #calculate top 30 degenes based on padj
-  df$delabel <- ifelse(df$symbol %in% head(df[order(df$padj), "symbol"], labeled_genes), df$symbol, NA)  
-  
-  
+  #calculate top 30 degenes based on pvalue
+  df$delabel <- ifelse(df$symbol %in% head(df[order(df$pvalue), "symbol"], labeled_genes), df$symbol, NA)  
   
   
-  ggplot(data = df, aes(x = log2FoldChange, y = -log10(padj), colour = diffexpressed, label = delabel)) +
+  
+  
+  ggplot(data = df, aes(x = log2FoldChange, y = -log10(pvalue), colour = diffexpressed, label = delabel)) +
     geom_vline(xintercept = c(-L2FC_cutoff, L2FC_cutoff), col = "gray", linetype = 'dashed') +
     geom_hline(yintercept = -log10(0.05), col = "gray", linetype = 'dashed') + 
     geom_point()+
     theme_classic()+
     scale_color_manual(values = c("skyblue", "grey", "tomato"), # to set the colours of our variable
                        labels = c("Downregulated", "Not significant", "Upregulated"))+
-    coord_cartesian(ylim = c(0, 250), xlim = c(-x_limit, x_limit))+
+    coord_cartesian(ylim = c(0, max(-log10(df$pvalue))), xlim = c(-x_limit, x_limit))+
     scale_x_continuous(breaks = seq(-x_limit, x_limit, 2))+
     geom_text_repel(max.overlaps = Inf) # To show all labels 
 }
