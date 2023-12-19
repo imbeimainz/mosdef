@@ -156,6 +156,12 @@ goseqTable <- function(res_de = NULL,
       stop("I couldn't find results in your dds. You should first run DESeq2::DESeq() on your dds.")
       
     }
+    
+    if((de_type == "up" | de_type == "down")&& !is.null(de_genes))
+      stop("The argument de_type can only be used if a dds and a res_de object are provided:\n",
+           "please either provide these objects or if you want to work with gene vectors set de_type to: 'up_and_down'")
+    
+    
         
     if(de_type == "up_and_down"){
       
