@@ -1,6 +1,17 @@
-
-
-
+#' Title
+#'
+#' @param res_de 
+#' @param dds 
+#' @param de_genes 
+#' @param bg_genes 
+#' @param mapping 
+#' @param de_type 
+#' @param ... 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 cluproTable <- function(res_de = NULL,
                         dds = NULL,
                         de_genes = NULL,
@@ -23,6 +34,7 @@ cluproTable <- function(res_de = NULL,
 #if(!(de_type %in% c("up_and_down","up", "down")))
 
 match.arg(de_type, choices = c("up_and_down","up", "down"), several.ok = FALSE)
+
 
 #stop("The de_type argument must be one of: 'up_and_down', 'up', 'down'")
 
@@ -137,20 +149,23 @@ if(!is.null(res_de)&& !is.null(dds)) {
                        multiVals = "first")
   
   # creating the vectors
-  de_genes_input <- factor(as.integer(bg_symbols %in% de_symbols))
-  names(de_genes_input) <- bg_symbols
-  bg_genes <- bg_symbols
+
+  res_enrich <- enrichGO(gene = de_symbols,
+                         universe = bg_symbols,
+                         OrgDb = mapping,
+                         keyType = keyType,
+                         ...)
   
 }   else if(!is.null(c(de_genes,bg_genes))){
-  # creating the vectors
-  de_genes_input <- factor(as.integer(bg_genes %in% de_genes))
-  names(de_genes_input) <- bg_genes
+  
+  res_enrich <- enrichGO(gene = de_genes,
+                         universe = bg_genes,
+                         OrgDb = mapping,
+                         keyType = keyType,
+                         ...)
   
 }
-res_enrich <- enrichGO(gene = names(de_genes_input),
-                       universe = bg_genes,
-                       OrgDb = mapping,
-                       keyType = keyType)
+
 return(res_enrich)
 
 }
