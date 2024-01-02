@@ -135,151 +135,23 @@ go_2_html <- function(go_id,
 #' geneinfo_2_html("ACTB")
 #' geneinfo_2_html("Pf4")
 geneinfo_2_html <- function(gene_id,
-                            res_de = NULL,
-                            col_to_use = "SYMBOL") {
-  # gene_ncbi_button <- create_link_NCBI(gene_id)
-  # gene_genecards_button <- create_link_genecards(gene_id)
-  # gene_gtex_button <- create_link_GTEX(gene_id)
-  # gene_uniProt_button <- create_link_UniProt(gene_id)
-  # gene_pubmed_button <- create_link_pubmed(gene_id)
-  # 
+                            res_de = NULL) {
+  gene_ncbi_button <- create_link_NCBI(gene_id)
+  gene_genecards_button <- create_link_genecards(gene_id)
+  gene_gtex_button <- create_link_GTEX(gene_id)
+  gene_uniProt_button <- create_link_UniProt(gene_id)
+  gene_pubmed_button <- create_link_pubmed(gene_id)
   
   if (!is.null(res_de)) {
     gid <- match(gene_id, res_de$SYMBOL)
-  #   if (is.na(gid)) {
-  #     message(
-  #       "Could not find the specified gene (`", gene_id,
-  #       "`) in the `res_de` object. \n",
-  #       "Still, the general HTML content has been generated."
-  #     )
-  #     gene_adjpvalue <- tags$em("not found")
-  #     gene_logfc <- tags$em("not found")
-  #   } else {
-  #     gene_adjpvalue <- format(res_de[gid, "padj"])
-  #     gene_logfc <- format(round(res_de[gid, "log2FoldChange"], 2), nsmall = 2)
-  #   }
-  }
-
-  mycontent <- paste0(
-    tags$b(gene_id), tags$br(),
-    # "Link to the NCBI Gene database: ", gene_ncbi_button, tags$br(),
-    # "Link to the GeneCards database: ", gene_genecards_button, tags$br(),
-    # "Link to the GTEx Portal: ", gene_gtex_button, tags$br(),
-    # "Link to the UniProt Portal: ", gene_uniProt_button, tags$br(),
-    # "Link to related articles on Pubmed: ", gene_pubmed_button, tags$br(),
-    ifelse(
-      !is.null(res_de),
-      paste0(tags$b("DE p-value (adjusted): "), gene_adjpvalue, tags$br(),
-             tags$b("DE log2FoldChange: "), gene_logfc,
-             collapse = ""
-      ),
-      ""
-    )
-  )
-  return(HTML(mycontent))
-}
-
-#' Link to NCBI database
-#'
-#' @param val Character, the gene symbol
-#'
-#' @return HTML for an action button
-#' @noRd
-.link2ncbi <- function(val) {
-  sprintf(
-    '<a href = "http://www.ncbi.nlm.nih.gov/gene/?term=%s[sym]" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
-    val,
-    .actionbutton_biocstyle,
-    val
-  )
-}
-
-#' Link to the GeneCards database
-#'
-#' @param val Character, the gene symbol of interest
-#'
-#' @return HTML for an action button
-#' @noRd
-.link2genecards <- function(val) {
-  sprintf(
-    '<a href = "https://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
-    val,
-    .actionbutton_biocstyle,
-    val
-  )
-}
-
-#' Link to the GTEx Portal
-#'
-#' @param val Character, the gene symbol of interest
-#'
-#' @return HTML for an action button
-#' @noRd
-.link2gtex <- function(val) {
-  sprintf(
-    '<a href = "https://www.gtexportal.org/home/gene/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-dna"></i>%s</a>',
-    val,
-    .actionbutton_biocstyle,
-    val
-  )
-}
-
-
-#' Information on a gene
-#'
-#' Assembles information, in HTML format, regarding a gene symbol identifier
-#'
-#' Creates links to the NCBI and the GeneCards databases
-#'
-#' @param gene_id Character specifying the gene identifier for which to retrieve
-#' information
-#' @param res_de A `DESeqResults` object, storing the result of the differential
-#' expression analysis. If not provided, the experiment-related information is not
-#' shown, and only some generic info on the identifier is displayed.
-#' The information about the gene is retrieved by matching on the `SYMBOL` column,
-#' which should be provided in `res_de`.
-#'
-#' @return HTML content related to a gene identifier, to be displayed in
-#' web applications (or inserted in Rmd documents)
-#' @export
-#'
-#' @examples
-#' geneinfo_3_html("ACTB")
-#' geneinfo_3_html("Pf4")
-geneinfo_3_html <- function(gene_id, res_de = NULL) {
-  print("Entering geneinfo_3_html function...")
-  
-  # Check the class and value of gene_id
-  print(class(gene_id))
-  print(gene_id)
-  
-  # Print the current environment
-  print(ls())
-  
-  gene_id <- as.character(gene_id)
-  print("After converting gene_id to character...")
-  
-  gene_ncbi_button <- .link2ncbi(gene_id)
-  gene_genecards_button <- .link2genecards(gene_id)
-  gene_gtex_button <- .link2gtex(gene_id)
-  
-  if (!is.null(res_de)) {
-    gene_id <- as.character(gene_id)
-    gid <- match(gene_id, res_de$SYMBOL)
-    
-    # Print information for debugging
-    print("After matching gene_id in res_de...")
-    print(gene_id)
-    print(gid)
-    
     if (is.na(gid)) {
       message(
         "Could not find the specified gene (`", gene_id,
         "`) in the `res_de` object. \n",
         "Still, the general HTML content has been generated."
       )
-      gene_adjpvalue <- tags$em("not found")
-      gene_logfc <- tags$em("not found")
+      gene_adjpvalue <- htmltools::tags$em("not found")
+      gene_logfc <- htmltools::tags$em("not found")
     } else {
       gene_adjpvalue <- format(res_de[gid, "padj"])
       gene_logfc <- format(round(res_de[gid, "log2FoldChange"], 2), nsmall = 2)
@@ -287,21 +159,23 @@ geneinfo_3_html <- function(gene_id, res_de = NULL) {
   }
   
   mycontent <- paste0(
-    tags$b(geneinfo_3_html::gene_id), tags$br(),
-    "Link to the NCBI Gene database: ", gene_ncbi_button, tags$br(),
-    "Link to the GeneCards database: ", gene_genecards_button, tags$br(),
-    "Link to the GTEx Portal: ", gene_gtex_button, tags$br(),
-    if (!is.null(res_de)) {
-      paste0(
-        tags$b("DE p-value (adjusted): "), gene_adjpvalue, tags$br(),
-        tags$b("DE log2FoldChange: "), gene_logfc
-      )
-    }
+    htmltools::tags$b(gene_id), htmltools::tags$br(),
+    "Link to the NCBI Gene database: ", gene_ncbi_button, htmltools::tags$br(),
+    "Link to the GeneCards database: ", gene_genecards_button, htmltools::tags$br(),
+    "Link to the GTEx Portal: ", gene_gtex_button, htmltools::tags$br(),
+    "Link to the UniProt Portal: ", gene_uniProt_button, htmltools::tags$br(),
+    "Link to related articles on Pubmed: ", gene_pubmed_button, htmltools::tags$br(),
+    ifelse(
+      !is.null(res_de),
+      paste0(htmltools::tags$b("DE p-value (adjusted): "), gene_adjpvalue, htmltools::tags$br(),
+             htmltools::tags$b("DE log2FoldChange: "), gene_logfc,
+             collapse = ""
+      ),
+      ""
+    )
   )
-  
-  return(HTML(mycontent))
+  return(shiny::HTML(mycontent))
 }
-
 
 #' Link to the GeneCards database
 #'
