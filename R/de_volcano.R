@@ -12,7 +12,7 @@
 #'
 #' @importFrom utils head
 #' @importFrom AnnotationDbi mapIds
-#' @importFrom ggplot2 ggplot aes label geom_vline geom_hline geom_point
+#' @importFrom ggplot2 ggplot aes geom_vline geom_hline geom_point
 #' theme_classic scale_color_manual coord_cartesian scale_x_continuous
 #' @importFrom ggrepel geom_label_repel geom_text_repel
 #'
