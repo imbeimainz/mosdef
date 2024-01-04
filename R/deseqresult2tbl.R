@@ -8,6 +8,8 @@
 #' @export
 #'
 #' @importFrom methods is
+#' @importFrom rentrez entrez_summary
+#' @importFrom dplyr arrange
 #'
 #' @examples
 #'

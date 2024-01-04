@@ -12,6 +12,11 @@
 #'
 #' @importFrom utils head
 #' @importFrom AnnotationDbi mapIds
+#' @importFrom ggplot2 ggplot aes colour label geom_vline geom_hline geom_point
+#' geom_text_repel theme_classic scale_color_manual coord_cartesian scale_x_continuous
+#'  
+#'
+#'
 #'
 #' @examples
 #' library(tidyverse) # includes ggplot2, for data visualisation. dplyr, for data manipulation.
@@ -54,9 +59,9 @@ annot_to_map_to <- get(mapping)
 
 
   df$diffexpressed <- "NO"
-  # if log2Foldchange > 0.6 and pvalue < 0.05, set as "UP"
+  # if log2Foldchange > Cutoff and pvalue < 0.05, set as "UP"
   df$diffexpressed[df$log2FoldChange > L2FC_cutoff & df$pvalue < 0.05] <- "UP"
-  # if log2Foldchange < -0.6 and pvalue < 0.05, set as "DOWN"
+  # if log2Foldchange < -Cutoff and pvalue < 0.05, set as "DOWN"
   df$diffexpressed[df$log2FoldChange < -L2FC_cutoff & df$pvalue < 0.05] <- "DOWN"
 
   #calculate top 30 degenes based on pvalue

@@ -13,6 +13,10 @@
 #'
 #' @return A dataframe or a \code{DT} datatable object with columns adding HTML objects that link to websites with further information on the genes in question.
 #' @export
+#' 
+#' 
+#' 
+#' @importFrom DT datatable
 #'
 #' @examples
 #' library(dplyr)

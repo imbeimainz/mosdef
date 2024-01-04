@@ -58,6 +58,11 @@ deseqresult2DEgenes <- function(deseqresult,
 #'
 #' @export
 #'
+#'
+#
+#' @importFrom methods is
+#' 
+#' 
 #' @examples
 #' data(res_de_macrophage, package = "GeneTonic")
 #' head(res_macrophage_IFNg_vs_naive)
