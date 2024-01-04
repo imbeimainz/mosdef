@@ -13,8 +13,8 @@
 #' @importFrom utils head
 #' @importFrom AnnotationDbi mapIds
 #' @importFrom ggplot2 ggplot aes label geom_vline geom_hline geom_point
-#' geom_label_repel geom_text_repel theme_classic scale_color_manual coord_cartesian scale_x_continuous
-#'  
+#' theme_classic scale_color_manual coord_cartesian scale_x_continuous
+#' @importFrom ggrepel geom_label_repel geom_text_repel
 #'
 #'
 #'
@@ -50,7 +50,7 @@ annot_to_map_to <- get(mapping)
                       multiVals = "first")
 
   df <-  deseqresult2df(res_de)
-  
+
   # finding the highest value in the log2FoldChange column and rounding it up to get a nice symetric plot
   x_limit = ceiling(max(abs(range(df$log2FoldChange, na.rm = TRUE))))
 
