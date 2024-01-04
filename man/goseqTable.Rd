@@ -15,7 +15,7 @@ goseqTable(
   testCats = c("GO:BP", "GO:MF", "GO:CC"),
   FDR_GO_cutoff = 1,
   orgDbPkg = "org.Hs.eg.db",
-  addGeneToTerms = TRUE
+  add_gene_to_terms = TRUE
 )
 }
 \arguments{
@@ -44,7 +44,7 @@ upregulated, downregulated or both}
 \item{orgDbPkg}{Character string, named as the \code{org.XX.eg.db}
 package which should be available in Bioconductor}
 
-\item{addGeneToTerms}{Logical, whether to add a column with all genes annotated
+\item{add_gene_to_terms}{Logical, whether to add a column with all genes annotated
 to each GO term}
 
 \item{nTop}{Number of categories to extract, and optionally process for adding
@@ -73,14 +73,14 @@ dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
 dds_airway <- DESeq2::DESeq(dds_airway)
 res_airway <- DESeq2::results(dds_airway)
 
-res_subset <- deseqresult2DEgenes(res_airway)[1:100, ]
+res_subset <- deseqresult2df(res_airway)[1:100, ]
 myde <- res_subset$id
 myassayed <- rownames(res_airway)
 \dontrun{
 mygo <- goseqTable(de_genes = myde,
   bg_genes = myassayed,
   testCats = "GO:BP",
-  addGeneToTerms = FALSE
+  add_gene_to_terms = FALSE
 )
 head(mygo)
 }

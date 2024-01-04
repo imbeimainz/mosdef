@@ -7,7 +7,7 @@
 #' @param labeled_genes A numeric value describing the amount of genes to be labeled. This uses the Top(x) highest differnetially expressed genes 
 #' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
 #'
-#' @return
+#' @return A  \code{ggplot2} volcano plot object that can be extended upon by the user
 #' @export
 #'
 #' @examples

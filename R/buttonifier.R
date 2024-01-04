@@ -9,9 +9,9 @@
 #' @param col_to_use name of the coloumns were the gene symbols are stored. Default is SYMBOL
 #' @param output_format a parameter deciding which output format to return, either a DT:datatable (recommended)
 #' or a simple dataframe (DF).In the latter case it is important that if the data is visualized with the
-#'  \code {datatable} function the parameter escape must be set to FALSE
+#'  \code{datatable} function the parameter escape must be set to FALSE
 #'
-#' @return
+#' @return A dataframe or a \code{DT} datatable object with columns adding HTML objects that link to websites with further information on the genes in question.
 #' @export
 #'
 #' @examples

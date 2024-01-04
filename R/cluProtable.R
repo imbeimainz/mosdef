@@ -1,17 +1,35 @@
 #' Title
 #'
-#' @param res_de 
-#' @param dds 
-#' @param de_genes 
-#' @param bg_genes 
-#' @param mapping 
-#' @param de_type 
-#' @param ... 
+#' @param res_de A DESeqResults object created using \code{DESeq2} 
+#' @param dds A DESeqDataset object created using \code{DESeq2} 
+#' @param de_genes A vector of (differentially expressed) genes
+#' @param bg_genes A vector of background genes, e.g. all (expressed) genes in the assays
+#' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
+#' @param de_type One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
+#' @param ... Further parameters to use for the go_enrich function from \code{clusterProfiler}
 #'
-#' @return
+#' @return A table containing the computed GO Terms and related enrichment scores
 #' @export
 #'
 #' @examples
+#' #' library(airway)
+#' library(DESeq2)
+#' data(airway)
+#' airway
+#' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+#' # Example, performing extraction of enriched functional categories in
+#' # detected significantly expressed genes
+#' \dontrun{
+#' dds_airway <- DESeq(dds_airway)
+#' res_airway <- results(dds_airway)
+#' library("AnnotationDbi")
+#' library("org.Hs.eg.db")
+#' library(clusterProfiler)
+#' CluProde_airway <- cluproTable(res_de = res_airway, 
+#'                               dds = dds_airway,
+#'                              mapping = "org.Hs.eg.db")
+#' }
+#'
 cluproTable <- function(res_de = NULL,
                         dds = NULL,
                         de_genes = NULL,

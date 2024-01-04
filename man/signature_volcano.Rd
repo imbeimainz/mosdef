@@ -7,7 +7,6 @@
 signature_volcano(
   res_de,
   annotation_obj = NULL,
-  gtl = NULL,
   geneset_id = NULL,
   genelist = NULL,
   FDR = 0.05,
@@ -21,10 +20,6 @@ signature_volcano(
 
 \item{annotation_obj}{A \code{data.frame} object with the feature annotation
 information, with at least two columns, \code{gene_id} and \code{gene_name}.}
-
-\item{gtl}{A \code{GeneTonic}-list object, containing in its slots the arguments
-specified above: \code{dds}, \code{res_de}, \code{res_enrich}, and \code{annotation_obj} - the names
-of the list \emph{must} be specified following the content they are expecting.}
 
 \item{geneset_id}{Character specifying the gene set identifier to be plotted.}
 

@@ -13,13 +13,13 @@ topGOtable(
   annot = annFUN.org,
   mapping = "org.Mm.eg.db",
   geneID = "symbol",
-  fullNamesInRows = TRUE,
-  addGeneToTerms = TRUE,
+  full_names_in_rows = TRUE,
+  add_gene_to_terms = TRUE,
   de_type = "up_and_down",
-  plotGraph = FALSE,
-  plotNodes = 10,
-  writeOutput = FALSE,
-  outputFile = "",
+  plot_graph = FALSE,
+  plot_nodes = 10,
+  write_output = FALSE,
+  output_file = "",
   topGO_method2 = "elim",
   do_padj = FALSE
 )
@@ -42,20 +42,20 @@ topGOtable(
 \item{geneID}{Which format the genes are provided. Defaults to \code{symbol}, could also be
 \code{entrez} or \code{ENSEMBL}}
 
-\item{fullNamesInRows}{Logical, whether to display or not the full names for the GO terms}
+\item{full_names_in_rows}{Logical, whether to display or not the full names for the GO terms}
 
-\item{addGeneToTerms}{Logical, whether to add a column with all genes annotated to each GO term}
+\item{add_gene_to_terms}{Logical, whether to add a column with all genes annotated to each GO term}
 
 \item{de_type}{One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
 upregulated, downregulated or both}
 
-\item{plotGraph}{Logical, if TRUE additionally plots a graph on the identified GO terms}
+\item{plot_graph}{Logical, if TRUE additionally plots a graph on the identified GO terms}
 
-\item{plotNodes}{Number of nodes to plot}
+\item{plot_nodes}{Number of nodes to plot}
 
-\item{writeOutput}{Logical, if TRUE additionally writes out the result to a file}
+\item{write_output}{Logical, if TRUE additionally writes out the result to a file}
 
-\item{outputFile}{Name of the file the result should be written into}
+\item{output_file}{Name of the file the result should be written into}
 
 \item{topGO_method2}{Character, specifying which of the methods implemented by \code{topGO} should be used, in addition to the \code{classic} algorithm. Defaults to \code{elim}}
 
