@@ -12,8 +12,8 @@
 #'
 #' @importFrom utils head
 #' @importFrom AnnotationDbi mapIds
-#' @importFrom ggplot2 ggplot aes colour label geom_vline geom_hline geom_point
-#' geom_text_repel theme_classic scale_color_manual coord_cartesian scale_x_continuous
+#' @importFrom ggplot2 ggplot aes label geom_vline geom_hline geom_point
+#' geom_label_repel geom_text_repel theme_classic scale_color_manual coord_cartesian scale_x_continuous
 #'  
 #'
 #'
@@ -37,8 +37,6 @@
 #'            labeled_genes = 20,
 #'            mapping = "org.Hs.eg.db")
 #' p
-
-
 de_volcano <- function(res_de,
                        L2FC_cutoff = 1,
                        labeled_genes = 30,

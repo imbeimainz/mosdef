@@ -35,8 +35,6 @@
 #' res_df <- as.data.frame(res_macrophage_IFNg_vs_naive@listData)
 #' res_df <-res_df[1:100,]
 #' gene_symbol_buttons(res_df)
-
-
 gene_symbol_buttons <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL", output_format = "DT"){
 
   .actionbutton_biocstyle <- "color: #ffffff; background-color: #0092AC"

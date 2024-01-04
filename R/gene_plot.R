@@ -43,8 +43,9 @@
 #' @export
 #'
 #' @importFrom stats median
-#' @importFrom ggplot2 ggplot aes aes_string geom_point geom_boxplot position_jitter
-#' scale_color_discrete scale_x_discrete scale_y_log10 stat_summary theme_bw
+#' @importFrom ggplot2 ggplot aes aes_string geom_point geom_boxplot geom_violin 
+#' position_jitter scale_color_discrete scale_x_discrete scale_y_log10 scale_y_continuous
+#' stat_summary theme_bw labs
 #'
 #' @examples
 #' library("macrophage")
