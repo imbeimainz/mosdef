@@ -2,11 +2,16 @@ Package: mosdef
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.1
 Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+    c(
+        person(
+            given = "Leon", family = "Dammer", role = c("aut"), 
+            email = "TODO", comment = c(ORCID = "0000-0001-0000-0001")
+        ),
+        person(
+            given = "Federico", family = "Marini", role = c("aut", "cre"), 
+            email = "marinif@uni-mainz.de", comment = c(ORCID = "0000-0003-3252-7758")
+        )
+    )
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
