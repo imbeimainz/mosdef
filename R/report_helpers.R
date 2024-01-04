@@ -7,7 +7,7 @@ create_link_GO <- function(val) {
 create_link_pubmed <- function(val){
     paste0('<a href="https://pubmed.ncbi.nlm.nih.gov/?term=',val,'" target="_blank" class="btn btn-primary">',
            paste0(val,"@Pubmed"),'</a>')
-  
+
 }
 
 create_link_ENS  <- function(val, species="Mus_musculus") {
@@ -21,7 +21,7 @@ create_link_ENS  <- function(val, species="Mus_musculus") {
 #' @return HTML for an action button
 #' @noRd
 create_link_NCBI <- function(val) {
- 
+
   paste0('<a href="http://www.ncbi.nlm.nih.gov/gene/?term=',val,'[sym]" target="_blank" class="btn btn-primary">',
          paste0(val,"@NCBI"),'</a>')
 }
@@ -141,7 +141,7 @@ geneinfo_2_html <- function(gene_id,
   gene_gtex_button <- create_link_GTEX(gene_id)
   gene_uniProt_button <- create_link_UniProt(gene_id)
   gene_pubmed_button <- create_link_pubmed(gene_id)
-  
+
   if (!is.null(res_de)) {
     gid <- match(gene_id, res_de$SYMBOL)
     if (is.na(gid)) {
@@ -157,7 +157,7 @@ geneinfo_2_html <- function(gene_id,
       gene_logfc <- format(round(res_de[gid, "log2FoldChange"], 2), nsmall = 2)
     }
   }
-  
+
   mycontent <- paste0(
     htmltools::tags$b(gene_id), htmltools::tags$br(),
     "Link to the NCBI Gene database: ", gene_ncbi_button, htmltools::tags$br(),
@@ -174,7 +174,7 @@ geneinfo_2_html <- function(gene_id,
       ""
     )
   )
-  return(shiny::HTML(mycontent))
+  return(htmltools::HTML(mycontent))
 }
 
 #' Link to the GeneCards database
@@ -222,8 +222,8 @@ create_link_UniProt <- function(val) {
 create_link_dbPTM <- function(val) {
   base_link_old <- "http://dbptm.mbc.nctu.edu.tw/"
   base_link_new <- "https://awi.cuhk.edu.cn/dbPTM/"
-  
-  
+
+
   sprintf('<a href = "%s/info.php?id=%s_HUMAN" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-edit"></i>%s</a>',
           base_link_new,     # main link to website
           val,               # link portion related to the gene
