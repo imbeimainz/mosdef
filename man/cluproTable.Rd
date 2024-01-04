@@ -36,7 +36,7 @@ A table containing the computed GO Terms and related enrichment scores
 Title
 }
 \examples{
-#' library(airway)
+library(airway)
 library(DESeq2)
 data(airway)
 airway
@@ -49,7 +49,7 @@ res_airway <- results(dds_airway)
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 library(clusterProfiler)
-CluProde_airway <- cluproTable(res_de = res_airway, 
+CluProde_airway <- cluproTable(res_de = res_airway,
                               dds = dds_airway,
                              mapping = "org.Hs.eg.db")
 }

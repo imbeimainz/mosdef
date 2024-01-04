@@ -22,6 +22,9 @@ gene_symbol_buttons(
 or a simple dataframe (DF).In the latter case it is important that if the data is visualized with the
 \code{datatable} function the parameter escape must be set to FALSE}
 }
+\value{
+TODO
+}
 \description{
 A function to turn Gene Symbols into buttons in an RMD linking to various Portals for further info
 about these genes.
