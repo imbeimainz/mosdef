@@ -215,7 +215,7 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
 
     de_symbols <- de_df$symbol
     bg_ids <- rownames(dds)[rowSums(counts(dds)) > 0]
-    bg_symbols <- mapIds(org.Hs.eg.db,
+    bg_symbols <- mapIds(annot_to_map_to,
                          keys = bg_ids,
                          column = "SYMBOL",
                          keytype = "ENSEMBL",

@@ -11,6 +11,11 @@
 #' @return A table containing the computed GO Terms and related enrichment scores
 #' @export
 #'
+#'
+#' @importFrom AnnotationDbi mapIds
+#' @importFrom clusterProfiler enrichGO
+#'
+#'
 #' @examples
 #' library(airway)
 #' library(DESeq2)
@@ -160,13 +165,13 @@ if(!is.null(res_de)&& !is.null(dds)) {
 
   de_symbols <- de_df$symbol
   bg_ids <- rownames(dds)[rowSums(counts(dds)) > 0]
-  bg_symbols <- mapIds(org.Hs.eg.db,
+  bg_symbols <- mapIds(annot_to_map_to,
                        keys = bg_ids,
                        column = "SYMBOL",
                        keytype = "ENSEMBL",
                        multiVals = "first")
 
-  # creating the vectors
+
 
   res_enrich <- enrichGO(gene = de_symbols,
                          universe = bg_symbols,

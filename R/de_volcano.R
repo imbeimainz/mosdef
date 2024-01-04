@@ -11,6 +11,7 @@
 #' @export
 #'
 #' @importFrom utils head
+#' @importFrom AnnotationDbi mapIds
 #'
 #' @examples
 #' library(tidyverse) # includes ggplot2, for data visualisation. dplyr, for data manipulation.
@@ -38,27 +39,16 @@ de_volcano <- function(res_de,
                        labeled_genes = 30,
                        mapping = "org.Mm.eg.db" ){
 
-  #library(package = mapping)
-  library("AnnotationDbi")
-  library("org.Hs.eg.db")
-  res_de$symbol <- mapIds(org.Hs.eg.db,
+annot_to_map_to <- get(mapping)
+  res_de$symbol <- mapIds(annot_to_map_to,
                       keys = row.names(res_airway),
                       column = "SYMBOL",
                       keytype = "ENSEMBL",
                       multiVals = "first")
 
   df <-  deseqresult2df(res_de)
-  #
-  # if(max(df$log2FoldChange, na.rm = TRUE) >= abs(min(df$log2FoldChange, na.rm = TRUE))){
-  #   #checking which absolute value is bigger to set xlim
-  #
-  #   x_limit = ceiling(max(df$log2FoldChange, na.rm = TRUE))
-  #
-  # }else if(max(df$log2FoldChange, na.rm = TRUE) < abs(min(df$log2FoldChange, na.rm = TRUE))){
-  #
-  #   x_limit = ceiling(abs(min(df$log2FoldChange, na.rm = TRUE)))
-  #
-  # }
+  
+  # finding the highest value in the log2FoldChange column and rounding it up to get a nice symetric plot
   x_limit = ceiling(max(abs(range(df$log2FoldChange, na.rm = TRUE))))
 
 
