@@ -42,6 +42,10 @@
 #' @return A `ggplot` object
 #' @export
 #'
+#' @importFrom stats median
+#' @importFrom ggplot2 ggplot aes aes_string geom_point geom_boxplot position_jitter
+#' scale_color_discrete scale_x_discrete scale_y_log10 stat_summary theme_bw
+#'
 #' @examples
 #' library("macrophage")
 #' library("DESeq2")
@@ -86,7 +90,7 @@ gene_plot <- function(dds,
     plot_type,
     c("auto", "jitteronly", "boxplot", "violin", "sina")
   )
-  
+
   if (!is.null(gtl)) {
     checkup_gtl(gtl)
     dds <- gtl$dds
@@ -94,14 +98,14 @@ gene_plot <- function(dds,
     res_enrich <- gtl$res_enrich
     annotation_obj <- gtl$annotation_obj
   }
-  
+
   if (!intgroup %in% colnames(colData(dds))) {
     stop("`intgroup` not found in the colData slot of the dds object",
          "\nPlease specify one of the following: \n",
          paste0(colnames(colData(dds)), collapse = ", ")
     )
   }
-  
+
   df <- get_expr_values(
     dds = dds,
     gene = gene,
@@ -109,32 +113,32 @@ gene_plot <- function(dds,
     assay = assay,
     normalized = normalized
   )
-  
+
   df$sample_id <- rownames(df)
   if (!is.null(annotation_obj)) {
     genesymbol <- annotation_obj$gene_name[match(gene, annotation_obj$gene_id)]
   } else {
     genesymbol <- ""
   }
-  
+
   onlyfactors <- df[, match(intgroup, colnames(df))]
   df$plotby <- interaction(onlyfactors)
-  
+
   min_by_groups <- min(table(df$plotby))
   # depending on this, use boxplots/nothing/violins/sina
-  
+
   if (return_data) {
     return(df)
   }
-  
+
   p <- ggplot(df, aes_string(x = "plotby", y = "exp_value", col = "plotby")) +
     scale_x_discrete(name = "") +
     scale_color_discrete(name = "Experimental\ngroup") +
     theme_bw()
-  
+
   # for connected handling of jittered points AND labels
   jit_pos <- position_jitter(width = 0.2, height = 0, seed = 42)
-  
+
   # somewhat following the recommendations here
   # https://www.embopress.org/doi/full/10.15252/embj.201694659
   if (plot_type == "jitteronly" || (plot_type == "auto" & min_by_groups <= 3)) {
@@ -163,7 +167,7 @@ gene_plot <- function(dds,
         geom = "crossbar", width = 0.3
       )
   }
-  
+
   # handling the labels
   if (labels_display) {
     if (labels_repel) {
@@ -179,7 +183,7 @@ gene_plot <- function(dds,
       )
     }
   }
-  
+
   y_label <- if (assay == "counts" & normalized) {
     "Normalized counts"
   } else if (assay == "counts" & !normalized) {
@@ -189,21 +193,21 @@ gene_plot <- function(dds,
   } else {
     assay
   }
-  
+
   # handling y axis transformation
   if (transform) {
     p <- p + scale_y_log10(name = paste0(y_label, " (log10 scale)"))
   } else {
     p <- p + scale_y_continuous(name = y_label)
   }
-  
+
   # handling the displayed names and ids
   if (!is.null(annotation_obj)) {
     p <- p + labs(title = paste0(genesymbol, " - ", gene))
   } else {
     p <- p + labs(title = paste0(gene))
   }
-  
+
   return(p)
 }
 
@@ -252,29 +256,29 @@ get_expr_values <- function(dds,
                             intgroup,
                             assay = "counts",
                             normalized = TRUE) {
-  
+
   if (!(assay %in% names(assays(dds)))) {
     stop(
       "Please specify a name of one of the existing assays: \n",
       paste(names(assays(dds)), collapse = ", ")
     )
   }
-  
+
   # checking the normalization factors are in
   if (is.null(sizeFactors(dds)) & is.null(normalizationFactors(dds))) {
     dds <- estimateSizeFactors(dds)
   }
-  
+
   if (assay == "counts") {
     exp_vec <- counts(dds, normalized = normalized)[gene, ]
   } else {
     exp_vec <- assays(dds)[[assay]][gene, ]
   }
-  
+
   exp_df <- data.frame(
     exp_value = exp_vec,
     colData(dds)[intgroup]
   )
-  
+
   return(exp_df)
 }

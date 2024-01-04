@@ -8,6 +8,9 @@
 #' @return A "tidy" data.frame with only genes marked as differentially expressed
 #' @export
 #'
+#' @importFrom dplyr arrange
+#' @importFrom methods is
+#'
 #' @examples
 #'
 #' # with simulated data...
@@ -21,11 +24,11 @@ deseqresult2DEgenes <- function(deseqresult,
   # library("dplyr")
   if (!is(deseqresult, "DESeqResults")) stop("Not a DESeqResults object.")
   deseqresult <- as.data.frame(deseqresult)
-  
+
   deseqresult <- cbind(rownames(deseqresult), deseqresult)
   names(deseqresult)[1] <- "id"
   deseqresult$id <- as.character(deseqresult$id)
-  
+
   # deseqresult$id <- rownames(deseqresult)
   # rownames(deseqresult) <- NULL
   # deseqresult <- dplyr::tbl_df(deseqresult)
