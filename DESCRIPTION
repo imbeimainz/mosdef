@@ -13,11 +13,30 @@ Authors@R:
         )
     )
 Description: What the package does (one paragraph).
+Imports:
+    dplyr,
+    DT,
+    ggplot2,
+    ggforce, 
+    ggrepel,
+    htmltools,
+    methods,
+    rentrez,
+    AnnotationDbi,
+    topGO,
+    DESeq2,
+    GO.db,
+    clusterProfiler, 
+    goseq,
+    utils,
+    org.Hs.eg.db
+Suggests: 
+    knitr,
+    rmarkdown,
+    airway,
+    macrophage
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Suggests: 
-    knitr,
-    rmarkdown
 VignetteBuilder: knitr
