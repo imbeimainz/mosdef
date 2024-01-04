@@ -34,6 +34,13 @@
 #' @return An object created by \code{ggplot}
 #' @export
 #'
+#'
+#' @importFrom ggplot2 ggplot aes aes_string geom_hline geom_point geom_text geom_rug
+#' xlab ylab ggtitle scale_colour_manual coord_cartesian theme_bw
+#' @importFrom ggrepel geom_text_repel
+#'
+#'
+#'
 #' @examples
 #' library(airway)
 #' data(airway)

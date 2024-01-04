@@ -48,6 +48,7 @@
 #' @export
 #'
 #' @importFrom stats p.adjust
+#' @importFrom goseq nullp goseq getgo
 #'
 #' @examples
 #'
@@ -95,9 +96,9 @@ goseqTable <- function(res_de = NULL,
                        ## do it by default only for bp?
                        ## tests at the beginning to see if the whole thing is feasible?
 ) {
-  library(goseq) # for now (again not sure how the dependencies work)
-  library(GO.db)
-  library(DESeq2)
+  # library(goseq) 
+  # library(GO.db)
+  # library(DESeq2)
 
   ##Checks:
 
