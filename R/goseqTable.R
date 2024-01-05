@@ -37,8 +37,6 @@
 #'  upregulated, downregulated or both
 #' @param testCats A vector specifying which categories to test for over representation amongst DE genes - can be any combination of "GO:CC", "GO:BP", "GO:MF" & "KEGG"
 #' @param FDR_GO_cutoff Numeric value for subsetting the results
-#' @param nTop Number of categories to extract, and optionally process for adding
-#' genes to the respective terms
 #' @param orgDbPkg Character string, named as the \code{org.XX.eg.db}
 #' package which should be available in Bioconductor
 #' @param add_gene_to_terms Logical, whether to add a column with all genes annotated
@@ -49,6 +47,7 @@
 #'
 #' @importFrom stats p.adjust
 #' @importFrom goseq nullp goseq getgo
+#' @importFrom AnnotationDbi mapIds
 #'
 #' @examples
 #'

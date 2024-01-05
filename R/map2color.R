@@ -16,6 +16,8 @@
 #' vector
 #' @export
 #'
+#' @importFrom RColorBrewer brewer.pal
+#'
 #' @examples
 #' a <- 1:9
 #' pal <- RColorBrewer::brewer.pal(9, "Set1")
