@@ -24,6 +24,7 @@
 #' library(ggrepel) # for nice annotations
 #' library(airway)
 #' library(DESeq2)
+#' library("org.Hs.eg.db")
 #' data(airway)
 #' airway
 #' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
