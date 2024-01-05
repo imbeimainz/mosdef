@@ -46,9 +46,6 @@ package which should be available in Bioconductor}
 
 \item{add_gene_to_terms}{Logical, whether to add a column with all genes annotated
 to each GO term}
-
-\item{nTop}{Number of categories to extract, and optionally process for adding
-genes to the respective terms}
 }
 \value{
 A table containing the computed GO Terms and related enrichment scores

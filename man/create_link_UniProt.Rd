@@ -2,10 +2,16 @@
 % Please edit documentation in R/report_helpers.R
 \name{create_link_UniProt}
 \alias{create_link_UniProt}
-\title{Link to the Uniprot Portal}
+\title{Link to Uniprot database}
 \usage{
 create_link_UniProt(val)
 }
+\arguments{
+\item{val}{Character, the gene symbol}
+}
+\value{
+HTML for an action button
+}
 \description{
-Link to the Uniprot Portal
+Link to Uniprot database
 }

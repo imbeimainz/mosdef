@@ -63,10 +63,6 @@ upregulated, downregulated or both}
 topGO method, based on the FDR correction. Defaults to FALSE, since the assumption of
 independent hypotheses is somewhat violated by the intrinsic DAG-structure of the Gene
 Ontology Terms}
-
-\item{annot_to_map_to}{A temporary parameter allowing the use of AnnotationDBs mapIds function}
-
-\item{topTablerows}{How many rows to report before any filtering}
 }
 \value{
 A table containing the computed GO Terms and related enrichment scores

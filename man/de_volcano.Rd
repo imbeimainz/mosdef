@@ -31,11 +31,12 @@ This function generates a base volcanoplot for differentially expressed genes th
 upon using further ggplot functions.
 }
 \examples{
-library("tidyverse") # includes ggplot2, for data visualisation. dplyr, for data manipulation.
+library(ggplot2) 
 library(RColorBrewer) # for a colourful plot
 library(ggrepel) # for nice annotations
 library(airway)
 library(DESeq2)
+library("org.Hs.eg.db")
 data(airway)
 airway
 dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)

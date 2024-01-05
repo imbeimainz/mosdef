@@ -29,7 +29,8 @@ Imports:
     clusterProfiler, 
     goseq,
     utils,
-    org.Hs.eg.db
+    org.Hs.eg.db,
+    RColorBrewer
 Suggests: 
     knitr,
     rmarkdown,

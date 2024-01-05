@@ -22,8 +22,16 @@ with adjusted p-value smaller than the value.
 Generate a tidy table with the results of \code{DESeq2}
 }
 \examples{
-data(res_de_macrophage, package = "GeneTonic")
-head(res_macrophage_IFNg_vs_naive)
-res_df <- deseqresult2df(res_macrophage_IFNg_vs_naive)
+library(airway)
+library(DESeq2)
+data(airway)
+airway
+dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+# Example, performing extraction of enriched functional categories in
+# detected significantly expressed genes
+dds_airway <- DESeq(dds_airway)
+res_airway <- results(dds_airway)
+head(res_airway)
+res_df <- deseqresult2df(res_airway)
 head(res_df)
 }
