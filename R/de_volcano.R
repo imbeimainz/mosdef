@@ -15,6 +15,7 @@
 #' @importFrom ggplot2 ggplot aes geom_vline geom_hline geom_point
 #' theme_classic scale_color_manual coord_cartesian scale_x_continuous
 #' @importFrom ggrepel geom_label_repel geom_text_repel
+#' @importFrom rlang .data
 #'
 #'
 #'
@@ -45,7 +46,7 @@ de_volcano <- function(res_de,
 
 annot_to_map_to <- get(mapping)
   res_de$symbol <- mapIds(annot_to_map_to,
-                      keys = row.names(res_airway),
+                      keys = row.names(res_de),
                       column = "SYMBOL",
                       keytype = "ENSEMBL",
                       multiVals = "first")
@@ -69,7 +70,8 @@ annot_to_map_to <- get(mapping)
 
 
 
-  ggplot(data = df, aes(x = log2FoldChange, y = -log10(pvalue), colour = diffexpressed, label = delabel)) +
+  ggplot(data = df, aes(x = .data$log2FoldChange, y = -log10(.data$pvalue), 
+                        colour = .data$diffexpressed, label = .data$delabel)) +
     geom_vline(xintercept = c(-L2FC_cutoff, L2FC_cutoff), col = "gray", linetype = 'dashed') +
     geom_hline(yintercept = -log10(0.05), col = "gray", linetype = 'dashed') +
     geom_point()+

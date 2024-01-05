@@ -15,6 +15,8 @@
 #' @importFrom AnnotationDbi mapIds
 #' @importFrom clusterProfiler enrichGO
 #' @importFrom methods is
+#' @importFrom S4Vectors mcols
+#' @importFrom DESeq2 counts
 #'
 #'
 #' @examples

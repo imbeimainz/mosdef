@@ -10,6 +10,7 @@
 #' @importFrom methods is
 #' @importFrom rentrez entrez_summary
 #' @importFrom dplyr arrange
+#' @importFrom rlang .data
 #'
 #' @examples
 #'
