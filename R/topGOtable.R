@@ -15,11 +15,9 @@
 #' @param bg_genes A vector of background genes, e.g. all (expressed) genes in the assays
 #' @param ontology Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)
 #' @param annot Which function to use for annotating genes to GO terms. Defaults to \code{annFUN.org}
-#' @param annot_to_map_to A temporary parameter allowing the use of AnnotationDBs mapIds function
 #' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
 #' @param geneID Which format the genes are provided. Defaults to \code{symbol}, could also be
 #' \code{entrez} or \code{ENSEMBL}
-#' @param topTablerows How many rows to report before any filtering
 #' @param full_names_in_rows Logical, whether to display or not the full names for the GO terms
 #' @param de_type One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
 #'  upregulated, downregulated or both
@@ -35,7 +33,7 @@
 #' Ontology Terms
 #'
 #' @importFrom methods is new
-#' @importFrom AnnotationDbi mapIds
+#' @importFrom AnnotationDbi mapIds Term
 #' @importFrom topGO runTest GenTable 
 #' @importFrom utils write.table
 #'
@@ -149,9 +147,7 @@ topGOtable <- function(res_de = NULL,                  # Differentially expresse
 
 
 
-  #Dependencies
-  library("AnnotationDbi")# for the dependencies I don't know how to set them :D
-  library("topGO") # see above
+
   annot_to_map_to <- get(mapping)
 
   if(!is.null(res_de)&& !is.null(dds)) {
