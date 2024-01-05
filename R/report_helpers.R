@@ -124,16 +124,15 @@ create_link_HPA <- function(val) {
 #' @param res_enrich A `data.frame` object, storing the result of the functional
 #' enrichment analysis. If not provided, the experiment-related information is not
 #' shown, and only some generic info on the identifier is displayed.
-#' See more in the main function, [GeneTonic()], to check the
-#' formatting requirements (a minimal set of columns should be present).
 #'
 #' @return HTML content related to a GeneOntology identifier, to be displayed in
 #' web applications (or inserted in Rmd documents)
 #' @export
 #' 
 #' 
-#' @importFrom AnnotationDbi Term Ontology Definition Secondary
+#' @importFrom AnnotationDbi Term Ontology Definition Secondary  GOID
 #' @importFrom htmltools tags 
+#' @importFrom GO.db GOTERM
 #' 
 #'
 #' @examples
@@ -141,19 +140,19 @@ create_link_HPA <- function(val) {
 #' go_2_html("GO:0043368")
 go_2_html <- function(go_id,
                       res_enrich = NULL) {
-  fullinfo <- GOTERM[[go_id]]
+  fullinfo <- GO.db::GOTERM[[go_id]]
   if (is.null(fullinfo)) {
     return(HTML("Gene Ontology term not found!"))
   }
   # extracting the field/component values
-  go_linkbutton <- create_link_GO(GOID(fullinfo))
-  go_term <- Term(fullinfo)
+  go_linkbutton <- create_link_GO(AnnotationDbi::GOID(fullinfo))
+  go_term <- AnnotationDbi::Term(fullinfo)
   go_pubmed <- create_link_pubmed(go_term)
-  go_ontology <- Ontology(fullinfo)
-  go_definition <- Definition(fullinfo)
+  go_ontology <- AnnotationDbi::Ontology(fullinfo)
+  go_definition <- AnnotationDbi::Definition(fullinfo)
   go_synonims <- paste0(
     unlist(
-      lapply(Synonym(fullinfo), function(arg) {
+      lapply(AnnotationDbi::Synonym(fullinfo), function(arg) {
         paste0(tags$b("Synonym: "), arg, tags$br())
       })
     ),
@@ -175,28 +174,28 @@ go_2_html <- function(go_id,
   }
   # assembling them together
   mycontent <- paste0(
-    tags$b("GO ID: "), go_linkbutton, tags$br(),
-    tags$b("Pubmed results: "), go_pubmed, tags$br(),
-    tags$b("Term: "), go_term, tags$br(),
+    htmltools::tags$b("GO ID: "), go_linkbutton, htmltools::tags$br(),
+    htmltools::tags$b("Pubmed results: "), go_pubmed, htmltools::tags$br(),
+    htmltools:: tags$b("Term: "), go_term, htmltools::tags$br(),
     ifelse(
       !is.null(res_enrich),
-      paste0(tags$b("p-value: "), go_pvalue, tags$br(),
-             tags$b("Z-score: "), go_zscore, tags$br(),
-             tags$b("Aggregated score: "), go_aggrscore, tags$br(),
+      paste0(htmltools::tags$b("p-value: "), go_pvalue, htmltools::tags$br(),
+             htmltools::tags$b("Z-score: "), go_zscore, htmltools::tags$br(),
+             htmltools::tags$b("Aggregated score: "), go_aggrscore, htmltools::tags$br(),
              collapse = ""
       ),
       ""
     ),
-    tags$b("Ontology: "), go_ontology, tags$br(), tags$br(),
-    tags$b("Definition: "), go_definition, tags$br(),
+    tags$b("Ontology: "), go_ontology, tags$br(), htmltools::tags$br(),
+    tags$b("Definition: "), go_definition, htmltools::tags$br(),
     go_synonims,
     ifelse(
       length(go_secondary) > 0,
-      paste0(tags$b("Secondary: "), go_secondary, collapse = ""),
+      paste0(htmltools::tags$b("Secondary: "), go_secondary, collapse = ""),
       ""
     )
   )
-  return(HTML(mycontent))
+  return(htmltools::HTML(mycontent))
 }
 
 

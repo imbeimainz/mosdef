@@ -250,7 +250,7 @@ gene_plot <- function(dds,
 #' rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 #' dds_macrophage <- estimateSizeFactors(dds_macrophage)
 #'
-#' df_exp <- get_expression_values(dds_macrophage,
+#' df_exp <- get_expr_values(dds_macrophage,
 #'   gene = "ENSG00000125347",
 #'   intgroup = "condition"
 #' )

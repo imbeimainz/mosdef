@@ -17,6 +17,7 @@
 #' 
 #' 
 #' @importFrom DT datatable
+#' @importFrom dplyr select
 #'
 #' @examples
 #' library(dplyr)
@@ -74,7 +75,7 @@ buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL"
 
   }
 
-  df <- df %>%
+  df <- df |> 
     select(-SYMBOL)
   if (output_format == "DT"){
     return(DT::datatable(df, escape = FALSE))
