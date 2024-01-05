@@ -1,15 +1,34 @@
+#' Link to AMIGO database
+#'
+#' @param val Character, the GOID
+#'
+#' @return HTML for an action button
+#' @export
 create_link_GO <- function(val) {
   sprintf('<a href="http://amigo.geneontology.org/amigo/term/%s" target="_blank" class="btn btn-primary">%s</a>',
           val,
           paste0(val, "@AMIGO"))
 }
 
+#' Link to Pubmed
+#'
+#' @param val Character, the gene symbol
+#'
+#' @return HTML for an action button
+#' @export
 create_link_pubmed <- function(val){
     paste0('<a href="https://pubmed.ncbi.nlm.nih.gov/?term=',val,'" target="_blank" class="btn btn-primary">',
            paste0(val,"@Pubmed"),'</a>')
 
 }
 
+#' Link to Ensemble database
+#'
+#' @param val Character, the gene symbol
+#' @param species The species to be analysed e.g "Mus_musculus"
+#'
+#' @return HTML for an action button
+#' @export
 create_link_ENS  <- function(val, species="Mus_musculus") {
   paste0('<a href="http://www.ensembl.org/',species,'/Gene/Summary?g=',val,'" target="_blank" class="btn btn-primary">',val,'</a>')
 }
@@ -19,12 +38,76 @@ create_link_ENS  <- function(val, species="Mus_musculus") {
 #' @param val Character, the gene symbol
 #'
 #' @return HTML for an action button
-#' @noRd
+#' @export
 create_link_NCBI <- function(val) {
 
   paste0('<a href="http://www.ncbi.nlm.nih.gov/gene/?term=',val,'[sym]" target="_blank" class="btn btn-primary">',
          paste0(val,"@NCBI"),'</a>')
 }
+
+#' Link to the GTEx Portal
+#'
+#' @param val Character, the gene symbol of interest
+#'
+#' @return HTML for an action button
+#' @export
+create_link_GTEX <- function(val) {
+  sprintf(
+    '<a href = "https://www.gtexportal.org/home/gene/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-dna"></i>%s</a>',
+    val,               # link portion related to the gene
+    .actionbutton_biocstyle, # button style
+    paste0(val, "@GTEX") # content of the button label
+  )
+}
+
+
+
+
+#' Link to Uniprot database
+#'
+#' @param val Character, the gene symbol
+#'
+#' @return HTML for an action button
+#' @export
+create_link_UniProt <- function(val) {
+  sprintf('<a href = "https://www.uniprot.org/uniprot/?query=%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-spinner"></i>%s</a>',
+          val,               # link portion related to the gene
+          .actionbutton_biocstyle, # button style
+          paste0(val, "@UNIPROT")) # content of the button label
+}
+
+#' Link to dbptm database
+#'
+#' @param val Character, the gene symbol
+#'
+#' @return HTML for an action button
+#' @export
+create_link_dbPTM <- function(val) {
+  base_link_old <- "http://dbptm.mbc.nctu.edu.tw/"
+  base_link_new <- "https://awi.cuhk.edu.cn/dbPTM/"
+  
+  
+  sprintf('<a href = "%s/info.php?id=%s_HUMAN" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-edit"></i>%s</a>',
+          base_link_new,     # main link to website
+          val,               # link portion related to the gene
+          .actionbutton_biocstyle, # button style
+          paste0(val, "@dbPTM")) # content of the button label
+}
+
+#' Link to the Human Protein Atlas
+#'
+#' @param val Character, the gene symbol
+#'
+#' @return HTML for an action button
+#' @export
+create_link_HPA <- function(val) {
+  sprintf('<a href = "https://www.proteinatlas.org/search/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-cubes"></i>%s</a>',
+          val,               # link portion related to the gene
+          .actionbutton_biocstyle, # button style
+          paste0(val, "@Human Protein Atlas")) # content of the button label
+}
+
+
 
 
 
@@ -200,56 +283,6 @@ create_link_genecards <- function(val) {
     paste0(val, "@GeneCards") # content of the button label
   )
 }
-
-#' Link to the GTEx Portal
-#'
-#' @param val Character, the gene symbol of interest
-#'
-#' @return HTML for an action button
-#' @noRd
-create_link_GTEX <- function(val) {
-  sprintf(
-    '<a href = "https://www.gtexportal.org/home/gene/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-dna"></i>%s</a>',
-    val,               # link portion related to the gene
-    .actionbutton_biocstyle, # button style
-    paste0(val, "@GTEX") # content of the button label
-  )
-}
-
-
-
-
-#' Link to the Uniprot Portal
-create_link_UniProt <- function(val) {
-  sprintf('<a href = "https://www.uniprot.org/uniprot/?query=%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-spinner"></i>%s</a>',
-          val,               # link portion related to the gene
-          .actionbutton_biocstyle, # button style
-          paste0(val, "@UNIPROT")) # content of the button label
-}
-
-#' Link to the dbPTM Portal
-create_link_dbPTM <- function(val) {
-  base_link_old <- "http://dbptm.mbc.nctu.edu.tw/"
-  base_link_new <- "https://awi.cuhk.edu.cn/dbPTM/"
-
-
-  sprintf('<a href = "%s/info.php?id=%s_HUMAN" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-edit"></i>%s</a>',
-          base_link_new,     # main link to website
-          val,               # link portion related to the gene
-          .actionbutton_biocstyle, # button style
-          paste0(val, "@dbPTM")) # content of the button label
-}
-
-#' Link to the human protein atlas Portal
-create_link_HPA <- function(val) {
-  sprintf('<a href = "https://www.proteinatlas.org/search/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-cubes"></i>%s</a>',
-          val,               # link portion related to the gene
-          .actionbutton_biocstyle, # button style
-          paste0(val, "@Human Protein Atlas")) # content of the button label
-}
-
-
-
 
 
 # Some constant values ----------------------------------------------------
