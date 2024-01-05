@@ -35,10 +35,19 @@
 #' @export
 #'
 #'
+<<<<<<< HEAD
 #' @importFrom ggplot2 ggplot aes_string aes geom_hline geom_point geom_text geom_rug
 #'  scale_colour_manual coord_cartesian xlab ylab ggtitle theme_bw
 #' @importFrom ggrepel geom_text_repel
 #'
+=======
+#' @importFrom ggplot2 ggplot aes aes_string geom_hline geom_point geom_text geom_rug
+#' xlab ylab ggtitle scale_colour_manual coord_cartesian theme_bw
+#' @importFrom ggrepel geom_text_repel
+#'
+#'
+#'
+>>>>>>> ae95313d7b8dc135fbdbe12d0b6cf8f765de6fc8
 #' @examples
 #' library(airway)
 #' data(airway)

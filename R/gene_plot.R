@@ -44,8 +44,10 @@
 #'
 #' @importFrom stats median
 #' @importFrom ggplot2 ggplot aes aes_string geom_point geom_boxplot geom_violin 
-#' position_jitter scale_color_discrete scale_x_discrete scale_y_log10 scale_y_continuous
-#' stat_summary theme_bw labs
+#' geome_text position_jitter scale_color_discrete scale_x_discrete scale_y_log10 
+#' scale_y_continuous stat_summary theme_bw labs
+#' @importFrom ggrepel geom_text_repel
+#'
 #'
 #' @examples
 #' library("macrophage")
@@ -92,13 +94,13 @@ gene_plot <- function(dds,
     c("auto", "jitteronly", "boxplot", "violin", "sina")
   )
 
-  if (!is.null(gtl)) {
-    checkup_gtl(gtl)
-    dds <- gtl$dds
-    res_de <- gtl$res_de
-    res_enrich <- gtl$res_enrich
-    annotation_obj <- gtl$annotation_obj
-  }
+  # if (!is.null(gtl)) {
+  #   checkup_gtl(gtl)
+  #   dds <- gtl$dds
+  #   res_de <- gtl$res_de
+  #   res_enrich <- gtl$res_enrich
+  #   annotation_obj <- gtl$annotation_obj
+  # }
 
   if (!intgroup %in% colnames(colData(dds))) {
     stop("`intgroup` not found in the colData slot of the dds object",
