@@ -34,9 +34,9 @@
 #' independent hypotheses is somewhat violated by the intrinsic DAG-structure of the Gene
 #' Ontology Terms
 #'
-#' @importFrom methods is
+#' @importFrom methods is new
 #' @importFrom AnnotationDbi mapIds
-#' @importFrom topGO runTest
+#' @importFrom topGO runTest GenTable 
 #' @importFrom utils write.table
 #'
 #' @return A table containing the computed GO Terms and related enrichment scores

@@ -19,7 +19,7 @@
 #'
 #'
 #' @examples
-#' library(tidyverse) # includes ggplot2, for data visualisation. dplyr, for data manipulation.
+#' library(ggplot2) 
 #' library(RColorBrewer) # for a colourful plot
 #' library(ggrepel) # for nice annotations
 #' library(airway)

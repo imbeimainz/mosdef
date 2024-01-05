@@ -47,6 +47,11 @@ create_link_NCBI <- function(val) {
 #' @return HTML content related to a GeneOntology identifier, to be displayed in
 #' web applications (or inserted in Rmd documents)
 #' @export
+#' 
+#' 
+#' @importFrom AnnotationDbi Term Ontology Definition Secondary
+#' @importFrom htmltools tags 
+#' 
 #'
 #' @examples
 #' go_2_html("GO:0002250")
@@ -130,6 +135,10 @@ go_2_html <- function(go_id,
 #' @return HTML content related to a gene identifier, to be displayed in
 #' web applications (or inserted in Rmd documents)
 #' @export
+#'
+#'
+#' @importFrom htmltools tags 
+#'
 #'
 #' @examples
 #' geneinfo_2_html("ACTB")

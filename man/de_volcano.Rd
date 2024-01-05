@@ -31,7 +31,7 @@ This function generates a base volcanoplot for differentially expressed genes th
 upon using further ggplot functions.
 }
 \examples{
-library(tidyverse) # includes ggplot2, for data visualisation. dplyr, for data manipulation.
+library("tidyverse") # includes ggplot2, for data visualisation. dplyr, for data manipulation.
 library(RColorBrewer) # for a colourful plot
 library(ggrepel) # for nice annotations
 library(airway)
