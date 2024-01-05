@@ -24,18 +24,21 @@ Imports:
     rentrez,
     AnnotationDbi,
     topGO,
-    DESeq2,
     GO.db,
     clusterProfiler, 
     goseq,
     utils,
-    org.Hs.eg.db,
-    RColorBrewer
+    RColorBrewer,
+    rlang,
+    DESeq2,
+    SummarizedExperiment,
+    S4Vectors
 Suggests: 
     knitr,
     rmarkdown,
     airway,
-    macrophage
+    macrophage,
+    org.Hs.eg.db
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

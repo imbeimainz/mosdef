@@ -238,6 +238,9 @@ gene_plot <- function(dds,
 #' processing
 #' @export
 #'
+#' @importFrom DESeq2 counts estimateSizeFactors sizeFactors 
+#' @importFrom SummarizedExperiment colData
+#'
 #' @examples
 #' library("macrophage")
 #' library("DESeq2")
