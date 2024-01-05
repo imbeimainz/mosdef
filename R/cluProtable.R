@@ -14,6 +14,7 @@
 #'
 #' @importFrom AnnotationDbi mapIds
 #' @importFrom clusterProfiler enrichGO
+#' @importFrom methods is
 #'
 #'
 #' @examples
@@ -99,9 +100,7 @@ if((de_type == "up" | de_type == "down")&& !is.null(de_genes))
 
 
 
-#Dependencies
-library("AnnotationDbi")# for the dependencies I don't know how to set them :D
-library("clusterProfiler") # see above
+
 annot_to_map_to <- get(mapping)
 
 if(!is.null(res_de)&& !is.null(dds)) {

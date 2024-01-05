@@ -44,9 +44,10 @@
 #'
 #' @importFrom stats median
 #' @importFrom ggplot2 ggplot aes aes_string geom_point geom_boxplot geom_violin 
-#' geome_text position_jitter scale_color_discrete scale_x_discrete scale_y_log10 
+#' geom_text position_jitter scale_color_discrete scale_x_discrete scale_y_log10 
 #' scale_y_continuous stat_summary theme_bw labs
 #' @importFrom ggrepel geom_text_repel
+#' @importFrom ggforce geom_sina
 #'
 #'
 #' @examples

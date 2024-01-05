@@ -33,7 +33,8 @@
 #'
 #' @return An object created by \code{ggplot}
 #' @export
-#'<<<<<<< HEAD
+#' 
+#' 
 #' @importFrom ggplot2 ggplot aes_string aes geom_hline geom_point geom_text geom_rug
 #'  scale_colour_manual coord_cartesian xlab ylab ggtitle theme_bw
 #' @importFrom ggrepel geom_text_repel
