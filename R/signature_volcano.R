@@ -4,9 +4,6 @@
 #' genes as shaded dots in the background of the plot.
 #'
 #' @param res_de A `DESeqResults` object.
-#' @param res_enrich A `data.frame` object, storing the result of the functional
-#' enrichment analysis. Can be generated using the functions `topGOtable` or `goseqTable` from the 
-#' `mosdef` package
 #' @param annotation_obj A `data.frame` object with the feature annotation
 #' information, with at least two columns, `gene_id` and `gene_name`.
 #' @param geneset_id Character specifying the gene set identifier to be plotted.
@@ -24,6 +21,12 @@
 #'
 #' @return A plot returned by the [ggplot()] function
 #' @export
+#'
+#' @importFrom ggplot2 ggplot aes_string geom_point labs scale_x_continuous
+#' scale_color_manual scale_alpha_manual theme_bw theme ggtitle guides
+#' element_text margin
+#' @importFrom ggrepel geom_text_repel
+#'
 #'
 #' @examples
 #' library("macrophage")
@@ -89,7 +92,6 @@ signature_volcano <- function(res_de,
                               color = "#1a81c2",
                               volcano_labels = 25,
                               plot_title = NULL) {
-  
   # removed from the Genetonic version
   # if (!is.null(gtl)) {
   #   checkup_gtl(gtl)
@@ -98,7 +100,7 @@ signature_volcano <- function(res_de,
   #   res_enrich <- gtl$res_enrich
   #   annotation_obj <- gtl$annotation_obj
   # }
-  # 
+  #
   # # Retrieve information about genes in geneset gs_id
   # if (!is.null(geneset_id)) {
   #   if (geneset_id %in% res_enrich[["gs_id"]]) {
@@ -108,7 +110,7 @@ signature_volcano <- function(res_de,
   #     thisset_members_ids <-
   #       annotation_obj$gene_id[match(thisset_members, annotation_obj$gene_name)]
   #   }
-  # } else {  
+  # } else {
   # overwritable via a list
   if (!all(genelist %in% rownames(res_de))) {
     not_there <- genelist[!(genelist %in% rownames(res_de))]
@@ -120,24 +122,24 @@ signature_volcano <- function(res_de,
   }
   thisset_members_ids <- intersect(rownames(res_de), genelist)
   thisset_name <- "Custom list"
-  
-  
-  
+
+
+
   # Prepare the data
   complete_genes_ids <- rownames(res_de)
   complete_genes <-
     annotation_obj$gene_name[match(complete_genes_ids, annotation_obj$gene_id)]
-  
+
   padj_complete <- res_de[complete_genes_ids, "padj"]
   filter_info_complete <- sapply(padj_complete, function(x) x <= FDR)
   padj_complete <- sapply(padj_complete, function(x) -log10(x))
-  
+
   log2FoldChange_complete <- res_de[complete_genes_ids, "log2FoldChange"]
-  
+
   gene_set_belong <- complete_genes_ids %in% thisset_members_ids
   filter_info_complete <- filter_info_complete & gene_set_belong
-  
-  
+
+
   thisset_complete_data <- data.frame(
     complete_genes_ids,
     padj_complete,
@@ -145,7 +147,7 @@ signature_volcano <- function(res_de,
     filter_info_complete,
     gene_set_belong
   )
-  
+
   colnames(thisset_complete_data) <- c(
     "genes",
     "logTransformedpvalue",
@@ -153,23 +155,23 @@ signature_volcano <- function(res_de,
     "significant",
     "belonging"
   )
-  
-  
+
+
   # Prepare plotting
   volcano_df_complete <- thisset_complete_data
   volcano_df_complete$genes_name <- complete_genes
   max_x <- max(abs(range(thisset_complete_data["log2FoldChange"])))
   limit_x <- max_x * c(-1, 1)
-  
-  
+
+
   # Prepare plot title
   if (is.null(plot_title)) {
     title <- paste0("Signature Volcano Plot - ", thisset_name, " - ", geneset_id)
   } else {
     title <- plot_title
   }
-  
-  
+
+
   # Plot data
   p <- ggplot(
     volcano_df_complete,
@@ -199,8 +201,8 @@ signature_volcano <- function(res_de,
       legend.title = element_text(size = 11, face = "bold"),
       legend.text = element_text(size = 10)
     )
-  
-  
+
+
   # adding labels to the significant points of the geneset
   p <- p + geom_text_repel(
     data = subset(volcano_df_complete, filter_info_complete),
@@ -208,8 +210,8 @@ signature_volcano <- function(res_de,
     size = 4,
     max.overlaps = volcano_labels
   )
-  
-  
+
+
   # handling the title
   p <- p + ggtitle(title)
   p <- p + guides(alpha = "none")

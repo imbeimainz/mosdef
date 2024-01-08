@@ -38,10 +38,6 @@ plotted as labels on the volcano scatter plot. Defaults to 25.}
 \item{plot_title}{Character string, to specify the title of the plot,
 displayed over the volcano plot. If left to \code{NULL} as by default, it tries to use
 the information on the geneset identifier provided.}
-
-\item{res_enrich}{A \code{data.frame} object, storing the result of the functional
-enrichment analysis. Can be generated using the functions \code{topGOtable} or \code{goseqTable} from the
-\code{mosdef} package}
 }
 \value{
 A plot returned by the \code{\link[=ggplot]{ggplot()}} function

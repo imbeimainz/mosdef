@@ -2,7 +2,7 @@
 % Please edit documentation in R/buttonifier.R
 \name{buttonifier}
 \alias{buttonifier}
-\title{Create a button for genesymbols in an RMD}
+\title{Create a button for gene symbols in an RMD}
 \usage{
 buttonifier(
   df,
@@ -12,11 +12,11 @@ buttonifier(
 )
 }
 \arguments{
-\item{df}{A dataframe with at least on coloumn with gene Symbols named: SYMBOL}
+\item{df}{A dataframe with at least on column with gene Symbols named: SYMBOL}
 
 \item{new_cols}{At least one of: "GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA"}
 
-\item{col_to_use}{name of the coloumns were the gene symbols are stored. Default is SYMBOL}
+\item{col_to_use}{name of the columns were the gene symbols are stored. Default is SYMBOL}
 
 \item{output_format}{a parameter deciding which output format to return, either a DT:datatable (recommended)
 or a simple dataframe (DF).In the latter case it is important that if the data is visualized with the
@@ -35,7 +35,8 @@ library(dplyr)
 library(DESeq2)
 data("gse", package = "macrophage")
 
-dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
+dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
+# changing the ids to Ensembl instead of the Gencode used in the object
 rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 dds_macrophage
 keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
@@ -44,10 +45,11 @@ dds_macrophage
 dds_macrophage <- DESeq(dds_macrophage)
 
 res_macrophage_IFNg_vs_naive <- results(dds_macrophage,
-                                        contrast = c("condition", "IFNg", "naive"),
-                                        lfcThreshold = 1, alpha = 0.05)
+  contrast = c("condition", "IFNg", "naive"),
+  lfcThreshold = 1, alpha = 0.05
+)
 res_macrophage_IFNg_vs_naive$SYMBOL <- rowData(dds_macrophage)$SYMBOL
 res_df <- as.data.frame(res_macrophage_IFNg_vs_naive@listData)
-res_df <-res_df[1:100,]
+res_df <- res_df[1:100, ]
 buttonifier(res_df)
 }

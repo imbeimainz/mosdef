@@ -9,7 +9,7 @@ create_link_ENS(val, species = "Mus_musculus")
 \arguments{
 \item{val}{Character, the gene symbol}
 
-\item{species}{The species to be analysed e.g "Mus_musculus"}
+\item{species}{The species to be analyzed e.g "Mus_musculus"}
 }
 \value{
 HTML for an action button

@@ -23,9 +23,6 @@ library(mosdef)
 Yadda yadda
 
 ```{r}
-
-
-
 ```
 
 
@@ -35,6 +32,5 @@ Yadda yadda
 buttons, links, yadda
 
 ```{r}
-
 ```
 

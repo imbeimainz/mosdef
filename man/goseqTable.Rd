@@ -74,7 +74,8 @@ res_subset <- deseqresult2df(res_airway)[1:100, ]
 myde <- res_subset$id
 myassayed <- rownames(res_airway)
 \dontrun{
-mygo <- goseqTable(de_genes = myde,
+mygo <- goseqTable(
+  de_genes = myde,
   bg_genes = myassayed,
   testCats = "GO:BP",
   add_gene_to_terms = FALSE

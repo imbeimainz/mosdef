@@ -18,7 +18,7 @@ de_volcano(
 
 \item{L2FC_cutoff}{A numeric value that sets the cutoff for the xintercept argument of ggplot}
 
-\item{labeled_genes}{A numeric value describing the amount of genes to be labeled. This uses the Top(x) highest differnetially expressed genes}
+\item{labeled_genes}{A numeric value describing the amount of genes to be labeled. This uses the Top(x) highest differntially expressed genes}
 
 \item{mapping}{Which \code{org.XX.eg.db} to use for annotation - select according to the species}
 }
@@ -31,7 +31,7 @@ This function generates a base volcanoplot for differentially expressed genes th
 upon using further ggplot functions.
 }
 \examples{
-library(ggplot2) 
+library(ggplot2)
 library(RColorBrewer) # for a colourful plot
 library(ggrepel) # for nice annotations
 library(airway)
@@ -39,15 +39,16 @@ library(DESeq2)
 library("org.Hs.eg.db")
 data(airway)
 airway
-dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
 # Example, performing extraction of enriched functional categories in
 # detected significantly expressed genes
 ## Not run:
 dds_airway <- DESeq(dds_airway)
 res_airway <- results(dds_airway)
 p <- de_volcano(res_airway,
-           L2FC_cutoff = 1,
-           labeled_genes = 20,
-           mapping = "org.Hs.eg.db")
+  L2FC_cutoff = 1,
+  labeled_genes = 20,
+  mapping = "org.Hs.eg.db"
+)
 p
 }

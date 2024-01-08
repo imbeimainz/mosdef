@@ -26,7 +26,7 @@ library(airway)
 library(DESeq2)
 data(airway)
 airway
-dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
 # Example, performing extraction of enriched functional categories in
 # detected significantly expressed genes
 dds_airway <- DESeq(dds_airway)

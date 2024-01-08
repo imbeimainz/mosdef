@@ -33,8 +33,8 @@
 #'
 #' @return An object created by \code{ggplot}
 #' @export
-#' 
-#' 
+#'
+#'
 #' @importFrom ggplot2 ggplot aes_string aes geom_hline geom_point geom_text geom_rug
 #'  scale_colour_manual coord_cartesian xlab ylab ggtitle theme_bw
 #' @importFrom ggrepel geom_text_repel
@@ -69,8 +69,8 @@
 #'     "ENSG00000103196", # CRISPLD2
 #'     "ENSG00000120129", # DUSP1
 #'     "ENSG00000163884", # KLF15
-#'     "ENSG00000179094"  # PER1
-#'   ) 
+#'     "ENSG00000179094" # PER1
+#'   )
 #' )
 plot_ma <- function(res_de,
                     FDR = 0.05,
@@ -94,50 +94,50 @@ plot_ma <- function(res_de,
     isDE = ifelse(is.na(res_de$padj), FALSE, res_de$padj < FDR),
     ID = rownames(res_de)
   )
-  
+
   ma_df <- ma_df[ma_df$mean > 0, ]
-  
+
   if (!is.null(annotation_obj)) {
     ma_df$genename <- annotation_obj$gene_name[match(ma_df$ID, rownames(annotation_obj))]
   }
-  
+
   ma_df$logmean <- log10(ma_df$mean) # TO ALLOW FOR BRUSHING!!
   # ma_df$DE <- ifelse(ma_df$isDE,"yes","no")
   ma_df$DE <- ifelse(ma_df$isDE, "red", "black")
-  
+
   p <- ggplot(ma_df, aes_string(x = "logmean", y = "lfc", colour = "DE"))
-  
+
   if (!is.null(hlines)) {
     p <- p + geom_hline(aes(yintercept = hlines), col = "lightblue", alpha = 0.4) +
       geom_hline(aes(yintercept = -hlines), col = "lightblue", alpha = 0.4)
   }
-  
-  if (draw_y0)
+
+  if (draw_y0) {
     p <- p + geom_hline(aes(yintercept = 0), col = "red", alpha = 0.4)
-  
+  }
+
   p <- p + xlab(xlab) + ylab("log fold change")
-  
+
   p <- p + geom_point(alpha = point_alpha)
   p <- p + scale_colour_manual(
     name = paste0("FDR = ", FDR),
     values = c("black", sig_color),
     labels = c("nonDE", "DE")
   )
-  
+
   if (!is.null(ylim)) {
     p <- p + coord_cartesian(ylim = ylim)
   }
-  
+
   if (!is.null(title)) {
     p <- p + ggtitle(title)
   }
-  
+
   if (!is.null(intgenes)) {
-    
     # now here for the symbol
     res_df <- as.data.frame(res_de)
     res_df$logmean <- log10(res_df$baseMean)
-    
+
     if ("symbol" %in% colnames(res_df)) {
       # use the gene names
       df_intgenes <- res_df[res_df$symbol %in% intgenes, ]
@@ -147,10 +147,10 @@ plot_ma <- function(res_de,
       df_intgenes <- res_df[rownames(res_df) %in% intgenes, ]
       df_intgenes$myids <- rownames(df_intgenes)
     }
-    
+
     # df_intgenes <- res_df[res_df$symbol %in% intgenes,]
     p <- p + geom_point(data = df_intgenes, aes_string("logmean", "log2FoldChange"), color = intgenes_color, size = 4)
-    
+
     if (labels_intgenes) {
       if (labels_repel) {
         p <- p + geom_text_repel(
@@ -165,11 +165,11 @@ plot_ma <- function(res_de,
       }
     }
   }
-  
+
   if (add_rug) {
     p <- p + geom_rug(alpha = 0.3)
   }
-  
+
   p <- p + theme_bw()
   p
 }

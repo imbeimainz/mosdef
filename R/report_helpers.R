@@ -5,9 +5,11 @@
 #' @return HTML for an action button
 #' @export
 create_link_GO <- function(val) {
-  sprintf('<a href="http://amigo.geneontology.org/amigo/term/%s" target="_blank" class="btn btn-primary">%s</a>',
-          val,
-          paste0(val, "@AMIGO"))
+  sprintf(
+    '<a href="http://amigo.geneontology.org/amigo/term/%s" target="_blank" class="btn btn-primary">%s</a>',
+    val,
+    paste0(val, "@AMIGO")
+  )
 }
 
 #' Link to Pubmed
@@ -16,21 +18,22 @@ create_link_GO <- function(val) {
 #'
 #' @return HTML for an action button
 #' @export
-create_link_pubmed <- function(val){
-    paste0('<a href="https://pubmed.ncbi.nlm.nih.gov/?term=',val,'" target="_blank" class="btn btn-primary">',
-           paste0(val,"@Pubmed"),'</a>')
-
+create_link_pubmed <- function(val) {
+  paste0(
+    '<a href="https://pubmed.ncbi.nlm.nih.gov/?term=', val, '" target="_blank" class="btn btn-primary">',
+    paste0(val, "@Pubmed"), "</a>"
+  )
 }
 
 #' Link to Ensemble database
 #'
 #' @param val Character, the gene symbol
-#' @param species The species to be analysed e.g "Mus_musculus"
+#' @param species The species to be analyzed e.g "Mus_musculus"
 #'
 #' @return HTML for an action button
 #' @export
-create_link_ENS  <- function(val, species="Mus_musculus") {
-  paste0('<a href="http://www.ensembl.org/',species,'/Gene/Summary?g=',val,'" target="_blank" class="btn btn-primary">',val,'</a>')
+create_link_ENS <- function(val, species = "Mus_musculus") {
+  paste0('<a href="http://www.ensembl.org/', species, "/Gene/Summary?g=", val, '" target="_blank" class="btn btn-primary">', val, "</a>")
 }
 
 #' Link to NCBI database
@@ -40,9 +43,10 @@ create_link_ENS  <- function(val, species="Mus_musculus") {
 #' @return HTML for an action button
 #' @export
 create_link_NCBI <- function(val) {
-
-  paste0('<a href="http://www.ncbi.nlm.nih.gov/gene/?term=',val,'[sym]" target="_blank" class="btn btn-primary">',
-         paste0(val,"@NCBI"),'</a>')
+  paste0(
+    '<a href="http://www.ncbi.nlm.nih.gov/gene/?term=', val, '[sym]" target="_blank" class="btn btn-primary">',
+    paste0(val, "@NCBI"), "</a>"
+  )
 }
 
 #' Link to the GTEx Portal
@@ -54,7 +58,7 @@ create_link_NCBI <- function(val) {
 create_link_GTEX <- function(val) {
   sprintf(
     '<a href = "https://www.gtexportal.org/home/gene/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-dna"></i>%s</a>',
-    val,               # link portion related to the gene
+    val, # link portion related to the gene
     .actionbutton_biocstyle, # button style
     paste0(val, "@GTEX") # content of the button label
   )
@@ -70,10 +74,12 @@ create_link_GTEX <- function(val) {
 #' @return HTML for an action button
 #' @export
 create_link_UniProt <- function(val) {
-  sprintf('<a href = "https://www.uniprot.org/uniprot/?query=%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-spinner"></i>%s</a>',
-          val,               # link portion related to the gene
-          .actionbutton_biocstyle, # button style
-          paste0(val, "@UNIPROT")) # content of the button label
+  sprintf(
+    '<a href = "https://www.uniprot.org/uniprot/?query=%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-spinner"></i>%s</a>',
+    val, # link portion related to the gene
+    .actionbutton_biocstyle, # button style
+    paste0(val, "@UNIPROT")
+  ) # content of the button label
 }
 
 #' Link to dbptm database
@@ -85,13 +91,15 @@ create_link_UniProt <- function(val) {
 create_link_dbPTM <- function(val) {
   base_link_old <- "http://dbptm.mbc.nctu.edu.tw/"
   base_link_new <- "https://awi.cuhk.edu.cn/dbPTM/"
-  
-  
-  sprintf('<a href = "%s/info.php?id=%s_HUMAN" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-edit"></i>%s</a>',
-          base_link_new,     # main link to website
-          val,               # link portion related to the gene
-          .actionbutton_biocstyle, # button style
-          paste0(val, "@dbPTM")) # content of the button label
+
+
+  sprintf(
+    '<a href = "%s/info.php?id=%s_HUMAN" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-edit"></i>%s</a>',
+    base_link_new, # main link to website
+    val, # link portion related to the gene
+    .actionbutton_biocstyle, # button style
+    paste0(val, "@dbPTM")
+  ) # content of the button label
 }
 
 #' Link to the Human Protein Atlas
@@ -101,10 +109,12 @@ create_link_dbPTM <- function(val) {
 #' @return HTML for an action button
 #' @export
 create_link_HPA <- function(val) {
-  sprintf('<a href = "https://www.proteinatlas.org/search/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-cubes"></i>%s</a>',
-          val,               # link portion related to the gene
-          .actionbutton_biocstyle, # button style
-          paste0(val, "@Human Protein Atlas")) # content of the button label
+  sprintf(
+    '<a href = "https://www.proteinatlas.org/search/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-cubes"></i>%s</a>',
+    val, # link portion related to the gene
+    .actionbutton_biocstyle, # button style
+    paste0(val, "@Human Protein Atlas")
+  ) # content of the button label
 }
 
 
@@ -128,12 +138,12 @@ create_link_HPA <- function(val) {
 #' @return HTML content related to a GeneOntology identifier, to be displayed in
 #' web applications (or inserted in Rmd documents)
 #' @export
-#' 
-#' 
+#'
+#'
 #' @importFrom AnnotationDbi Term Ontology Definition Secondary  GOID
-#' @importFrom htmltools tags 
+#' @importFrom htmltools tags HTML
 #' @importFrom GO.db GOTERM
-#' 
+#'
 #'
 #' @examples
 #' go_2_html("GO:0002250")
@@ -176,13 +186,13 @@ go_2_html <- function(go_id,
   mycontent <- paste0(
     htmltools::tags$b("GO ID: "), go_linkbutton, htmltools::tags$br(),
     htmltools::tags$b("Pubmed results: "), go_pubmed, htmltools::tags$br(),
-    htmltools:: tags$b("Term: "), go_term, htmltools::tags$br(),
+    htmltools::tags$b("Term: "), go_term, htmltools::tags$br(),
     ifelse(
       !is.null(res_enrich),
       paste0(htmltools::tags$b("p-value: "), go_pvalue, htmltools::tags$br(),
-             htmltools::tags$b("Z-score: "), go_zscore, htmltools::tags$br(),
-             htmltools::tags$b("Aggregated score: "), go_aggrscore, htmltools::tags$br(),
-             collapse = ""
+        htmltools::tags$b("Z-score: "), go_zscore, htmltools::tags$br(),
+        htmltools::tags$b("Aggregated score: "), go_aggrscore, htmltools::tags$br(),
+        collapse = ""
       ),
       ""
     ),
@@ -219,7 +229,7 @@ go_2_html <- function(go_id,
 #' @export
 #'
 #'
-#' @importFrom htmltools tags 
+#' @importFrom htmltools tags
 #'
 #'
 #' @examples
@@ -259,8 +269,8 @@ geneinfo_2_html <- function(gene_id,
     ifelse(
       !is.null(res_de),
       paste0(htmltools::tags$b("DE p-value (adjusted): "), gene_adjpvalue, htmltools::tags$br(),
-             htmltools::tags$b("DE log2FoldChange: "), gene_logfc,
-             collapse = ""
+        htmltools::tags$b("DE log2FoldChange: "), gene_logfc,
+        collapse = ""
       ),
       ""
     )
@@ -277,7 +287,7 @@ geneinfo_2_html <- function(gene_id,
 create_link_genecards <- function(val) {
   sprintf(
     '<a href = "https://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
-    val,               # link portion related to the gene
+    val, # link portion related to the gene
     .actionbutton_biocstyle, # button style
     paste0(val, "@GeneCards") # content of the button label
   )
@@ -288,5 +298,3 @@ create_link_genecards <- function(val) {
 
 .actionbutton_biocstyle <- "color: #ffffff; background-color: #0092AC"
 .helpbutton_biocstyle <- "color: #0092AC; background-color: #FFFFFF; border-color: #FFFFFF"
-
-

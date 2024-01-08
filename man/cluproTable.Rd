@@ -40,7 +40,7 @@ library(airway)
 library(DESeq2)
 data(airway)
 airway
-dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
 # Example, performing extraction of enriched functional categories in
 # detected significantly expressed genes
 \dontrun{
@@ -49,9 +49,11 @@ res_airway <- results(dds_airway)
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 library(clusterProfiler)
-CluProde_airway <- cluproTable(res_de = res_airway,
-                              dds = dds_airway,
-                             mapping = "org.Hs.eg.db")
+CluProde_airway <- cluproTable(
+  res_de = res_airway,
+  dds = dds_airway,
+  mapping = "org.Hs.eg.db"
+)
 }
 
 }

@@ -33,16 +33,16 @@ map2color <- function(x, pal, symmetric = TRUE, limits = NULL) {
   if (is.null(limits)) {
     limits <- range(x)
   }
-  
+
   if (symmetric) {
     max_val <- max(limits)
     limits[1] <- -max_val
     limits[2] <- max_val
   }
-  
+
   pal_ret <- pal[findInterval(x, seq(limits[1],
-                                     limits[2],
-                                     length.out = length(pal) + 1
+    limits[2],
+    length.out = length(pal) + 1
   ),
   all.inside = TRUE
   )]

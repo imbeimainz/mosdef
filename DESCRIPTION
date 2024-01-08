@@ -38,7 +38,8 @@ Suggests:
     rmarkdown,
     airway,
     macrophage,
-    org.Hs.eg.db
+    org.Hs.eg.db,
+    GeneTonic
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

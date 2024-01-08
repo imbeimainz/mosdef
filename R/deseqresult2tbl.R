@@ -41,6 +41,3 @@ geneinfo <- function(gene_id) {
 
   return(entrezinfo)
 }
-
-
-

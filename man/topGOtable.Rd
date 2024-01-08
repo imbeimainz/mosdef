@@ -82,7 +82,7 @@ library(airway)
 library(DESeq2)
 data(airway)
 airway
-dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
 # Example, performing extraction of enriched functional categories in
 # detected significantly expressed genes
 \dontrun{
@@ -90,30 +90,14 @@ dds_airway <- DESeq(dds_airway)
 res_airway <- results(dds_airway)
 library("AnnotationDbi")
 library("org.Hs.eg.db")
-res_airway$symbol <- mapIds(org.Hs.eg.db,
-                            keys = row.names(res_airway),
-                            column = "SYMBOL",
-                            keytype = "ENSEMBL",
-                            multiVals = "first")
-res_airway$entrez <- mapIds(org.Hs.eg.db,
-                            keys = row.names(res_airway),
-                            column = "ENTREZID",
-                            keytype = "ENSEMBL",
-                            multiVals = "first")
-resOrdered <- as.data.frame(res_airway[order(res_airway$padj),])
-de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
-de_symbols <- de_df$symbol
-bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
-bg_symbols <- mapIds(org.Hs.eg.db,
-                     keys = bg_ids,
-                     column = "SYMBOL",
-                     keytype = "ENSEMBL",
-                     multiVals = "first")
+
 library(topGO)
-topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
-                             ontology = "BP",
-                             mapping = "org.Hs.eg.db",
-                             geneID = "symbol")
+topgoDE_airway <- topGOtable(res_de = res_airway,
+  dds = dds_airway,
+  ontology = "BP",
+  mapping = "org.Hs.eg.db",
+  geneID = "symbol"
+)
 }
 
 }

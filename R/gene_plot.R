@@ -43,8 +43,8 @@
 #' @export
 #'
 #' @importFrom stats median
-#' @importFrom ggplot2 ggplot aes aes_string geom_point geom_boxplot geom_violin 
-#' geom_text position_jitter scale_color_discrete scale_x_discrete scale_y_log10 
+#' @importFrom ggplot2 ggplot aes aes_string geom_point geom_boxplot geom_violin
+#' geom_text position_jitter scale_color_discrete scale_x_discrete scale_y_log10
 #' scale_y_continuous stat_summary theme_bw labs
 #' @importFrom ggrepel geom_text_repel
 #' @importFrom ggforce geom_sina
@@ -104,9 +104,10 @@ gene_plot <- function(dds,
   # }
 
   if (!intgroup %in% colnames(colData(dds))) {
-    stop("`intgroup` not found in the colData slot of the dds object",
-         "\nPlease specify one of the following: \n",
-         paste0(colnames(colData(dds)), collapse = ", ")
+    stop(
+      "`intgroup` not found in the colData slot of the dds object",
+      "\nPlease specify one of the following: \n",
+      paste0(colnames(colData(dds)), collapse = ", ")
     )
   }
 
@@ -148,7 +149,7 @@ gene_plot <- function(dds,
   if (plot_type == "jitteronly" || (plot_type == "auto" & min_by_groups <= 3)) {
     p <- p +
       geom_point(aes_string(x = "plotby", y = "exp_value"),
-                 position = jit_pos
+        position = jit_pos
       )
     # do nothing - or add a line for the median?
   } else if (plot_type == "boxplot" || (plot_type == "auto" & (min_by_groups > 3 & min_by_groups < 10))) {
@@ -176,14 +177,13 @@ gene_plot <- function(dds,
   if (labels_display) {
     if (labels_repel) {
       p <- p + ggrepel::geom_text_repel(aes_string(label = "sample_id"),
-                                        min.segment.length = 0,
-                                        position = jit_pos
+        min.segment.length = 0,
+        position = jit_pos
       )
-    }
-    else {
+    } else {
       p <- p + geom_text(aes_string(label = "sample_id"),
-                         hjust = -0.1, vjust = 0.1,
-                         position = jit_pos
+        hjust = -0.1, vjust = 0.1,
+        position = jit_pos
       )
     }
   }
@@ -238,8 +238,8 @@ gene_plot <- function(dds,
 #' processing
 #' @export
 #'
-#' @importFrom DESeq2 counts estimateSizeFactors sizeFactors 
-#' @importFrom SummarizedExperiment colData
+#' @importFrom DESeq2 counts estimateSizeFactors sizeFactors  normalizationFactors
+#' @importFrom SummarizedExperiment colData assays
 #'
 #' @examples
 #' library("macrophage")
@@ -263,7 +263,6 @@ get_expr_values <- function(dds,
                             intgroup,
                             assay = "counts",
                             normalized = TRUE) {
-
   if (!(assay %in% names(assays(dds)))) {
     stop(
       "Please specify a name of one of the existing assays: \n",
