@@ -21,8 +21,6 @@
 #' @param de_type One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
 #'  upregulated, downregulated or both
 #' @param add_gene_to_terms Logical, whether to add a column with all genes annotated to each GO term
-#' @param plot_graph Logical, if TRUE additionally plots a graph on the identified GO terms
-#' @param plot_nodes Number of nodes to plot
 #' @param write_output Logical, if TRUE additionally writes out the result to a file
 #' @param output_file Name of the file the result should be written into
 #' @param topGO_method2 Character, specifying which of the methods implemented by \code{topGO} should be used, in addition to the \code{classic} algorithm. Defaults to \code{elim}
@@ -58,7 +56,7 @@
 #'   dds = dds_airway,
 #'   ontology = "BP",
 #'   mapping = "org.Hs.eg.db",
-#'   geneID = "symbol"
+#'   geneID = "symbol",
 #' )
 #' }
 #'
@@ -75,8 +73,8 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
                        full_names_in_rows = TRUE,
                        add_gene_to_terms = TRUE,
                        de_type = "up_and_down",
-                       plot_graph = FALSE,
-                       plot_nodes = 10,
+                       #plot_graph = FALSE,
+                       #plot_nodes = 10,
                        write_output = FALSE,
                        output_file = "",
                        topGO_method2 = "elim",
