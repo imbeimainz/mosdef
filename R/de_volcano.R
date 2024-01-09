@@ -10,6 +10,7 @@
 #' @return A  \code{ggplot2} volcano plot object that can be extended upon by the user
 #' @export
 #'
+#' @importFrom methods is
 #' @importFrom utils head
 #' @importFrom AnnotationDbi mapIds
 #' @importFrom ggplot2 ggplot aes geom_vline geom_hline geom_point
@@ -51,6 +52,7 @@ de_volcano <- function(res_de,
   
   
   annot_to_map_to <- get(mapping)
+  
   res_de$symbol <- mapIds(annot_to_map_to,
     keys = row.names(res_de),
     column = "SYMBOL",

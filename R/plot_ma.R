@@ -87,6 +87,13 @@ plot_ma <- function(res_de,
                     intgenes_color = "steelblue",
                     labels_intgenes = TRUE,
                     labels_repel = TRUE) {
+  
+  if (!is(res_de, "DESeqResults")) {
+    stop("The provided `res_de` is not a DESeqResults object, please check your input parameters.")
+  }
+  
+  
+  
   ma_df <- data.frame(
     mean = res_de$baseMean,
     lfc = res_de$log2FoldChange,
