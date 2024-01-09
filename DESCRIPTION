@@ -39,9 +39,11 @@ Suggests:
     airway,
     macrophage,
     org.Hs.eg.db,
-    GeneTonic
+    GeneTonic,
+    testthat (>= 3.0.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
+Config/testthat/edition: 3
