@@ -20,9 +20,59 @@ library(mosdef)
 
 # Functions that beautify an interactive table
 
-Yadda yadda
+Load an example dataset. We will use the well known airway data.
 
 ```{r}
+
+ library(airway)
+ library(DESeq2)
+ data(airway)
+ airway
+ dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
+ dds_airway <- DESeq(dds_airway)
+ res_airway <- results(dds_airway)
+
+
+
+```
+
+# Functions that generate enrichment results
+mosdef allows you to create your enrichment results right from your dds and res_de objects using 3 possible algorithms:
+
+topGO
+goseq
+clusterProfiler
+For more information on the differences between these algorithms we refer to their individual vignettes and publications.
+
+All of these algorithms reguire an annotation to function propperly so make sure you have installed and use the correct one for your experiment. The default is org.Mm.eg.db (Mus musculus). The airway data however stems from human so we need org.Hs.eg.db
+
+```{r}
+
+ library("AnnotationDbi")
+ library("org.Hs.eg.db")
+
+```
+
+topGO
+```{r}
+
+ topgoDE_airway <- topGOtable(res_de = res_airway,
+   dds = dds_airway,
+   ontology = "BP", #which gene ontology to analyse, default is "BP"
+   mapping = "org.Hs.eg.db",# the annotation
+   geneID = "symbol", #Which format the genes are provided. If you provide a res_de and a dds mosdef does                        #it for you and uses symbols if you provide vectors please specify
+   de_type = "up_and_down", #which genes to analyse. default is all ("up_and_down"), other possibilities                               #are only upregulated ("up") or  ("down") genes
+   add_gene_to_terms = TRUE, #Logical, whether to add a column with all genes annotated to each GO term
+   topGO_method2 = "elim" #Character, specifying which of the methods implemented by topGO default is elim
+                           #For more info look at the documentation of topGO
+ )
+
+```
+
+This will give an analysis for all possible GO terms (when using the BP ontology that is 6547 terms) not all of these results are significant and this list can (should) be further subsetted/ filtered. For example by using a pvalue cutoff.
+```{r}
+head(topgoDE_airway)
+
 ```
 
 
