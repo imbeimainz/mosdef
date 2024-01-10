@@ -226,7 +226,18 @@ goseqTable <- function(res_de = NULL,
 
     # TODO: replace identifiers/annotaions!!!
     ## and also TODO: do this only if genes are not already symbols
-    goseq_out$genesymbols <- sapply(goseq_out$genes, function(x) sort(AnnotationDbi::mapIds(get(mapping), keys = x, keytype = "ENSEMBL", column = "SYMBOL", multiVals = "first")))
+    goseq_out$genesymbols <- sapply(goseq_out$genes, function(x) 
+      sort(AnnotationDbi::mapIds(get(mapping), keys = x, keytype = "ENSEMBL", column = "SYMBOL", multiVals = "first")))
+    goseq_out$genesymbols <- 
+    for (i in 1:length(goseq_out$genes)) {
+      goseq_out$genesymbols[[i]] <- sort(AnnotationDbi::mapIds(get(mapping),
+                                                             keys = goseq_out$genes[[i]],
+                                                             keytype = "ENSEMBL",
+                                                             column = "SYMBOL", 
+                                                             multiVals = "first"))
+      print(paste0("This is iteration ", i))
+      
+    }
     # coerce to char
     goseq_out$genes <- unlist(lapply(goseq_out$genes, function(arg) paste(arg, collapse = ",")))
     # coerce to char
