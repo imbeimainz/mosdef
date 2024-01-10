@@ -46,6 +46,7 @@ cluproTable <- function(res_de = NULL,
                         bg_genes = NULL,
                         mapping,
                         de_type = "up_and_down",
+                        keyType = "SYMBOL",
                         ...) {
   if (!is.null(res_de) & !is.null(dds)) {
     keyType <- "SYMBOL"
