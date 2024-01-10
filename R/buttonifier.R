@@ -46,42 +46,53 @@ buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL"
   if(!(col_to_use %in% colnames(df)))
     stop("The provided dataframe does not contain the column ", col_to_use,". Please make ",
          "sure that ther is a colum with gene symbols in your df and that its name is provided",
-         " to the 'col_to_use' parameter.")
+         " to the 'col_to_use' parameter. Please watch spelling as well as capital letters.")
   
   
   .actionbutton_biocstyle <- "color: #ffffff; background-color: #0092AC"
   val <- df[[col_to_use]]
+  
   match.arg(new_cols, choices = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA"), several.ok = TRUE)
+  for (i in 1:length(new_cols)) {
+    if((new_cols[i] %in% c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA")) ==FALSE){
+      warning(paste0("Please make sure you used the values suggested in the documentation. \n",
+                     "One or more of the following values entered into new_cols is not supported: \n",
+                     new_cols[new_cols %in% c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA") == FALSE]))
+    }
+  }
+ 
+  
   match.arg(output_format, choices = c("DT", "DF"))
-
+  
   if ("GC" %in% new_cols) {
     df$SYMBOL_GC <- create_link_genecards(df[[col_to_use]])
   }
   if ("NCBI" %in% new_cols) {
     df$SYMBOL_NCBI <- create_link_NCBI(df[[col_to_use]])
   }
-
+  
   if ("GTEX" %in% new_cols) {
     df$SYMBOL_GTEX <- create_link_GTEX(df[[col_to_use]])
   }
-
+  
   if ("UNIPROT" %in% new_cols) {
     df$SYMBOL_UNIPROT <- create_link_UniProt(df[[col_to_use]])
   }
-
+  
   if ("dbPTM" %in% new_cols) {
     df$SYMBOL_dbPTM <- create_link_dbPTM(df[[col_to_use]])
   }
-
+  
   if ("HPA" %in% new_cols) {
     df$SYMBOL_HPA <- create_link_HPA(df[[col_to_use]])
   }
-
+  
   df <- df |>
     select(-.data$SYMBOL)
   if (output_format == "DT") {
     return(DT::datatable(df, escape = FALSE))
   } else if (output_format == "DF") {
+    df <- data.frame(df)
     return(df)
   }
 }
