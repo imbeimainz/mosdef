@@ -43,6 +43,12 @@
 #' res_df <- res_df[1:100, ]
 #' buttonifier(res_df)
 buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL", output_format = "DT") {
+  if(!(col_to_use %in% colnames(df)))
+    stop("The provided dataframe does not contain the column ", col_to_use,". Please make ",
+         "sure that ther is a colum with gene symbols in your df and that its name is provided",
+         " to the 'col_to_use' parameter.")
+  
+  
   .actionbutton_biocstyle <- "color: #ffffff; background-color: #0092AC"
   val <- df[[col_to_use]]
   match.arg(new_cols, choices = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA"), several.ok = TRUE)
