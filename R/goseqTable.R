@@ -37,7 +37,7 @@
 #'  upregulated, downregulated or both
 #' @param testCats A vector specifying which categories to test for over representation amongst DE genes - can be any combination of "GO:CC", "GO:BP", "GO:MF" & "KEGG"
 #' @param FDR_GO_cutoff Numeric value for subsetting the results
-#' @param orgDbPkg Character string, named as the \code{org.XX.eg.db}
+#' @param mapping Character string, named as the \code{org.XX.eg.db}
 #' package which should be available in Bioconductor
 #' @param add_gene_to_terms Logical, whether to add a column with all genes annotated
 #' to each GO term
@@ -85,7 +85,7 @@ goseqTable <- function(res_de = NULL,
                        testCats = c("GO:BP", "GO:MF", "GO:CC"),
                        FDR_GO_cutoff = 1,
                        # nTop = 200,
-                       orgDbPkg = "org.Hs.eg.db",
+                       mapping = "org.Hs.eg.db",
                        # testKegg=TRUE,
                        # keggObject=mapPathwayToName("mmu"), # need the dedicated function!!
                        # writeOutput=FALSE,
@@ -226,7 +226,7 @@ goseqTable <- function(res_de = NULL,
 
     # TODO: replace identifiers/annotaions!!!
     ## and also TODO: do this only if genes are not already symbols
-    goseq_out$genesymbols <- sapply(goseq_out$genes, function(x) sort(AnnotationDbi::mapIds(get(orgDbPkg), keys = x, keytype = "ENSEMBL", column = "SYMBOL", multiVals = "first")))
+    goseq_out$genesymbols <- sapply(goseq_out$genes, function(x) sort(AnnotationDbi::mapIds(get(mapping), keys = x, keytype = "ENSEMBL", column = "SYMBOL", multiVals = "first")))
     # coerce to char
     goseq_out$genes <- unlist(lapply(goseq_out$genes, function(arg) paste(arg, collapse = ",")))
     # coerce to char
