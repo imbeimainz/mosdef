@@ -53,8 +53,8 @@ test_that("Early fails are triggered", {
                geneID = "symbol"
     )
   })
-  
-  #check if dds are dds
+})
+test_that("check if dds are dds and vecs are vecs", {
   expect_error({
     cluproTable(
       res_de = res_airway,
@@ -88,6 +88,36 @@ test_that("Early fails are triggered", {
     )
   })
   
+  # check if vectors are actually vectors
+  expect_error({
+    cluproTable(
+      de_genes = res_airway,
+      bg_genes = dds_airway,
+      mapping = "org.Hs.eg.db"
+    )
+  })
+  
+  
+  expect_error({
+    goseqTable(
+      de_genes = res_airway,
+      bg_genes = dds_airway,
+      mapping = "org.Hs.eg.db"
+    )
+  })
+  
+  
+  expect_error({
+    topGOtable(de_genes = res_airway,
+               bg_genes = dds_airway,
+               ontology = "BP",
+               mapping = "org.Hs.eg.db",
+               geneID = "symbol"
+    )
+  })
+})
+
+test_that("Error is thrown with insufficient input", {
   #check insufficient input
   
   expect_error({
@@ -96,7 +126,7 @@ test_that("Early fails are triggered", {
     )
   })
   
-
+  
   
   expect_error({
     goseqTable(
@@ -106,13 +136,14 @@ test_that("Early fails are triggered", {
   
   expect_error({
     topGOtable(
-               ontology = "BP",
-               mapping = "org.Hs.eg.db",
-               geneID = "symbol"
+      ontology = "BP",
+      mapping = "org.Hs.eg.db",
+      geneID = "symbol"
     )
   })
-  
-  #Check if de_type is correct
+})
+
+test_that("Check if de_type is correct", {
   
   expect_error({
     cluproTable(
@@ -145,6 +176,37 @@ test_that("Early fails are triggered", {
   
 })
 
+test_that("res_de and dds are related", {
+  
+  
+  expect_warning({
+    cluproTable(
+      res_de = res_macrophage_IFNg_vs_naive,
+      dds = dds_airway,
+      mapping = "org.Hs.eg.db"
+    )
+  })
+  
+  expect_warning({
+    goseqTable(
+      res_de = res_macrophage_IFNg_vs_naive,
+      dds = dds_airway,
+      mapping = "org.Hs.eg.db",
+      add_gene_to_terms = FALSE
+    )
+  })
+  
+  expect_warning({
+    topGOtable(res_de = res_macrophage_IFNg_vs_naive,
+               dds = dds_airway,
+               ontology = "BP",
+               mapping = "org.Hs.eg.db",
+               geneID = "symbol"
+    )
+  })
+  
+  
+})
 
 
 
