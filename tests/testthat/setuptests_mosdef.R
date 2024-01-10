@@ -7,11 +7,11 @@ library("macrophage")
 #Get a dds ad a res_de
 data(airway)
 airway
-dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
+dds_airway_nodeseq <- DESeqDataSet(airway, design = ~ cell + dex)
 # Example, performing extraction of enriched functional categories in
 # detected significantly expressed genes
 
-dds_airway <- DESeq(dds_airway)
+dds_airway <- DESeq(dds_airway_nodeseq)
 res_airway <- results(dds_airway)
 
 res_airway$SYMBOL <- AnnotationDbi::mapIds(org.Hs.eg.db,
