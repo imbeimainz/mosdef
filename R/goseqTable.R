@@ -29,6 +29,8 @@
 #' in the assays
 #' @param dds A DESeqDataset object created using \code{DESeq2}
 #' @param res_de A DESeqResults object created using \code{DESeq2}
+#' @param top_de TODO TODO
+#' @param min_counts TODO TODO
 #' @param genome A string identifying the genome that genes refer to, as in the
 #' \code{\link{goseq}} function
 #' @param id A string identifying the gene identifier used by genes, as in the
@@ -77,7 +79,9 @@
 goseqTable <- function(res_de = NULL,
                        dds = NULL,
                        de_genes = NULL, # Differentially expressed genes
-                       bg_genes = NULL, # background genes, normally = rownames(cds) or filtering to genes
+                       bg_genes = NULL, # background genes, normally = rownames(cds) or filtering to genes,
+                       top_de = NULL,
+                       min_counts = 0,
                        #  with at least 1 read - could also be ls(org.Mm.egGO)
                        genome = "hg38",
                        id = "ensGene",
