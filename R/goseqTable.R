@@ -69,7 +69,7 @@
 #'   de_genes = myde,
 #'   bg_genes = myassayed,
 #'   testCats = "GO:BP",
-#'   add_gene_to_terms = FALSE
+#'   add_gene_to_terms = TRUE
 #' )
 #' head(mygo)
 #' }
@@ -224,20 +224,29 @@ goseqTable <- function(res_de = NULL,
     # one list per GO term
     goseq_out$genes <- sapply(goseq_out$category, function(x) cat2gene[[x]])
 
-    # TODO: replace identifiers/annotaions!!!
-    ## and also TODO: do this only if genes are not already symbols
-    goseq_out$genesymbols <- sapply(goseq_out$genes, function(x) 
-      sort(AnnotationDbi::mapIds(get(mapping), keys = x, keytype = "ENSEMBL", column = "SYMBOL", multiVals = "first")))
-    goseq_out$genesymbols <- 
-    # for (i in 1:length(goseq_out$genes)) {
-    #   goseq_out$genesymbols[[i]] <- sort(AnnotationDbi::mapIds(get(mapping),
-    #                                                          keys = goseq_out$genes[[i]],
-    #                                                          keytype = "ENSEMBL",
-    #                                                          column = "SYMBOL", 
-    #                                                          multiVals = "first"))
-    #   print(paste0("This is iteration ", i))
-    #   
-    # }
+
+    all_ens_ids <- unique(
+      unique(unlist(goseq_out$genes))
+    )
+
+    all_genesymbols <- mapIds(get(mapping),
+                              keys = all_ens_ids,
+                              keytype = "ENSEMBL",
+                              column = "SYMBOL",
+                              multiVals = "first")
+
+    # building the lookup table
+    lut_genes <- data.frame(
+      gene_id = all_ens_ids,
+      gene_name = all_genesymbols,
+      row.names = all_ens_ids
+    )
+
+    # and also TODO: do this only if genes are not already symbols
+    goseq_out$genesymbols <- sapply(goseq_out$genes, function(x) {
+      sort(lut_genes[x, "gene_name"])
+    })
+
     # coerce to char
     goseq_out$genes <- unlist(lapply(goseq_out$genes, function(arg) paste(arg, collapse = ",")))
     # coerce to char
