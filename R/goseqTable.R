@@ -136,7 +136,7 @@ goseqTable <- function(res_de = NULL,
   if (!is.null(de_genes) & is.null(bg_genes)) {
     stop("Please also provide  a vector of background genes.")
   }
-  
+
   if ((de_type == "up" | de_type == "down") && !is.null(de_genes)) {
     stop(
       "The argument de_type can only be used if a dds and a res_de object are provided:\n",
@@ -174,29 +174,34 @@ goseqTable <- function(res_de = NULL,
 
 
     if (de_type == "up_and_down") {
-      res_de_subset <- deseqresult2df(res_de)[res_de$padj <= 0.05, ]
+      res_de_subset <- deseqresult2df(res_de, FDR = 0.05)
     } else if (de_type == "up") {
-      res_de_subset <- deseqresult2df(res_de)[res_de$padj <= 0.05, ]
+      res_de_subset <- deseqresult2df(res_de, FDR = 0.05)
       res_de_subset <- res_de_subset[res_de_subset$log2FoldChange >= 0, ]
     } else if (de_type == "down") {
-      res_de_subset <- deseqresult2df(res_de)[res_de$padj <= 0.05, ]
+      res_de_subset <- deseqresult2df(res_de, FDR = 0.05)
       res_de_subset <- res_de_subset[res_de_subset$log2FoldChange <= 0, ]
     }
 
 
     # in example top 100 but this makes more sense no?
     de_genes <- res_de_subset$id
-    bg_genes <- rownames(res_de)
 
-    # creating the vectors
-    gene.vector <- as.integer(bg_genes %in% de_genes)
-    names(gene.vector) <- bg_genes
+    if(!is.null(top_de)) {
+      top_de <- min(top_de, length(de_genes))
+      de_genes <- de_genes[seq_len(top_de)]
+    }
+    bg_genes <- rownames(dds)[rowSums(counts(dds)) > min_counts]
+
   } else if (!is.null(c(bg_genes, de_genes))) {
-    # creating the vectors
-    gene.vector <- as.integer(bg_genes %in% de_genes)
-    names(gene.vector) <- bg_genes
+    if(!is.null(top_de)) {
+      top_de <- min(top_de, length(de_genes))
+      de_genes <- de_genes[seq_len(top_de)]
+    }
   }
-
+  # creating the vectors
+  gene.vector <- as.integer(bg_genes %in% de_genes)
+  names(gene.vector) <- bg_genes
 
   fdr <- FDR_GO_cutoff
 
