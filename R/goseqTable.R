@@ -63,9 +63,9 @@
 #' dds_airway <- DESeq2::DESeq(dds_airway)
 #' res_airway <- DESeq2::results(dds_airway)
 #'
-#' res_subset <- deseqresult2df(res_airway)[1:100, ]
+#' res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:100, ]
 #' myde <- res_subset$id
-#' myassayed <- rownames(res_airway)
+#' myassayed <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
 #' \dontrun{
 #' mygo <- goseqTable(
 #'   de_genes = myde,
