@@ -93,7 +93,8 @@ goseqTable <- function(res_de = NULL,
                        # testKegg=TRUE,
                        # keggObject=mapPathwayToName("mmu"), # need the dedicated function!!
                        # writeOutput=FALSE,
-                       add_gene_to_terms = TRUE # ,
+                       add_gene_to_terms = TRUE,
+                       verbose = TRUE
                        # outputFiles_goseq="",outputFiles_goseq_kegg=""
                        ## TODO TODO: bring back in action the function
                        ## add genes annotated to each term
@@ -181,6 +182,12 @@ goseqTable <- function(res_de = NULL,
     } else if (de_type == "down") {
       res_de_subset <- deseqresult2df(res_de, FDR = 0.05)
       res_de_subset <- res_de_subset[res_de_subset$log2FoldChange <= 0, ]
+    }
+
+    if (verbose) {
+      message("You have been selecting ",
+              nrow(res_de_subset),
+              " genes as DE")
     }
 
 
