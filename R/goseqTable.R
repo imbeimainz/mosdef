@@ -29,6 +29,8 @@
 #' in the assays
 #' @param dds A DESeqDataset object created using \code{DESeq2}
 #' @param res_de A DESeqResults object created using \code{DESeq2}
+#' @param top_de TODO TODO
+#' @param min_counts TODO TODO
 #' @param genome A string identifying the genome that genes refer to, as in the
 #' \code{\link{goseq}} function
 #' @param id A string identifying the gene identifier used by genes, as in the
@@ -61,15 +63,15 @@
 #' dds_airway <- DESeq2::DESeq(dds_airway)
 #' res_airway <- DESeq2::results(dds_airway)
 #'
-#' res_subset <- deseqresult2df(res_airway)[1:100, ]
+#' res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:100, ]
 #' myde <- res_subset$id
-#' myassayed <- rownames(res_airway)
+#' myassayed <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
 #' \dontrun{
 #' mygo <- goseqTable(
 #'   de_genes = myde,
 #'   bg_genes = myassayed,
 #'   testCats = "GO:BP",
-#'   add_gene_to_terms = FALSE
+#'   add_gene_to_terms = TRUE
 #' )
 #' head(mygo)
 #' }
@@ -77,7 +79,9 @@
 goseqTable <- function(res_de = NULL,
                        dds = NULL,
                        de_genes = NULL, # Differentially expressed genes
-                       bg_genes = NULL, # background genes, normally = rownames(cds) or filtering to genes
+                       bg_genes = NULL, # background genes, normally = rownames(cds) or filtering to genes,
+                       top_de = NULL,
+                       min_counts = 0,
                        #  with at least 1 read - could also be ls(org.Mm.egGO)
                        genome = "hg38",
                        id = "ensGene",
@@ -89,7 +93,8 @@ goseqTable <- function(res_de = NULL,
                        # testKegg=TRUE,
                        # keggObject=mapPathwayToName("mmu"), # need the dedicated function!!
                        # writeOutput=FALSE,
-                       add_gene_to_terms = TRUE # ,
+                       add_gene_to_terms = TRUE,
+                       verbose = TRUE
                        # outputFiles_goseq="",outputFiles_goseq_kegg=""
                        ## TODO TODO: bring back in action the function
                        ## add genes annotated to each term
@@ -132,7 +137,7 @@ goseqTable <- function(res_de = NULL,
   if (!is.null(de_genes) & is.null(bg_genes)) {
     stop("Please also provide  a vector of background genes.")
   }
-  
+
   if ((de_type == "up" | de_type == "down") && !is.null(de_genes)) {
     stop(
       "The argument de_type can only be used if a dds and a res_de object are provided:\n",
@@ -170,29 +175,40 @@ goseqTable <- function(res_de = NULL,
 
 
     if (de_type == "up_and_down") {
-      res_de_subset <- deseqresult2df(res_de)[res_de$padj <= 0.05, ]
+      res_de_subset <- deseqresult2df(res_de, FDR = 0.05)
     } else if (de_type == "up") {
-      res_de_subset <- deseqresult2df(res_de)[res_de$padj <= 0.05, ]
+      res_de_subset <- deseqresult2df(res_de, FDR = 0.05)
       res_de_subset <- res_de_subset[res_de_subset$log2FoldChange >= 0, ]
     } else if (de_type == "down") {
-      res_de_subset <- deseqresult2df(res_de)[res_de$padj <= 0.05, ]
+      res_de_subset <- deseqresult2df(res_de, FDR = 0.05)
       res_de_subset <- res_de_subset[res_de_subset$log2FoldChange <= 0, ]
+    }
+
+    if (verbose) {
+      message("You have been selecting ",
+              nrow(res_de_subset),
+              " genes as DE")
     }
 
 
     # in example top 100 but this makes more sense no?
     de_genes <- res_de_subset$id
-    bg_genes <- rownames(res_de)
 
-    # creating the vectors
-    gene.vector <- as.integer(bg_genes %in% de_genes)
-    names(gene.vector) <- bg_genes
+    if(!is.null(top_de)) {
+      top_de <- min(top_de, length(de_genes))
+      de_genes <- de_genes[seq_len(top_de)]
+    }
+    bg_genes <- rownames(dds)[rowSums(counts(dds)) > min_counts]
+
   } else if (!is.null(c(bg_genes, de_genes))) {
-    # creating the vectors
-    gene.vector <- as.integer(bg_genes %in% de_genes)
-    names(gene.vector) <- bg_genes
+    if(!is.null(top_de)) {
+      top_de <- min(top_de, length(de_genes))
+      de_genes <- de_genes[seq_len(top_de)]
+    }
   }
-
+  # creating the vectors
+  gene.vector <- as.integer(bg_genes %in% de_genes)
+  names(gene.vector) <- bg_genes
 
   fdr <- FDR_GO_cutoff
 
@@ -224,20 +240,29 @@ goseqTable <- function(res_de = NULL,
     # one list per GO term
     goseq_out$genes <- sapply(goseq_out$category, function(x) cat2gene[[x]])
 
-    # TODO: replace identifiers/annotaions!!!
-    ## and also TODO: do this only if genes are not already symbols
-    goseq_out$genesymbols <- sapply(goseq_out$genes, function(x) 
-      sort(AnnotationDbi::mapIds(get(mapping), keys = x, keytype = "ENSEMBL", column = "SYMBOL", multiVals = "first")))
-    goseq_out$genesymbols <- 
-    # for (i in 1:length(goseq_out$genes)) {
-    #   goseq_out$genesymbols[[i]] <- sort(AnnotationDbi::mapIds(get(mapping),
-    #                                                          keys = goseq_out$genes[[i]],
-    #                                                          keytype = "ENSEMBL",
-    #                                                          column = "SYMBOL", 
-    #                                                          multiVals = "first"))
-    #   print(paste0("This is iteration ", i))
-    #   
-    # }
+
+    all_ens_ids <- unique(
+      unique(unlist(goseq_out$genes))
+    )
+
+    all_genesymbols <- mapIds(get(mapping),
+                              keys = all_ens_ids,
+                              keytype = "ENSEMBL",
+                              column = "SYMBOL",
+                              multiVals = "first")
+
+    # building the lookup table
+    lut_genes <- data.frame(
+      gene_id = all_ens_ids,
+      gene_name = all_genesymbols,
+      row.names = all_ens_ids
+    )
+
+    # and also TODO: do this only if genes are not already symbols
+    goseq_out$genesymbols <- sapply(goseq_out$genes, function(x) {
+      sort(lut_genes[x, "gene_name"])
+    })
+
     # coerce to char
     goseq_out$genes <- unlist(lapply(goseq_out$genes, function(arg) paste(arg, collapse = ",")))
     # coerce to char
