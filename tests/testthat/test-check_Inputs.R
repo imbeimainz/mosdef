@@ -177,16 +177,18 @@ test_that("Check if de_type is correct", {
 })
 
 test_that("res_de and dds are related", {
-  
-  
+
+
   expect_warning({
     cluproTable(
       res_de = res_macrophage_IFNg_vs_naive,
       dds = dds_airway,
       mapping = "org.Hs.eg.db"
     )
-  })
-  
+  }, "not related")
+})
+
+test_that("res_de and dds are related", {
   expect_warning({
     goseqTable(
       res_de = res_macrophage_IFNg_vs_naive,
@@ -194,11 +196,46 @@ test_that("res_de and dds are related", {
       mapping = "org.Hs.eg.db",
       add_gene_to_terms = FALSE
     )
-  })
+  }, "not related")
+})
   
-  expect_warning({
+  test_that("res_de and dds are related", {
+    expect_warning({
     topGOtable(res_de = res_macrophage_IFNg_vs_naive,
                dds = dds_airway,
+               ontology = "BP",
+               mapping = "org.Hs.eg.db",
+               geneID = "symbol"
+    )
+  },"not related")
+
+
+})
+
+test_that("DESeq was run on the dds", {
+  
+  
+  
+  expect_error({
+    cluproTable(
+      res_de = res_airway,
+      dds = dds_airway_nodeseq,
+      mapping = "org.Hs.eg.db"
+    )
+  })
+  
+  expect_error({
+    goseqTable(
+      res_de = res_airway,
+      dds = dds_airway_nodeseq,
+      mapping = "org.Hs.eg.db",
+      add_gene_to_terms = FALSE
+    )
+  })
+  
+  expect_error({
+    topGOtable(res_de = res_airway,
+               dds = dds_airway_nodeseq,
                ontology = "BP",
                mapping = "org.Hs.eg.db",
                geneID = "symbol"
@@ -208,7 +245,154 @@ test_that("res_de and dds are related", {
   
 })
 
+test_that("Errors are thrown if only one of two needed inputs is provided",{
+  #res_de missing
+  
+  
+  expect_error({
+    cluproTable(
+      dds = dds_airway,
+      mapping = "org.Hs.eg.db"
+    )
+  })
+  
+  expect_error({
+    goseqTable(
+      dds = dds_airway,
+      mapping = "org.Hs.eg.db",
+      add_gene_to_terms = FALSE
+    )
+  })
+  
+  expect_error({
+    topGOtable(dds = dds_airway,
+               ontology = "BP",
+               mapping = "org.Hs.eg.db",
+               geneID = "symbol"
+    )
+  })
+  
+  #dds is missing
+  
+  expect_error({
+    cluproTable(
+      res_de = res_airway,
+      mapping = "org.Hs.eg.db"
+    )
+  })
+  
+  expect_error({
+    goseqTable(
+      res_de = res_airway,
+      mapping = "org.Hs.eg.db",
+      add_gene_to_terms = FALSE
+    )
+  })
+  
+  expect_error({
+    topGOtable(
+      res_de = res_airway,
+      ontology = "BP",
+      mapping = "org.Hs.eg.db",
+      geneID = "symbol"
+    )
+  })
+  
+  #de_genes is missing
+  
+  
+  expect_error({
+    cluproTable(
+      bg_genes  = myassayed,
+      mapping = "org.Hs.eg.db"
+    )
+  })
+  
+  expect_error({
+    goseqTable(
+      bg_genes  = myassayed,
+      mapping = "org.Hs.eg.db",
+      add_gene_to_terms = FALSE
+    )
+  })
+  
+  expect_error({
+    topGOtable(
+      bg_genes  = myassayed,
+      ontology = "BP",
+      mapping = "org.Hs.eg.db",
+      geneID = "symbol"
+    )
+  })
+  
+  #bg_genes is missing
+  
+  
+  expect_error({
+    cluproTable(
+      de_genes  = myde,
+      mapping = "org.Hs.eg.db"
+    )
+  })
+  
+  expect_error({
+    goseqTable(
+      de_genes  = myde,
+      mapping = "org.Hs.eg.db",
+      add_gene_to_terms = FALSE
+    )
+  })
+  
+  expect_error({
+    topGOtable(
+      de_genes  = myde,
+      ontology = "BP",
+      mapping = "org.Hs.eg.db",
+      geneID = "symbol"
+    )
+  })
+  
+  
+})
 
+test_that("de_type can not be used with vectors to avoid confusion",{
+  
+  
+  
+  expect_error({
+    cluproTable(
+      de_genes  = myde,
+      bg_genes = myassayed,
+      mapping = "org.Hs.eg.db",
+      de_type = "up"
+    )
+  })
+  
+  expect_error({
+    goseqTable(
+      de_genes  = myde,
+      bg_genes = myassayed,
+      mapping = "org.Hs.eg.db",
+      add_gene_to_terms = FALSE,
+      de_type = "up"
+    )
+  })
+  
+  expect_error({
+    topGOtable(
+      de_genes  = myde,
+      bg_genes = myassayed,
+      ontology = "BP",
+      mapping = "org.Hs.eg.db",
+      geneID = "symbol",
+      de_type = "up"
+    )
+  })
+  
+  
+  
+  
+})
 
 
 

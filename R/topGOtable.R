@@ -274,7 +274,7 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
 
   # write all entries of the table
   if (write_output) write.table(sTab, file = output_file, sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
-  if (plot_graph) showSigOfNodes(GOdata, topGO::score(result_method2), firstSigNodes = plot_nodes, useInfo = "all")
+  #if (plot_graph) showSigOfNodes(GOdata, topGO::score(result_method2), firstSigNodes = plot_nodes, useInfo = "all")
   #   if(outputToLatex) sTabSig <- xtable(apply(sTabSig[1:15,], 2, as.character)) # take a smaller subset
 
   # and returns the significant ones # or all, like here
