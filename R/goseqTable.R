@@ -29,8 +29,10 @@
 #' in the assays
 #' @param dds A DESeqDataset object created using \code{DESeq2}
 #' @param res_de A DESeqResults object created using \code{DESeq2}
-#' @param top_de TODO TODO
-#' @param min_counts TODO TODO
+#' @param top_de numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
+#'  Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).
+#' @param min_counts numeric, min number of counts a gene needs to have to be included 
+#' in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.
 #' @param genome A string identifying the genome that genes refer to, as in the
 #' \code{\link{goseq}} function
 #' @param id A string identifying the gene identifier used by genes, as in the
