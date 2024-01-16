@@ -188,7 +188,16 @@ goseqTable <- function(res_de = NULL,
     }
     
     
-
+    if (verbose) {
+      message("Your dataset has ",
+              nrow(res_de_subset),
+              " DE genes. You selected ",
+              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(res_de_subset))*100), # sprintf format with 2 decimal places
+              ") genes. You analysed all ",
+              de_type,
+              "-regulated genes")
+    }
+    
 
     # in example top 100 but this makes more sense no?
     de_genes <- res_de_subset$id
@@ -201,22 +210,26 @@ goseqTable <- function(res_de = NULL,
     bg_genes <- rownames(dds)[rowSums(counts(dds)) > min_counts]
 
   } else if (!is.null(c(bg_genes, de_genes))) {
+    
+    all_de <- length(de_genes)
+    
     if(!is.null(top_de)) {
       top_de <- min(top_de, length(de_genes))
       de_genes <- de_genes[seq_len(top_de)]
     }
+    if (verbose) {
+      message("Your dataset has ",
+              all_de,
+              " DE genes.You selected ",
+              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/all_de)*100), # sprintf format with 2 decimal places
+              ") genes. You analysed all ",
+              de_type,
+              "-regulated genes")
+    }
+    
   }
 
-  if (verbose) {
-    message("Your dataset has ",
-            nrow(res_de_subset),
-            " DE genes. You selected ",
-            length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(res_de_subset))*100), # sprintf format with 2 decimal places
-            ") genes. You analysed all ",
-            de_type,
-            "-regulated genes")
-  }
-  
+
   # creating the vectors
   gene.vector <- as.integer(bg_genes %in% de_genes)
   names(gene.vector) <- bg_genes
