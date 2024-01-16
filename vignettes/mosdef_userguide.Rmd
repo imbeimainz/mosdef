@@ -55,7 +55,7 @@ All of these algorithms reguire an annotation to function propperly so make sure
 
 topGO
 ```{r}
-
+library(topGO)
  topgoDE_airway <- topGOtable(res_de = res_airway,
    dds = dds_airway,
    ontology = "BP", #which gene ontology to analyse, default is "BP"
