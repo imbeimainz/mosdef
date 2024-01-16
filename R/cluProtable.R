@@ -10,6 +10,8 @@
 #' in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.
 #' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
 #' @param de_type One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
+#' @param keyType Gene format to input into goenrich from clusterProfiler. If res_de and dds are used use "SYMBOL" for more
+#' information check the goEnrich documentation
 #' @param verbose Logical, whether to add messages telling the user which steps were taken
 #' @param ... Further parameters to use for the go_enrich function from \code{clusterProfiler}
 #'
@@ -183,23 +185,38 @@ cluproTable <- function(res_de = NULL,
                                       keytype = "ENSEMBL",
                                       multiVals = "first"
     )
-    
+    if (verbose) {
+      message("Your dataset has ",
+              nrow(de_df),
+              " DE genes. You selected ",
+              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(de_df))*100), # sprintf format with 2 decimal places
+              ") genes. You analysed all ",
+              de_type,
+              "-regulated genes")
+    }  
   } else if (!is.null(c(bg_genes, de_genes))) {
+    
+    all_de <- length(de_genes)
+    
     if(!is.null(top_de)) {
+      
       top_de <- min(top_de, length(de_genes))
       de_genes <- de_genes[seq_len(top_de)]
+      
+      if (verbose) {
+        message("Your dataset has ",
+                all_de,
+                " DE genes.You selected ",
+                length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/all_de)*100), # sprintf format with 2 decimal places
+                ") genes. You analysed all ",
+                de_type,
+                "-regulated genes")
+      }
+      
     }
   }
   
-  if (verbose) {
-    message("Your dataset has ",
-            nrow(de_df),
-            " DE genes. You selected ",
-            length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(de_df))*100), # sprintf format with 2 decimal places
-            ") genes. You analysed all ",
-            de_type,
-            "-regulated genes")
-  }
+
   
   # bg_genes <- mapIds(annot_to_map_to,
   #     keys = bg_ids,
