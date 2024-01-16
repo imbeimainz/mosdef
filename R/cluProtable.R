@@ -4,8 +4,13 @@
 #' @param dds A DESeqDataset object created using \code{DESeq2}
 #' @param de_genes A vector of (differentially expressed) genes
 #' @param bg_genes A vector of background genes, e.g. all (expressed) genes in the assays
+#' @param top_de numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
+#'  Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).
+#' @param min_counts numeric, min number of counts a gene needs to have to be included 
+#' in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.
 #' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
 #' @param de_type One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
+#' @param verbose Logical, whether to add messages telling the user which steps were taken
 #' @param ... Further parameters to use for the go_enrich function from \code{clusterProfiler}
 #'
 #' @return A table containing the computed GO Terms and related enrichment scores
@@ -44,9 +49,12 @@ cluproTable <- function(res_de = NULL,
                         dds = NULL,
                         de_genes = NULL,
                         bg_genes = NULL,
-                        mapping,
+                        top_de = NULL,
+                        min_counts = 0,
+                        mapping = "org.Hs.eg.db",
                         de_type = "up_and_down",
                         keyType = "SYMBOL",
+                        verbose = TRUE,
                         ...) {
   if (!is.null(res_de) & !is.null(dds)) {
     keyType <- "SYMBOL"
@@ -163,26 +171,47 @@ cluproTable <- function(res_de = NULL,
       de_df <- de_df[de_df$log2FoldChange <= 0, ]
     }
 
-
-    de_symbols <- de_df$symbol
-    bg_ids <- rownames(dds)[rowSums(counts(dds)) > 0]
-    bg_symbols <- mapIds(annot_to_map_to,
-      keys = bg_ids,
-      column = "SYMBOL",
-      keytype = "ENSEMBL",
-      multiVals = "first"
+    de_genes <- de_df$symbol
+    if(!is.null(top_de)) {
+      top_de <- min(top_de, length(de_genes))
+      de_genes <- de_genes[seq_len(top_de)]
+    }
+    bg_ids <- rownames(dds)[rowSums(counts(dds)) > min_counts]
+    bg_genes <- AnnotationDbi::mapIds(annot_to_map_to,
+                                      keys = bg_ids,
+                                      column = "SYMBOL",
+                                      keytype = "ENSEMBL",
+                                      multiVals = "first"
     )
+    
+  } else if (!is.null(c(bg_genes, de_genes))) {
+    if(!is.null(top_de)) {
+      top_de <- min(top_de, length(de_genes))
+      de_genes <- de_genes[seq_len(top_de)]
+    }
+  }
+  
+  if (verbose) {
+    message("Your dataset has ",
+            nrow(de_df),
+            " DE genes. You selected ",
+            length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(de_df))*100), # sprintf format with 2 decimal places
+            ") genes. You analysed all ",
+            de_type,
+            "-regulated genes")
+  }
+  
+  # bg_genes <- mapIds(annot_to_map_to,
+  #     keys = bg_ids,
+  #     column = "SYMBOL",
+  #     keytype = "ENSEMBL",
+  #     multiVals = "first"
+  #   )
 
 
 
-    res_enrich <- enrichGO(
-      gene = de_symbols,
-      universe = bg_symbols,
-      OrgDb = mapping,
-      keyType = keyType,
-      ...
-    )
-  } else if (!is.null(c(de_genes, bg_genes))) {
+
+   
     res_enrich <- enrichGO(
       gene = de_genes,
       universe = bg_genes,
@@ -190,7 +219,7 @@ cluproTable <- function(res_de = NULL,
       keyType = keyType,
       ...
     )
-  }
+  
 
   return(res_enrich)
 }

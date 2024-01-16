@@ -45,6 +45,7 @@
 #' package which should be available in Bioconductor
 #' @param add_gene_to_terms Logical, whether to add a column with all genes annotated
 #' to each GO term
+#' @param verbose Logical, whether to add messages telling the user which steps were taken
 #'
 #' @return A table containing the computed GO Terms and related enrichment scores
 #' @export
@@ -185,16 +186,13 @@ goseqTable <- function(res_de = NULL,
       res_de_subset <- deseqresult2df(res_de, FDR = 0.05)
       res_de_subset <- res_de_subset[res_de_subset$log2FoldChange <= 0, ]
     }
-
-    if (verbose) {
-      message("You have been selecting ",
-              nrow(res_de_subset),
-              " genes as DE")
-    }
+    
+    
 
 
     # in example top 100 but this makes more sense no?
     de_genes <- res_de_subset$id
+
 
     if(!is.null(top_de)) {
       top_de <- min(top_de, length(de_genes))
@@ -208,6 +206,17 @@ goseqTable <- function(res_de = NULL,
       de_genes <- de_genes[seq_len(top_de)]
     }
   }
+
+  if (verbose) {
+    message("Your dataset has ",
+            nrow(res_de_subset),
+            " DE genes. You selected ",
+            length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(res_de_subset))*100), # sprintf format with 2 decimal places
+            ") genes. You analysed all ",
+            de_type,
+            "-regulated genes")
+  }
+  
   # creating the vectors
   gene.vector <- as.integer(bg_genes %in% de_genes)
   names(gene.vector) <- bg_genes

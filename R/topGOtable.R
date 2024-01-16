@@ -12,6 +12,10 @@
 #' @param dds A DESeqDataset object created using \code{DESeq2}
 #' @param de_genes A vector of (differentially expressed) genes
 #' @param bg_genes A vector of background genes, e.g. all (expressed) genes in the assays
+#' @param top_de numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
+#'  Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).
+#' @param min_counts numeric, min number of counts a gene needs to have to be included 
+#' in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.
 #' @param ontology Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)
 #' @param annot Which function to use for annotating genes to GO terms. Defaults to \code{annFUN.org}
 #' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
@@ -28,6 +32,7 @@
 #' topGO method, based on the FDR correction. Defaults to FALSE, since the assumption of
 #' independent hypotheses is somewhat violated by the intrinsic DAG-structure of the Gene
 #' Ontology Terms
+#' @param verbose Logical, whether to add messages telling the user which steps were taken
 #'
 #' @importFrom methods is new
 #' @importFrom AnnotationDbi mapIds Term
@@ -65,6 +70,8 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
                        dds = NULL, # background genes
                        de_genes = NULL,
                        bg_genes = NULL,
+                       top_de = NULL,
+                       min_counts = 0,
                        ontology = "BP", # could use also "MF"
                        annot = annFUN.org, # parameters for creating topGO object
                        mapping = "org.Mm.eg.db",
@@ -78,7 +85,8 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
                        write_output = FALSE,
                        output_file = "",
                        topGO_method2 = "elim",
-                       do_padj = FALSE) {
+                       do_padj = FALSE,
+                       verbose = TRUE) {
   ## Checks:
 
   # Check if de-type is correct
@@ -191,25 +199,41 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
       de_df <- resOrdered[resOrdered$padj <= .05 & !is.na(resOrdered$padj), ]
       de_df <- de_df[de_df$log2FoldChange <= 0, ]
     }
-
-
-    de_symbols <- de_df$symbol
-    bg_ids <- rownames(dds)[rowSums(counts(dds)) > 0]
-    bg_symbols <- mapIds(annot_to_map_to,
-      keys = bg_ids,
-      column = "SYMBOL",
-      keytype = "ENSEMBL",
-      multiVals = "first"
+    de_genes <- de_df$symbol
+    if(!is.null(top_de)) {
+      top_de <- min(top_de, length(de_genes))
+      de_genes <- de_genes[seq_len(top_de)]
+    }
+    bg_ids <- rownames(dds)[rowSums(counts(dds)) > min_counts]
+    bg_genes <- AnnotationDbi::mapIds(annot_to_map_to,
+                                      keys = bg_ids,
+                                      column = "SYMBOL",
+                                      keytype = "ENSEMBL",
+                                      multiVals = "first"
     )
+    
+  } else if (!is.null(c(bg_genes, de_genes))) {
+    if(!is.null(top_de)) {
+      top_de <- min(top_de, length(de_genes))
+      de_genes <- de_genes[seq_len(top_de)]
+    }
+  }
+  
+  if (verbose) {
+    message("Your dataset has ",
+            nrow(de_df),
+            " DE genes. You selected ",
+            length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(de_df))*100), # sprintf format with 2 decimal places
+            ") genes. You analysed all ",
+            de_type,
+            "-regulated genes")
+  }
+  
 
-    # creating the vectors
-    de_genes_input <- factor(as.integer(bg_symbols %in% de_symbols))
-    names(de_genes_input) <- bg_symbols
-  } else if (!is.null(c(de_genes, bg_genes))) {
     # creating the vectors
     de_genes_input <- factor(as.integer(bg_genes %in% de_genes))
     names(de_genes_input) <- bg_genes
-  }
+  
 
 
   # instantiating the topGOdata object
