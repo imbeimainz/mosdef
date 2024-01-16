@@ -24,7 +24,7 @@ res_airway$SYMBOL <- AnnotationDbi::mapIds(org.Hs.eg.db,
 airway_df <- deseqresult2df(res_airway)
 
 # get a vector of de and bg genes
-res_subset <- deseqresult2df(res_airway)[1:100, ]
+res_subset <- deseqresult2df(res_airway)[1:500,]
 myde <- res_subset$id
 myassayed <- rownames(res_airway)
 
