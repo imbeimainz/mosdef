@@ -9,13 +9,16 @@ goseqTable(
   dds = NULL,
   de_genes = NULL,
   bg_genes = NULL,
+  top_de = NULL,
+  min_counts = 0,
   genome = "hg38",
   id = "ensGene",
   de_type = "up_and_down",
   testCats = c("GO:BP", "GO:MF", "GO:CC"),
   FDR_GO_cutoff = 1,
-  orgDbPkg = "org.Hs.eg.db",
-  add_gene_to_terms = TRUE
+  mapping = "org.Hs.eg.db",
+  add_gene_to_terms = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -27,6 +30,12 @@ goseqTable(
 
 \item{bg_genes}{A vector of background genes, e.g. all (expressed) genes
 in the assays}
+
+\item{top_de}{numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
+Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).}
+
+\item{min_counts}{numeric, min number of counts a gene needs to have to be included
+in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.}
 
 \item{genome}{A string identifying the genome that genes refer to, as in the
 \code{\link{goseq}} function}
@@ -41,11 +50,13 @@ upregulated, downregulated or both}
 
 \item{FDR_GO_cutoff}{Numeric value for subsetting the results}
 
-\item{orgDbPkg}{Character string, named as the \code{org.XX.eg.db}
+\item{mapping}{Character string, named as the \code{org.XX.eg.db}
 package which should be available in Bioconductor}
 
 \item{add_gene_to_terms}{Logical, whether to add a column with all genes annotated
 to each GO term}
+
+\item{verbose}{Logical, whether to add messages telling the user which steps were taken}
 }
 \value{
 A table containing the computed GO Terms and related enrichment scores
@@ -70,15 +81,15 @@ dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
 dds_airway <- DESeq2::DESeq(dds_airway)
 res_airway <- DESeq2::results(dds_airway)
 
-res_subset <- deseqresult2df(res_airway)[1:100, ]
+res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:100, ]
 myde <- res_subset$id
-myassayed <- rownames(res_airway)
+myassayed <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
 \dontrun{
 mygo <- goseqTable(
   de_genes = myde,
   bg_genes = myassayed,
   testCats = "GO:BP",
-  add_gene_to_terms = FALSE
+  add_gene_to_terms = TRUE
 )
 head(mygo)
 }

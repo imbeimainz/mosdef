@@ -9,8 +9,12 @@ cluproTable(
   dds = NULL,
   de_genes = NULL,
   bg_genes = NULL,
-  mapping,
+  top_de = NULL,
+  min_counts = 0,
+  mapping = "org.Hs.eg.db",
   de_type = "up_and_down",
+  keyType = "SYMBOL",
+  verbose = TRUE,
   ...
 )
 }
@@ -23,9 +27,20 @@ cluproTable(
 
 \item{bg_genes}{A vector of background genes, e.g. all (expressed) genes in the assays}
 
+\item{top_de}{numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
+Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).}
+
+\item{min_counts}{numeric, min number of counts a gene needs to have to be included
+in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.}
+
 \item{mapping}{Which \code{org.XX.eg.db} to use for annotation - select according to the species}
 
 \item{de_type}{One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:}
+
+\item{keyType}{Gene format to input into goenrich from clusterProfiler. If res_de and dds are used use "SYMBOL" for more
+information check the goEnrich documentation}
+
+\item{verbose}{Logical, whether to add messages telling the user which steps were taken}
 
 \item{...}{Further parameters to use for the go_enrich function from \code{clusterProfiler}}
 }

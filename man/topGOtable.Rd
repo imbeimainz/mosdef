@@ -9,6 +9,8 @@ topGOtable(
   dds = NULL,
   de_genes = NULL,
   bg_genes = NULL,
+  top_de = NULL,
+  min_counts = 0,
   ontology = "BP",
   annot = annFUN.org,
   mapping = "org.Mm.eg.db",
@@ -16,12 +18,11 @@ topGOtable(
   full_names_in_rows = TRUE,
   add_gene_to_terms = TRUE,
   de_type = "up_and_down",
-  plot_graph = FALSE,
-  plot_nodes = 10,
   write_output = FALSE,
   output_file = "",
   topGO_method2 = "elim",
-  do_padj = FALSE
+  do_padj = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -32,6 +33,12 @@ topGOtable(
 \item{de_genes}{A vector of (differentially expressed) genes}
 
 \item{bg_genes}{A vector of background genes, e.g. all (expressed) genes in the assays}
+
+\item{top_de}{numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
+Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).}
+
+\item{min_counts}{numeric, min number of counts a gene needs to have to be included
+in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.}
 
 \item{ontology}{Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)}
 
@@ -49,10 +56,6 @@ topGOtable(
 \item{de_type}{One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
 upregulated, downregulated or both}
 
-\item{plot_graph}{Logical, if TRUE additionally plots a graph on the identified GO terms}
-
-\item{plot_nodes}{Number of nodes to plot}
-
 \item{write_output}{Logical, if TRUE additionally writes out the result to a file}
 
 \item{output_file}{Name of the file the result should be written into}
@@ -63,6 +66,8 @@ upregulated, downregulated or both}
 topGO method, based on the FDR correction. Defaults to FALSE, since the assumption of
 independent hypotheses is somewhat violated by the intrinsic DAG-structure of the Gene
 Ontology Terms}
+
+\item{verbose}{Logical, whether to add messages telling the user which steps were taken}
 }
 \value{
 A table containing the computed GO Terms and related enrichment scores
@@ -96,7 +101,7 @@ topgoDE_airway <- topGOtable(res_de = res_airway,
   dds = dds_airway,
   ontology = "BP",
   mapping = "org.Hs.eg.db",
-  geneID = "symbol"
+  geneID = "symbol",
 )
 }
 
