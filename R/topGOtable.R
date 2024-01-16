@@ -82,7 +82,7 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
                        de_type = "up_and_down",
                        #plot_graph = FALSE,
                        #plot_nodes = 10,
-                       write_output = FALSE,
+                       #write_output = FALSE,
                        output_file = "",
                        topGO_method2 = "elim",
                        do_padj = FALSE,
@@ -211,23 +211,35 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
                                       keytype = "ENSEMBL",
                                       multiVals = "first"
     )
-    
+    if (verbose) {
+      message("Your dataset has ",
+              nrow(de_df),
+              " DE genes. You selected ",
+              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(de_df))*100), # sprintf format with 2 decimal places
+              ") genes. You analysed all ",
+              de_type,
+              "-regulated genes")
+    } 
   } else if (!is.null(c(bg_genes, de_genes))) {
+    
+    all_de <- length(de_genes)
+    
     if(!is.null(top_de)) {
       top_de <- min(top_de, length(de_genes))
       de_genes <- de_genes[seq_len(top_de)]
     }
+    if (verbose) {
+      message("Your dataset has ",
+              all_de,
+              " DE genes.You selected ",
+              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/all_de)*100), # sprintf format with 2 decimal places
+              ") genes. You analysed all ",
+              de_type,
+              "-regulated genes")
+    }
   }
   
-  if (verbose) {
-    message("Your dataset has ",
-            nrow(de_df),
-            " DE genes. You selected ",
-            length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(de_df))*100), # sprintf format with 2 decimal places
-            ") genes. You analysed all ",
-            de_type,
-            "-regulated genes")
-  }
+
   
 
     # creating the vectors
@@ -297,7 +309,7 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
   ))
 
   # write all entries of the table
-  if (write_output) write.table(sTab, file = output_file, sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
+  # if (write_output) write.table(sTab, file = output_file, sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
   #if (plot_graph) showSigOfNodes(GOdata, topGO::score(result_method2), firstSigNodes = plot_nodes, useInfo = "all")
   #   if(outputToLatex) sTabSig <- xtable(apply(sTabSig[1:15,], 2, as.character)) # take a smaller subset
 
