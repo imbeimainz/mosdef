@@ -188,16 +188,7 @@ goseqTable <- function(res_de = NULL,
     }
     
     
-    if (verbose) {
-      message("Your dataset has ",
-              nrow(res_de_subset),
-              " DE genes. You selected ",
-              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(res_de_subset))*100), # sprintf format with 2 decimal places
-              ") genes. You analysed all ",
-              de_type,
-              "-regulated genes")
-    }
-    
+
 
     # in example top 100 but this makes more sense no?
     de_genes <- res_de_subset$id
@@ -208,6 +199,16 @@ goseqTable <- function(res_de = NULL,
       de_genes <- de_genes[seq_len(top_de)]
     }
     bg_genes <- rownames(dds)[rowSums(counts(dds)) > min_counts]
+    if (verbose) {
+      message("Your dataset has ",
+              nrow(res_de_subset),
+              " DE genes. You selected ",
+              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(res_de_subset))*100), # sprintf format with 2 decimal places
+              ") genes. You analysed all ",
+              de_type,
+              "-regulated genes")
+    }
+    
 
   } else if (!is.null(c(bg_genes, de_genes))) {
     
