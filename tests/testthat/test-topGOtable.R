@@ -59,14 +59,27 @@ test_that("top_de works propperly", {
 
 test_that("Error is thrown if wrong topGO method is used", {
   
-  expect_error(topGOde_airway_methods <- topGOtable(
+  expect_error(
+    topGOtable(
     res_de = res_airway,
     dds = dds_airway,
     mapping = "org.Hs.eg.db",
-    top_go_method2 = "test"
+    topGO_method2 = "test"
     )
   )
   
   
 })
+test_that("do_paj works", {
+  topGOde_airway_padj<- topGOtable(
+    res_de = res_airway,
+    dds = dds_airway,
+    mapping = "org.Hs.eg.db",
+    do_padj = TRUE
+  )
+  expect_s3_class(topGOde_airway_padj, "data.frame")
+  
+  
+})
+
 
