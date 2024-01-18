@@ -23,7 +23,7 @@ test_that("All columns are created", {
   })
 test_that("Errors are triggered correctly", {
   
-  expect_error(buttonifier(airway_df, col_to_use = "symbol"))
+  expect_error(buttonifier(airway_df, col_to_use = "yaddayadda"))
   expect_error(buttonifier(airway_df, new_cols = "Genes"))
   expect_warning(buttonifier(airway_df, new_cols = c( "GC", "NCBI", "Genes")))
   
