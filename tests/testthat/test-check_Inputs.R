@@ -180,8 +180,8 @@ test_that("Check if de_type is correct", {
 })
 
 test_that("res_de and dds are related", {
-
-
+  
+  
   expect_warning({
     cluproTable(
       res_de = res_macrophage_IFNg_vs_naive,
@@ -201,9 +201,9 @@ test_that("res_de and dds are related", {
     )
   }, "not related")
 })
-  
-  test_that("res_de and dds are related", {
-    expect_warning({
+
+test_that("res_de and dds are related", {
+  expect_warning({
     topGOtable(res_de = res_macrophage_IFNg_vs_naive,
                dds = dds_airway,
                ontology = "BP",
@@ -211,8 +211,8 @@ test_that("res_de and dds are related", {
                geneID = "symbol"
     )
   },"not related")
-
-
+  
+  
 })
 
 test_that("DESeq was run on the dds", {
