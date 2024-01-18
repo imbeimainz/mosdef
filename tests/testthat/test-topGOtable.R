@@ -32,7 +32,8 @@ test_that("enrich_result is created  when using vectors not res_De/dds", {
   topGOde_airway_vec <- topGOtable(
     de_genes  =  myde,
     bg_genes  = myassayed,
-    mapping = "org.Hs.eg.db"
+    mapping = "org.Hs.eg.db",
+    geneID = "ensembl"
   )
   expect_s3_class(topGOde_airway_vec, "data.frame")
   
