@@ -25,7 +25,6 @@
 #' @param de_type One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
 #'  upregulated, downregulated or both
 #' @param add_gene_to_terms Logical, whether to add a column with all genes annotated to each GO term
-#' @param write_output Logical, if TRUE additionally writes out the result to a file
 #' @param output_file Name of the file the result should be written into
 #' @param topGO_method2 Character, specifying which of the methods implemented by \code{topGO} should be used, in addition to the \code{classic} algorithm. Defaults to \code{elim}
 #' @param do_padj Logical, whether to perform the adjustment on the p-values from the specific
