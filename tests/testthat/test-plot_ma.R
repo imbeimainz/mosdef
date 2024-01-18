@@ -39,3 +39,71 @@ test_that("Other parameters can be used if not at default value", {
   
    
 })
+
+test_that("intgenes can be used without label",code = {
+  
+  p_intgenes_nolabel <- plot_ma(res_airway,
+                        FDR = 0.1,
+                        intgenes = c(
+                          "ENSG00000103196", # CRISPLD2
+                          "ENSG00000120129", # DUSP1
+                          "ENSG00000163884", # KLF15
+                          "ENSG00000179094" # PER1
+                        ),
+                        labels_intgenes = FALSE
+  )
+  expect_s3_class(p_intgenes_nolabel, "gg")
+  
+  
+})
+
+test_that("annotation obj can be used ",code = {
+  
+  p_intgenes_nolabel <- plot_ma(res_airway,
+                                FDR = 0.1,
+                                intgenes = c(
+                                  "ENSG00000103196", # CRISPLD2
+                                  "ENSG00000120129", # DUSP1
+                                  "ENSG00000163884", # KLF15
+                                  "ENSG00000179094" # PER1
+                                ),
+                                annotation_obj = annotationobject
+  )
+  expect_s3_class(p_intgenes_nolabel, "gg")
+  
+  
+})
+
+
+# test_that("label_repel = FALSE works ",code = {
+#   
+#   p_intgenes_nolabel <- plot_ma(res_airway,
+#                                 FDR = 0.1, 
+#                                 label_repel = FALSE,
+#                                 intgenes = c(
+#                                   "ENSG00000103196", # CRISPLD2
+#                                   "ENSG00000120129", # DUSP1
+#                                   "ENSG00000163884", # KLF15
+#                                   "ENSG00000179094" # PER1
+#                                 )
+# 
+#   )
+#   expect_s3_class(p_intgenes_nolabel, "gg")
+#   
+#   
+# })
+
+test_that("plot is created if there is no symbol column in the res_de ",code = {
+  
+  p_intgenes_nolabel <- plot_ma(res_airway_nosymbols,
+                                intgenes = c(
+                                  "ENSG00000103196", # CRISPLD2
+                                  "ENSG00000120129", # DUSP1
+                                  "ENSG00000163884", # KLF15
+                                  "ENSG00000179094" # PER1
+                                ),
+  )
+  expect_s3_class(p_intgenes_nolabel, "gg")
+  
+  
+})
