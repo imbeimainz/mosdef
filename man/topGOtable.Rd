@@ -18,7 +18,6 @@ topGOtable(
   full_names_in_rows = TRUE,
   add_gene_to_terms = TRUE,
   de_type = "up_and_down",
-  write_output = FALSE,
   output_file = "",
   topGO_method2 = "elim",
   do_padj = FALSE,
@@ -55,8 +54,6 @@ in the geneset that the de genes are compared to. Default is 0, recommended only
 
 \item{de_type}{One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
 upregulated, downregulated or both}
-
-\item{write_output}{Logical, if TRUE additionally writes out the result to a file}
 
 \item{output_file}{Name of the file the result should be written into}
 
