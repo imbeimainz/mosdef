@@ -237,21 +237,21 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
               de_type,
               "-regulated genes")
     }
-    de_genes <- mapIds(annot_to_map_to,
-                       keys = de_genes,
-                       column = "SYMBOL",
-                       keytype = "ENSEMBL",
-                       multiVals = "first")
-    
-    bg_genes <- mapIds(annot_to_map_to,
-                       keys = bg_genes,
-                       column = "SYMBOL",
-                       keytype = "ENSEMBL",
-                       multiVals = "first")
-    
-
-  }
-  
+  #   de_genes <- mapIds(annot_to_map_to,
+  #                      keys = de_genes,
+  #                      column = "SYMBOL",
+  #                      keytype = "ENSEMBL",
+  #                      multiVals = "first")
+  #   
+  #   bg_genes <- mapIds(annot_to_map_to,
+  #                      keys = bg_genes,
+  #                      column = "SYMBOL",
+  #                      keytype = "ENSEMBL",
+  #                      multiVals = "first")
+  #   
+  # 
+   }
+   
 
 
     # creating the vectors
