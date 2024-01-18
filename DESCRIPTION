@@ -32,7 +32,7 @@ Imports:
     rlang,
     DESeq2,
     SummarizedExperiment,
-    S4Vectors
+    S4Vectors,
     scales
 Suggests: 
     knitr,

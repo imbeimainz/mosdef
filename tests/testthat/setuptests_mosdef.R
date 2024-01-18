@@ -4,6 +4,7 @@ library(topGO)
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 library("macrophage")
+library("scales")
 
 #Get a dds ad a res_de
 data(airway)

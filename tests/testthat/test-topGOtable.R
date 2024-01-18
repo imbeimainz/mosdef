@@ -52,7 +52,8 @@ test_that("top_de works propperly", {
     de_genes =  myde,
     bg_genes  = myassayed,
     mapping = "org.Hs.eg.db",
-    top_de = 400
+    top_de = 400,
+    geneID = "ensembl"
   )
   expect_s3_class(topGOde_airway_topde_vectors, "data.frame")
   
