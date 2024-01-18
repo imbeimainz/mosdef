@@ -14,6 +14,7 @@ dds_airway_nodeseq <- DESeqDataSet(airway, design = ~ cell + dex)
 
 dds_airway <- DESeq(dds_airway_nodeseq)
 res_airway <- results(dds_airway)
+res_airway_nosymbols <- results(dds_airway)
 
 res_airway$SYMBOL <- AnnotationDbi::mapIds(org.Hs.eg.db,
                                        keys = row.names(res_airway),
@@ -21,13 +22,20 @@ res_airway$SYMBOL <- AnnotationDbi::mapIds(org.Hs.eg.db,
                                        keytype = "ENSEMBL",
                                        multiVals = "first"
 )
+res_airway$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
+                                           keys = row.names(res_airway),
+                                           column = "SYMBOL",
+                                           keytype = "ENSEMBL",
+                                           multiVals = "first"
+)
 airway_df <- deseqresult2df(res_airway)
 
 # get a vector of de and bg genes
 res_subset <- deseqresult2df(res_airway)[1:500,]
 myde <- res_subset$id
 myassayed <- rownames(res_airway)
-
+annotationobject <- deseqresult2df(res_airway)
+annotationobject <- annotationobject["SYMBOL"]
 #Macrophage
 
 
