@@ -10,7 +10,7 @@ test_that("Basic gene plot is generated", {
     transform = TRUE,
     labels_repel = TRUE
   )
-  expect_is(p, "gg")
+  expect_s3_class(p, "gg")
   
   p2_noanno_normallabels_untransformed <- gene_plot(
     dds = dds_macrophage,
@@ -20,7 +20,7 @@ test_that("Basic gene plot is generated", {
     transform = FALSE,
     labels_repel = FALSE
   )
-  expect_is(p2_noanno_normallabels_untransformed, "gg")
+  expect_s3_class(p2_noanno_normallabels_untransformed, "gg")
   
   expect_error({
     gene_plot(
@@ -64,10 +64,10 @@ test_that("Enforcing plot types", {
     intgroup = "condition",
     plot_type = "sina"
   )
-  expect_is(p_jitter, "gg")
-  expect_is(p_boxplot, "gg")
-  expect_is(p_violin, "gg")
-  expect_is(p_sina, "gg")
+  expect_s3_class(p_jitter, "gg")
+  expect_s3_class(p_boxplot, "gg")
+  expect_s3_class(p_violin, "gg")
+  expect_s3_class(p_sina, "gg")
 })
 
 test_that("Data instead of plot is returned", {
@@ -78,7 +78,7 @@ test_that("Data instead of plot is returned", {
     intgroup = "condition",
     return_data = TRUE
   )
-  expect_is(df_jitter, "data.frame")
+  expect_s3_class(df_jitter, "data.frame")
 })
 
 test_that("Assays are correctly accessed", {
@@ -89,7 +89,7 @@ test_that("Assays are correctly accessed", {
     intgroup = "condition",
     normalized = FALSE
   )
-  expect_is(p_non_norm_counts, "gg")
+  expect_s3_class(p_non_norm_counts, "gg")
   p_tpm <- gene_plot(
     dds = dds_macrophage,
     gene = "ENSG00000285982",
@@ -97,7 +97,7 @@ test_that("Assays are correctly accessed", {
     intgroup = "condition",
     normalized = FALSE
   )
-  expect_is(p_tpm, "gg")
+  expect_s3_class(p_tpm, "gg")
   
   p_other_assay <- gene_plot(
     dds = dds_macrophage,
@@ -106,7 +106,7 @@ test_that("Assays are correctly accessed", {
     intgroup = "condition",
     normalized = FALSE
   )
-  expect_is(p_other_assay, "gg")
+  expect_s3_class(p_other_assay, "gg")
 })
 
 test_that("Extraction of expression values works", {
@@ -116,7 +116,7 @@ test_that("Extraction of expression values works", {
     intgroup = "condition",
     assay = "counts"
   )
-  expect_is(df_simple, "data.frame")
+  expect_s3_class(df_simple, "data.frame")
 
   
   expect_error(get_expr_values(
@@ -131,5 +131,5 @@ test_that("Extraction of expression values works", {
     intgroup = "condition",
     assay = "counts"
   )
-  expect_is(df_unnormalized, "data.frame")
+  expect_s3_class(df_unnormalized, "data.frame")
 })

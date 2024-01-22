@@ -1,5 +1,3 @@
-context("Input main parameter checking works")
-
 test_that("Early fails are triggered", {
   
   #res_de is a DESeqResults
