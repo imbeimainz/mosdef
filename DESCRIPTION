@@ -32,8 +32,7 @@ Imports:
     rlang,
     DESeq2,
     SummarizedExperiment,
-    S4Vectors,
-    scales
+    S4Vectors
 Suggests: 
     knitr,
     rmarkdown,
@@ -41,7 +40,9 @@ Suggests:
     macrophage,
     org.Hs.eg.db,
     GeneTonic,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    TxDb.Hsapiens.UCSC.hg38.knownGene,
+    scales
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
