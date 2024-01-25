@@ -53,7 +53,7 @@ All of these algorithms reguire an annotation to function propperly so make sure
 
 ```
 
-topGO
+*topGO*
 ```{r}
 library(topGO)
  topgoDE_airway <- topGOtable(res_de = res_airway,
@@ -63,8 +63,12 @@ library(topGO)
    geneID = "symbol", #Which format the genes are provided. If you provide a res_de and a dds mosdef does                        #it for you and uses symbols if you provide vectors please specify
    de_type = "up_and_down", #which genes to analyse. default is all ("up_and_down"), other possibilities                               #are only upregulated ("up") or  ("down") genes
    add_gene_to_terms = TRUE, #Logical, whether to add a column with all genes annotated to each GO term
-   topGO_method2 = "elim" #Character, specifying which of the methods implemented by topGO default is elim
+   topGO_method2 = "elim", #Character, specifying which of the methods implemented by topGO default is elim
                            #For more info look at the documentation of topGO
+   min_counts = 20,  #minimum number of counts a gene has to have to be considered for the background. 
+                    # Default is 0 and we advise this parameter is only used by expert users
+   top_de = 700, # number of genes to be considered in the enrich analysis default is all, can be reduced                   # to reduce redundancy. Takes the top 700 highest DE genes absed of padj score. IF this                    # number is bigger than the total amount of de genes the parameter defaults to all genes
+   verbose = TRUE # weather or not to summarise the analysis in a message
  )
 
 ```
@@ -75,6 +79,74 @@ head(topgoDE_airway)
 
 ```
 
+*goseq*
+parameters like top_de, min_counts, verbose and de_type can also be used here
+Important; goseqTable needs a genome to compare gene lengths to, so make sure one is installed on your PC for human we recommend:https://bioconductor.org/packages/release/data/annotation/html/TxDb.Hsapiens.UCSC.hg38.knownGene.html
+# TODO: Can we say that here? maybe also provide a good mouse reference genome
+
+```{r}
+goseq_airway <- goseqTable(res_de = res_airway,
+                           dds = dds_airway,
+                           mapping = "org.Hs.eg.db",
+                           testCats = "GO:BP" # which categories to test of ("GO:BP, "GO:MF", "GO:CC")
+                           )
+```
+
+*clusterProfiler*
+Parameters like top_de, min_counts, verbose and de_type can also be used here.
+If you want to further customize the call of go_enrich inside the function, have a look at the documentation for go_enrich from clusterprofiler. Those parameters can be added to the cluprotable function call
+```{r}
+clupro_airway <- cluproTable(res_de = res_airway,
+                           dds = dds_airway,
+                           mapping = "org.Hs.eg.db",
+                           keyType = "SYMBOL" #Important for the goenrich function that is run later on.                                                If using dds and res_de has to be "SYMBOL" which is also                                                  the default
+)
+```
+
+# Functions to generate summary plots
+
+*VolcanoPlot*
+One of the most well known and used plots to display highly differentially expressed genes. Easy to read while providing a lot of data.
+A basic gg plot object including the most important parts when creating a volcano plot. Can be later expanded upon like any regular gg object by the user.
+
+```{r}
+volcPlot <- de_volcano(res_de = res_airway,
+                       mapping = "org.Hs.eg.db", # important to generate symbols for labelling
+                       labeled_genes = 25, # number of the top DE genes to be labeled. Default 30
+                       L2FC_cutoff = 1 # Where to draw the lines in the plot and which genes to mark as                                           significant default is one (meaning L2FC +/-1)
+                       )
+volcPlot
+
+```
+As mentioned above the user can now expand upon this with all the tools in the ggplot2 toolbox. For example:
+```{r}
+library(ggplot2)
+
+volcPlot +
+  ggtitle("Airway Volcano")+
+  ylab("-log10 PValue")+
+  xlab("Log 2 FoldChange (Cutoff 1/-1)")
+```
+For further possibilities please look at the ggplot2 documentation.
+
+*MA plot*
+Plotting the counts of a gene vs it's expression (Log2 FoldChange). Granting an overview of the amount of differentially expressed genes vs the amount of genes overall. As well as an overview of the amount of up vs. downregulated genes.
+plot_ma further allows you to highlight certain genes of interest to you if provided the ensemble ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as wether it is up or down regulated. 
+plot_ma also allows you to set x and y labels right away but has defaults. However, similar to de_volcano these can also be set later on. For all possible parameters please look at the documentation
+
+```{r}
+ maplot <- plot_ma(res_airway,
+                   FDR = 0.05, # which padj to set to count genes as DE
+                   intgenes = c(
+                     "ENSG00000103196", # CRISPLD2
+                     "ENSG00000120129", # DUSP1
+                     "ENSG00000163884", # KLF15
+                     "ENSG00000179094" # PER1
+                   ), # suggested genes of interest
+                   hlines = 1 #weather or not (and where) to draw the horizontal line (optional)
+                   
+ )
+```
 
 
 # Functions that create gene-centric content
