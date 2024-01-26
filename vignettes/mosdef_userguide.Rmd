@@ -134,6 +134,8 @@ Plotting the counts of a gene vs it's expression (Log2 FoldChange). Granting an 
 plot_ma further allows you to highlight certain genes of interest to you if provided the ensemble ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as wether it is up or down regulated. 
 plot_ma also allows you to set x and y labels right away but has defaults. However, similar to de_volcano these can also be set later on. For all possible parameters please look at the documentation
 
+
+
 ```{r}
  maplot <- plot_ma(res_airway,
                    FDR = 0.05, # which padj to set to count genes as DE
