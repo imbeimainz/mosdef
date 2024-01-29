@@ -21,7 +21,7 @@
 #' data("gse", package = "macrophage")
 #'
 #' dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
-#' #changing the ids to Ensembl instead of the Gencode used in the object
+#' # changing the ids to Ensembl instead of the Gencode used in the object
 #' rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 #' dds_macrophage
 #' keep <- rowSums(counts(dds_macrophage) >= 10) >= 6

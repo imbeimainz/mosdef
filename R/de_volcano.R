@@ -45,14 +45,13 @@ de_volcano <- function(res_de,
                        L2FC_cutoff = 1,
                        labeled_genes = 30,
                        mapping = "org.Mm.eg.db") {
-  
   if (!is(res_de, "DESeqResults")) {
     stop("The provided `res_de` is not a DESeqResults object, please check your input parameters.")
   }
-  
-  
+
+
   annot_to_map_to <- get(mapping)
-  
+
   res_de$symbol <- mapIds(annot_to_map_to,
     keys = row.names(res_de),
     column = "SYMBOL",

@@ -90,12 +90,11 @@ gene_plot <- function(dds,
                       plot_type = "auto",
                       return_data = FALSE,
                       gtl = NULL) {
-  
   if (!is(dds, "DESeqDataSet")) {
     stop("The provided `dds` is not a DESeqDataSet object, please check your input parameters.")
   }
-  
-  
+
+
   plot_type <- match.arg(
     plot_type,
     c("auto", "jitteronly", "boxplot", "violin", "sina")

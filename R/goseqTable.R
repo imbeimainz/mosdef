@@ -31,7 +31,7 @@
 #' @param res_de A DESeqResults object created using \code{DESeq2}
 #' @param top_de numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
 #'  Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).
-#' @param min_counts numeric, min number of counts a gene needs to have to be included 
+#' @param min_counts numeric, min number of counts a gene needs to have to be included
 #' in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.
 #' @param genome A string identifying the genome that genes refer to, as in the
 #' \code{\link{goseq}} function
@@ -186,48 +186,48 @@ goseqTable <- function(res_de = NULL,
       res_de_subset <- deseqresult2df(res_de, FDR = 0.05)
       res_de_subset <- res_de_subset[res_de_subset$log2FoldChange <= 0, ]
     }
-    
-    
+
+
 
 
     # in example top 100 but this makes more sense no?
     de_genes <- res_de_subset$id
 
 
-    if(!is.null(top_de)) {
+    if (!is.null(top_de)) {
       top_de <- min(top_de, length(de_genes))
       de_genes <- de_genes[seq_len(top_de)]
     }
     bg_genes <- rownames(dds)[rowSums(counts(dds)) > min_counts]
     if (verbose) {
-      message("Your dataset has ",
-              nrow(res_de_subset),
-              " DE genes. You selected ",
-              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(res_de_subset))*100), # sprintf format with 2 decimal places
-              ") genes. You analysed all ",
-              de_type,
-              "-regulated genes")
+      message(
+        "Your dataset has ",
+        nrow(res_de_subset),
+        " DE genes. You selected ",
+        length(de_genes), " (", sprintf("%.2f%%", (length(de_genes) / nrow(res_de_subset)) * 100), # sprintf format with 2 decimal places
+        ") genes. You analysed all ",
+        de_type,
+        "-regulated genes"
+      )
     }
-    
-
   } else if (!is.null(c(bg_genes, de_genes))) {
-    
     all_de <- length(de_genes)
-    
-    if(!is.null(top_de)) {
+
+    if (!is.null(top_de)) {
       top_de <- min(top_de, length(de_genes))
       de_genes <- de_genes[seq_len(top_de)]
     }
     if (verbose) {
-      message("Your dataset has ",
-              all_de,
-              " DE genes.You selected ",
-              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/all_de)*100), # sprintf format with 2 decimal places
-              ") genes. You analysed all ",
-              de_type,
-              "-regulated genes")
+      message(
+        "Your dataset has ",
+        all_de,
+        " DE genes.You selected ",
+        length(de_genes), " (", sprintf("%.2f%%", (length(de_genes) / all_de) * 100), # sprintf format with 2 decimal places
+        ") genes. You analysed all ",
+        de_type,
+        "-regulated genes"
+      )
     }
-    
   }
 
 
@@ -271,10 +271,11 @@ goseqTable <- function(res_de = NULL,
     )
 
     all_genesymbols <- mapIds(get(mapping),
-                              keys = all_ens_ids,
-                              keytype = "ENSEMBL",
-                              column = "SYMBOL",
-                              multiVals = "first")
+      keys = all_ens_ids,
+      keytype = "ENSEMBL",
+      column = "SYMBOL",
+      multiVals = "first"
+    )
 
     # building the lookup table
     lut_genes <- data.frame(

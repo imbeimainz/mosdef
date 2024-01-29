@@ -112,11 +112,11 @@ signature_volcano <- function(res_de,
   #   }
   # } else {
   # overwritable via a list
-  
+
   if (!is(res_de, "DESeqResults")) {
     stop("The provided `res_de` is not a DESeqResults object, please check your input parameters.")
   }
-  
+
   if (!all(genelist %in% rownames(res_de))) {
     not_there <- genelist[!(genelist %in% rownames(res_de))]
     warning(
