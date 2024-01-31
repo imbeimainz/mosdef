@@ -93,7 +93,7 @@ buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL"
   }
 
   df <- df |>
-    select(-.data$SYMBOL)
+    select(-.data[[col_to_use]])
   if (output_format == "DT") {
     return(DT::datatable(df, escape = FALSE))
   } else if (output_format == "DF") {
