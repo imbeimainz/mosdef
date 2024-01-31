@@ -46,6 +46,17 @@ All of these algorithms reguire an annotation to function propperly so make sure
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 ```
+We also want to add a symbol column for later use:
+```{r}
+
+res_airway$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
+                                           keys = row.names(res_airway),
+                                           column = "SYMBOL",
+                                           keytype = "ENSEMBL",
+                                           multiVals = "first"
+)
+```
+
 
 *topGO*
 ```{r}
@@ -63,7 +74,7 @@ topgoDE_airway <- topGOtable(
   min_counts = 20, # minimum number of counts a gene has to have to be considered for the background.
   # Default is 0 and we advise this parameter is only used by expert users
   top_de = 700, # number of genes to be considered in the enrich analysis default is all, can be reduced                   # to reduce redundancy. Takes the top 700 highest DE genes absed of padj score. IF this                    # number is bigger than the total amount of de genes the parameter defaults to all genes
-  verbose = TRUE # weather or not to summarise the analysis in a message
+  verbose = TRUE # whether or not to summarise the analysis in a message
 )
 ```
 
@@ -126,29 +137,123 @@ For further possibilities please look at the ggplot2 documentation.
 
 *MA plot*
 Plotting the counts of a gene vs it's expression (Log2 FoldChange). Granting an overview of the amount of differentially expressed genes vs the amount of genes overall. As well as an overview of the amount of up vs. downregulated genes.
-plot_ma further allows you to highlight certain genes of interest to you if provided the ensemble ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as wether it is up or down regulated. 
+
 plot_ma also allows you to set x and y labels right away but has defaults. However, similar to de_volcano these can also be set later on. For all possible parameters please look at the documentation
-
-
 
 ```{r}
 maplot <- plot_ma(res_airway,
-  FDR = 0.05, # which padj to set to count genes as DE
+                  FDR = 0.05, # which padj to set to count genes as DE (default 0.05)
+                  hlines = 1 # whether or not (and where) to draw the horizontal line (optional)
+                  )
+
+maplot
+```
+
+plot_ma further allows you to highlight certain genes of interest to you if provided the ensemble ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as whether it is up or down regulated. 
+```{r}
+maplot_genes <- plot_ma(res_airway,
+  FDR = 0.1, 
   intgenes = c(
     "ENSG00000103196", # CRISPLD2
     "ENSG00000120129", # DUSP1
     "ENSG00000163884", # KLF15
     "ENSG00000179094" # PER1
   ), # suggested genes of interest
-  hlines = 1 # weather or not (and where) to draw the horizontal line (optional)
+  hlines = 1 
 )
+maplot_genes
 ```
 
 
-# Functions that create gene-centric content
+# Functions that create gene-centric content/Report helpers
+
+RMDs are a great way of handing over reports to colaborators. These functions are supposed to improve the report quality by upgrading the report turning normal tables into interactive tables linking to further websites.
 
 buttons, links, yadda
 
+*GO terms*
 ```{r}
+topgoDE_airway$GO.ID <- create_link_GO(topgoDE_airway$GO.ID)
+
+DT::datatable(topgoDE_airway, escape = FALSE) # the esxape =FALSE is important to ensure the link is turned into a button
+
 ```
+
+To get information on a singular GOterm of interest you can use:
+```{r}
+ go_2_html("GO:0001525")
+
+```
+
+*Genes*
+
+There are various websites that can give more information on genes. Currently we have functions to create links to:
+Ensemble
+GeneCards
+Pubmed
+NCBI
+dbptm
+GTEX
+UniProt
+Human Protein Atlas
+
+You can use acces all of these easily by using one function
+```{r}
+# creating a smaller subset for visulisation purposes and to keep the main res_de 
+res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
+
+buttonifier(res_subset,
+            col_to_use = "symbol", # col where the gene names are stored, default is "SYMBOL", in this example however the col is named "symbol"
+            new_cols = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED") 
+            # all of the supported websites y0u can pick however many you want
+            )
+```
+Important to know is that the buttonifier function returns a DT:datatable not a df. This is to ensure that the excape = FALSE parameter of datatable is set and not forgotten as the links/buttons will not work otherwise.
+Advanced users that want further customisation options to their datatable can ensure a dataframe is returned (then the escape = FALSE must be set by hand):
+```{r}
+res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
+
+res_subset <- buttonifier(res_subset,
+                          col_to_use = "symbol", 
+                          new_cols = c("GC", "NCBI", "HPA"),
+                          output_format = "DF"
+)
+
+DT::datatable(res_subset,
+              escape = FALSE,
+              rownames = FALSE
+              #other parameters...
+)
+```
+
+All of the functions included inside the buttonifier function are also avaiulable as singular functions in case you are only interested in one of them:
+```{r}
+res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
+
+row.names(res_subset) <- create_link_ENS(row.names(res_subset), species = "Homo_sapiens")
+res_subset$symbol_GC <- create_link_genecards(res_subset$symbol)
+res_subset$symbol_Pub <- create_link_pubmed(res_subset$symbol)
+res_subset$symbol_NCBI <- create_link_NCBI(res_subset$symbol)
+res_subset$symbol_dbptm <-create_link_dbPTM(res_subset$symbol)
+res_subset$symbol_GTEX <- create_link_GTEX(res_subset$symbol)
+res_subset$symbol_UniP <- create_link_UniProt(res_subset$symbol)
+res_subset$symbol_HPA <- create_link_HPA(res_subset$symbol)
+
+DT::datatable(res_subset, escape = FALSE)
+```
+
+For information on singular genes you can use:
+
+```{r}
+ geneinfo_2_html("SPARCL1",
+                 res_de = res_airway,
+                 col_to_use = "symbol" # similar to before: the default is "SYMBOL" but we have a different name so we have to specify it here
+                 )
+```
+It can however also be used without a res_de for a general overview
+
+```{r}
+geneinfo_2_html("ACTB")
+```
+
 
