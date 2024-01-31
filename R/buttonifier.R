@@ -91,6 +91,10 @@ buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL"
   if ("HPA" %in% new_cols) {
     df$SYMBOL_HPA <- create_link_HPA(df[[col_to_use]])
   }
+  
+  if ("PUB" %in% new_cols) {
+    df$SYMBOL_PUBM <- create_link_pubmed(df[[col_to_use]])
+  }
 
   df <- df |>
     select(-.data[[col_to_use]])
