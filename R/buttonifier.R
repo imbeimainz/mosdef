@@ -5,7 +5,7 @@
 #' Current supported portals are: Genecards, NCBI, GTEX, Uniprot, dbPTM, Human Protein Atlas
 #'
 #' @param df A dataframe with at least on column with gene Symbols named: SYMBOL
-#' @param new_cols At least one of: "GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA"
+#' @param new_cols At least one of: "GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA" "PUBMED"
 #' @param col_to_use name of the columns were the gene symbols are stored. Default is SYMBOL
 #' @param output_format a parameter deciding which output format to return, either a DT:datatable (recommended)
 #' or a simple dataframe (DF).In the latter case it is important that if the data is visualized with the
@@ -55,13 +55,13 @@ buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL"
   .actionbutton_biocstyle <- "color: #ffffff; background-color: #0092AC"
   val <- df[[col_to_use]]
 
-  match.arg(new_cols, choices = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA"), several.ok = TRUE)
+  match.arg(new_cols, choices = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED"), several.ok = TRUE)
   for (i in 1:length(new_cols)) {
-    if ((new_cols[i] %in% c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA")) == FALSE) {
+    if ((new_cols[i] %in% c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED")) == FALSE) {
       warning(paste0(
         "Please make sure you used the values suggested in the documentation. \n",
         "One or more of the following values entered into new_cols is not supported: \n",
-        new_cols[new_cols %in% c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA") == FALSE]
+        new_cols[new_cols %in% c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED") == FALSE]
       ))
     }
   }
@@ -92,7 +92,7 @@ buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL"
     df$SYMBOL_HPA <- create_link_HPA(df[[col_to_use]])
   }
   
-  if ("PUB" %in% new_cols) {
+  if ("PUBMED" %in% new_cols) {
     df$SYMBOL_PUBM <- create_link_pubmed(df[[col_to_use]])
   }
 
