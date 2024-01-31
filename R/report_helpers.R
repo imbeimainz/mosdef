@@ -236,7 +236,8 @@ go_2_html <- function(go_id,
 #' geneinfo_2_html("ACTB")
 #' geneinfo_2_html("Pf4")
 geneinfo_2_html <- function(gene_id,
-                            res_de = NULL) {
+                            res_de = NULL,
+                            col_to_use = "SYMBOL") {
   gene_ncbi_button <- create_link_NCBI(gene_id)
   gene_genecards_button <- create_link_genecards(gene_id)
   gene_gtex_button <- create_link_GTEX(gene_id)
@@ -244,7 +245,7 @@ geneinfo_2_html <- function(gene_id,
   gene_pubmed_button <- create_link_pubmed(gene_id)
 
   if (!is.null(res_de)) {
-    gid <- match(gene_id, res_de$SYMBOL)
+    gid <- match(gene_id, res_de[[col_to_use]])
     if (is.na(gid)) {
       message(
         "Could not find the specified gene (`", gene_id,
