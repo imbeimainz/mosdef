@@ -18,16 +18,16 @@ res_airway <- results(dds_airway)
 res_airway_nosymbols <- results(dds_airway)
 
 res_airway$SYMBOL <- AnnotationDbi::mapIds(org.Hs.eg.db,
-  keys = row.names(res_airway),
-  column = "SYMBOL",
-  keytype = "ENSEMBL",
-  multiVals = "first"
+                                           keys = row.names(res_airway),
+                                           column = "SYMBOL",
+                                           keytype = "ENSEMBL",
+                                           multiVals = "first"
 )
 res_airway$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
-  keys = row.names(res_airway),
-  column = "SYMBOL",
-  keytype = "ENSEMBL",
-  multiVals = "first"
+                                           keys = row.names(res_airway),
+                                           column = "SYMBOL",
+                                           keytype = "ENSEMBL",
+                                           multiVals = "first"
 )
 airway_df <- deseqresult2df(res_airway)
 
@@ -49,9 +49,9 @@ rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 anno_df <- data.frame(
   gene_id = rownames(dds_macrophage),
   gene_name = mapIds(org.Hs.eg.db,
-    keys = rownames(dds_macrophage),
-    column = "SYMBOL",
-    keytype = "ENSEMBL"
+                     keys = rownames(dds_macrophage),
+                     column = "SYMBOL",
+                     keytype = "ENSEMBL"
   ),
   stringsAsFactors = FALSE,
   row.names = rownames(dds_macrophage)
@@ -67,13 +67,19 @@ dds_unnormalized <- dds_macrophage
 
 dds_macrophage <- DESeq(dds_macrophage)
 vst_macrophage <- vst(dds_macrophage)
-res_macrophage_IFNg_vs_naive <- results(dds_macrophage,
+res_macrophage_IFNg_vs_naive <- results(
+  dds_macrophage,
   contrast = c("condition", "IFNg", "naive"),
   lfcThreshold = 1, alpha = 0.05
 )
 summary(res_macrophage_IFNg_vs_naive)
 res_macrophage_IFNg_vs_naive$SYMBOL <- rowData(dds_macrophage)$SYMBOL
 
+topgoDE_airway <- topGOtable( 
+  res_airway,
+  dds_airway,
+  mapping = "org.Hs.eg.db"
+)
 
 goseqde_airway <- goseqTable(
   res_de = res_airway,
