@@ -58,7 +58,7 @@ res_airway$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
 ```
 
 
-*topGO*
+## topGO
 ```{r}
 library(topGO)
 topgoDE_airway <- topGOtable(
@@ -83,7 +83,7 @@ This will give an analysis for all possible GO terms (when using the BP ontology
 head(topgoDE_airway)
 ```
 
-*goseq*
+## goseq
 parameters like top_de, min_counts, verbose and de_type can also be used here
 Important; goseqTable needs a genome to compare gene lengths to, so make sure one is installed on your PC for human we recommend:https://bioconductor.org/packages/release/data/annotation/html/TxDb.Hsapiens.UCSC.hg38.knownGene.html
 # TODO: Can we say that here? maybe also provide a good mouse reference genome
@@ -95,9 +95,10 @@ goseq_airway <- goseqTable(
   mapping = "org.Hs.eg.db",
   testCats = "GO:BP" # which categories to test of ("GO:BP, "GO:MF", "GO:CC")
 )
+head(goseq_airway)
 ```
 
-*clusterProfiler*
+## clusterProfiler
 Parameters like top_de, min_counts, verbose and de_type can also be used here.
 If you want to further customize the call of go_enrich inside the function, have a look at the documentation for go_enrich from clusterprofiler. Those parameters can be added to the cluprotable function call
 ```{r}
@@ -107,7 +108,23 @@ clupro_airway <- cluproTable(
   mapping = "org.Hs.eg.db",
   keyType = "SYMBOL" # Important for the goenrich function that is run later on.                                                If using dds and res_de has to be "SYMBOL" which is also                                                  the default
 )
+head(clupro_airway)
 ```
+All of these functions also work if you only have/provide a vector of differentially expressed genes and a vector of background genes. Most of the above mentioned parameters work here as well (top_de, verbose), however parameters like min_counts and de_type will not work since they need further information which can only be found in the dds/res_de. Namely the counts from the dds and the Log2FoldChange from the res_de.
+```{r}
+res_subset <- deseqresult2df(res_airway)[1:500, ] #reduce size to increase computational speed
+myde <- res_subset$id
+myassayed <- rownames(res_airway)
+#Here Keys are ensemble not symbols
+topGOde_airway_vec <- topGOtable(
+  de_genes = myde,
+  bg_genes = myassayed,
+  mapping = "org.Hs.eg.db",
+  geneID = "ensembl"
+)
+head(topGOde_airway_vec)
+```
+
 
 # Functions to generate summary plots
 
