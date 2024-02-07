@@ -17,7 +17,7 @@
 #' # with simulated data...
 #' library(DESeq2)
 #' data(res_airway, package = "mosdef")
-#' deseqresult2tbl(res)
+#' deseqresult2tbl(res_airway)
 deseqresult2tbl <- function(res_de) {
   # library("dplyr")
   if (!is(res_de, "DESeqResults")) stop("Not a DESeqResults object.")

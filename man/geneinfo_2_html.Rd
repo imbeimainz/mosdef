@@ -15,6 +15,9 @@ expression analysis. If not provided, the experiment-related information is not
 shown, and only some generic info on the identifier is displayed.
 The information about the gene is retrieved by matching on the \code{SYMBOL} column,
 which should be provided in \code{res_de}.}
+
+\item{col_to_use}{The column of your res_de object containing the gene symbols.
+Default is "SYMBOL"}
 }
 \value{
 HTML content related to a gene identifier, to be displayed in

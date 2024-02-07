@@ -31,7 +31,8 @@ go_volcano(
 
 \item{L2FC_cutoff}{A numeric value that sets the cutoff for the xintercept argument of ggplot}
 
-\item{col_to_use}{The column in your differential expression results containing your gene symbols. If you don't have one it is created automatically}
+\item{col_to_use}{The column in your differential expression results containing your gene symbols.
+If you don't have one it is created automatically}
 
 \item{enrich_col}{coloumn name from your res_enrich where the genes associated with your GOterm are stored (for example see the topGOtable result in mosdef)}
 
@@ -41,7 +42,8 @@ go_volcano(
 
 \item{highlight_col}{The coloir for the genes associated with your GOterm default is "tomato"}
 
-\item{overlaps}{number of overlaps ggrepel is supposed to allow when labelling (for more info chcek ggrepel documentation)}
+\item{overlaps}{number of overlaps ggrepel is supposed to allow when labelling
+(for more info chcek ggrepel documentation)}
 }
 \value{
 A  \code{ggplot2} volcano plot object that can be extended upon by the user
@@ -61,16 +63,20 @@ library(AnnotationDbi)
 library("org.Hs.eg.db")
 data(dds_airway, package = "mosdef")
 data(res_airway, package = "mosdef")
-topgoDE_airway <- topGOtable( 
-res_airway,
-dds_airway,
-mapping = "org.Hs.eg.db"
+topgoDE_airway <- topGOtable(
+  res_de = res_airway,
+  dds = dds_airway,
+  ontology = "BP",
+  mapping = "org.Hs.eg.db",
+  geneID = "symbol",
 )
 p <- go_volcano(
   res_airway,
+  res_enrich = topgoDE_airway,
+  term_index = 1,
   L2FC_cutoff = 1,
-  labeled_genes = 20,
-  mapping = "org.Hs.eg.db"
+  mapping = "org.Hs.eg.db",
+  overlaps = 50
 )
 p
 }
