@@ -37,6 +37,7 @@
 #' library(DESeq2)
 #' library(AnnotationDbi)
 #' library("org.Hs.eg.db")
+#' library(topGO)
 #' data(dds_airway, package = "mosdef")
 #' data(res_airway, package = "mosdef")
 #' topgoDE_airway <- topGOtable(
