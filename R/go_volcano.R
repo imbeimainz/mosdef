@@ -3,7 +3,7 @@
 #' that can then be expanded upon using further ggplot functions.
 #'
 #' @param res_de A DESeqResults object created using \code{DESeq2}
-#' @param res_enrich A enrichmen result object created by for example using topGOtable
+#' @param res_enrich A enrichment result object created by for example using topGOtable
 #' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
 #' @param term_index The location (row) of your GO term of interest in your enrichment result
 #' @param L2FC_cutoff A numeric value that sets the cutoff for the xintercept argument of ggplot
@@ -33,15 +33,22 @@
 #' library(ggrepel) # for nice annotations
 #' library(airway)
 #' library(DESeq2)
+#' library(AnnotationDbi)
 #' library("org.Hs.eg.db")
+#' data(dds_airway, package = "mosdef")
 #' data(res_airway, package = "mosdef")
+#' topgoDE_airway <- topGOtable( 
+#' res_airway,
+#' dds_airway,
+#' mapping = "org.Hs.eg.db"
+#' )
 #' p <- go_volcano(
 #'   res_airway,
 #'   L2FC_cutoff = 1,
 #'   labeled_genes = 20,
 #'   mapping = "org.Hs.eg.db"
 #' )
-#' plibrary(AnnotationDbi)
+#' p
 go_volcano <- function(
     res_de,
     res_enrich,
@@ -54,89 +61,89 @@ go_volcano <- function(
     up_col = "grey",
     highlight_col = "tomato",
     overlaps = 20){
-
-if(is.null(col_to_use)){
- res_de$symbol <- mapIds(org.Hs.eg.db,
-                         keys = row.names(res_de),
-                         column = "SYMBOL",
-                         keytype = "ENSEMBL",
-                         multiVals = "first"
- )
-}else
-  res_de$symbol <- res_de[[col_to_use]]
   
-df <- deseqresult2df(res_airway)
-
-
-
-
-# finding the highest value in the log2FoldChange column and rounding it up to get a nice symetric plot
-x_limit <- ceiling(max(abs(range(df$log2FoldChange, na.rm = TRUE))))
-
-
-
-df$diffexpressed <- "NO"
-# if log2Foldchange > Cutoff and pvalue < 0.05, set as "UP"
-df$diffexpressed[df$log2FoldChange > L2FC_cutoff & df$pvalue < 0.05] <- "UP"
-# if log2Foldchange < -Cutoff and pvalue < 0.05, set as "DOWN"
-df$diffexpressed[df$log2FoldChange < -L2FC_cutoff & df$pvalue < 0.05] <- "DOWN"
-
-# calculate top 30 degenes based on pvalue
-#df$delabel <- ifelse(df$symbol %in% head(df[order(df$pvalue), "symbol"], labeled_genes), df$symbol, NA)
-
-
-# Either get indexes of the term name
-#grep("cell adhesion", res_enrich[["Term"]], fixed =TRUE)
-
-
-#or have the user tell us at which index the term of interest is
-
-test_vec <- res_enrich$genes[term_index]
-test_vec <- strsplit(test_vec, ",")
-test_vec <- as.vector(test_vec)
-#test_for_plot <- test_vec[[1]][1:30]
-
-for (i in 1:length(df$id)) {
+  if(is.null(col_to_use)){
+    res_de$symbol <- mapIds(org.Hs.eg.db,
+                            keys = row.names(res_de),
+                            column = "SYMBOL",
+                            keytype = "ENSEMBL",
+                            multiVals = "first"
+    )
+  }else
+    res_de$symbol <- res_de[[col_to_use]]
+  
+  df <- deseqresult2df(res_airway)
   
   
-  if (df$symbol[i] %in% test_vec[[1]]){
-    df$de_label[i] <- df$symbol[i]
+  
+  
+  # finding the highest value in the log2FoldChange column and rounding it up to get a nice symetric plot
+  x_limit <- ceiling(max(abs(range(df$log2FoldChange, na.rm = TRUE))))
+  
+  
+  
+  df$diffexpressed <- "NO"
+  # if log2Foldchange > Cutoff and pvalue < 0.05, set as "UP"
+  df$diffexpressed[df$log2FoldChange > L2FC_cutoff & df$pvalue < 0.05] <- "UP"
+  # if log2Foldchange < -Cutoff and pvalue < 0.05, set as "DOWN"
+  df$diffexpressed[df$log2FoldChange < -L2FC_cutoff & df$pvalue < 0.05] <- "DOWN"
+  
+  # calculate top 30 degenes based on pvalue
+  #df$delabel <- ifelse(df$symbol %in% head(df[order(df$pvalue), "symbol"], labeled_genes), df$symbol, NA)
+  
+  
+  # Either get indexes of the term name
+  #grep("cell adhesion", res_enrich[["Term"]], fixed =TRUE)
+  
+  
+  #or have the user tell us at which index the term of interest is
+  
+  test_vec <- res_enrich$genes[term_index]
+  test_vec <- strsplit(test_vec, ",")
+  test_vec <- as.vector(test_vec)
+  #test_for_plot <- test_vec[[1]][1:30]
+  
+  for (i in 1:length(df$id)) {
     
     
-  } else{
-    df$de_label[i] <- NA
+    if (df$symbol[i] %in% test_vec[[1]]){
+      df$de_label[i] <- df$symbol[i]
+      
+      
+    } else{
+      df$de_label[i] <- NA
+    }
+    
+    
   }
+  #df$delabel <- ifelse(df$symbol %in% head(df[order(df$de_label), "symbol"], labeled_genes), df$symbol, NA)
+  
+  p <-ggplot(data = df, aes(
+    x = .data$log2FoldChange, y = -log10(.data$pvalue),
+    colour = .data$diffexpressed, label = .data$de_label
+  )) +
+    geom_vline(xintercept = c(-L2FC_cutoff, L2FC_cutoff), col = "gray", linetype = "dashed") +
+    geom_hline(yintercept = -log10(0.05), col = "gray", linetype = "dashed") +
+    geom_point() +
+    theme_classic() +
+    coord_cartesian(ylim = c(0, max(-log10(df$pvalue))), xlim = c(-x_limit, x_limit)) +
+    scale_x_continuous(breaks = seq(-x_limit, x_limit, 2)) +
+    geom_label_repel(max.overlaps = overlaps) # To show all labels
+  # or   geom_text_repel(max.overlaps = Inf) not quite sure which is better
   
   
-}
-#df$delabel <- ifelse(df$symbol %in% head(df[order(df$de_label), "symbol"], labeled_genes), df$symbol, NA)
-
-p <-ggplot(data = df, aes(
-  x = .data$log2FoldChange, y = -log10(.data$pvalue),
-  colour = .data$diffexpressed, label = .data$de_label
-)) +
-  geom_vline(xintercept = c(-L2FC_cutoff, L2FC_cutoff), col = "gray", linetype = "dashed") +
-  geom_hline(yintercept = -log10(0.05), col = "gray", linetype = "dashed") +
-  geom_point() +
-  theme_classic() +
-  coord_cartesian(ylim = c(0, max(-log10(df$pvalue))), xlim = c(-x_limit, x_limit)) +
-  scale_x_continuous(breaks = seq(-x_limit, x_limit, 2)) +
-  geom_label_repel(max.overlaps = overlaps) # To show all labels
-# or   geom_text_repel(max.overlaps = Inf) not quite sure which is better
-
-
-# Define the genes to highlight
-genes_to_highlight <- c(test_vec[[1]])
-# Define a custom color scale
-custom_color_scale <- c("DOWN" = down_col, "NO" = "grey", "UP" = up_col, "Highlighted" = highlight_col)
-
-# Add another geom_point layer to highlight specific genes
-q <- p +
-  geom_point(data = df[df$symbol %in% genes_to_highlight, ],
-             aes(color = "Highlighted"), size = 3, shape = 16) +
-  scale_color_manual(values = custom_color_scale,
-                     labels = c("Downregulated", "GOTerm","Not significant", "Upregulated"))
-
+  # Define the genes to highlight
+  genes_to_highlight <- c(test_vec[[1]])
+  # Define a custom color scale
+  custom_color_scale <- c("DOWN" = down_col, "NO" = "grey", "UP" = up_col, "Highlighted" = highlight_col)
+  
+  # Add another geom_point layer to highlight specific genes
+  q <- p +
+    geom_point(data = df[df$symbol %in% genes_to_highlight, ],
+               aes(color = "Highlighted"), size = 3, shape = 16) +
+    scale_color_manual(values = custom_color_scale,
+                       labels = c("Downregulated", "GOTerm","Not significant", "Upregulated"))
+  
 }
 
 #Ideas:
