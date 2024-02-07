@@ -13,8 +13,8 @@ dds_airway_nodeseq <- DESeqDataSet(airway, design = ~ cell + dex)
 # Example, performing extraction of enriched functional categories in
 # detected significantly expressed genes
 
-dds_airway <- DESeq(dds_airway_nodeseq)
-res_airway <- results(dds_airway)
+data(dds_airway, package = "mosdef")
+data(res_airway, package = "mosdef")
 res_airway_nosymbols <- results(dds_airway)
 
 res_airway$SYMBOL <- AnnotationDbi::mapIds(org.Hs.eg.db,
@@ -23,12 +23,7 @@ res_airway$SYMBOL <- AnnotationDbi::mapIds(org.Hs.eg.db,
                                            keytype = "ENSEMBL",
                                            multiVals = "first"
 )
-res_airway$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
-                                           keys = row.names(res_airway),
-                                           column = "SYMBOL",
-                                           keytype = "ENSEMBL",
-                                           multiVals = "first"
-)
+res_airway$symbol <- res_airway$SYMBOL
 airway_df <- deseqresult2df(res_airway)
 
 # get a vector of de and bg genes

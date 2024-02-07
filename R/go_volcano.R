@@ -31,7 +31,7 @@
 # 
 # 
 # # Either get indexes of the term name
-# grep("cell adhesion", res_enrich[["Term"]], fixed =TRUE)
+# #grep("cell adhesion", res_enrich[["Term"]], fixed =TRUE)
 # 
 # 
 # #or have the user tell us at which index the term of interest is
@@ -39,7 +39,7 @@
 # test_vec <- res_enrich$genes[index_test]
 # test_vec <- strsplit(test_vec, ",")
 # test_vec <- as.vector(test_vec)
-# test_for_plot <- test_vec[[1]][1:30]
+# #test_for_plot <- test_vec[[1]][1:30]
 # 
 # for (i in 1:length(df$id)) {
 # 
@@ -97,3 +97,4 @@
 # # somehow filter terms with more gnees for the most significant by padj
 #   # maybe a loop that extraxts all genes from test vec out of the res_de together with their padj
 #   # then filter by that padj and take top 30 + add a message maybe even a parameter
+#   # or just let ggrepell do the work for us

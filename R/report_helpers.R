@@ -12,6 +12,22 @@ create_link_GO <- function(val) {
   )
 }
 
+#' Link to the GeneCards database
+#'
+#' @param val Character, the gene symbol of interest
+#'
+#' @return HTML for an action button
+#' @export
+create_link_genecards <- function(val) {
+  sprintf(
+    '<a href = "https://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
+    val, # link portion related to the gene
+    .actionbutton_biocstyle, # button style
+    paste0(val, "@GeneCards") # content of the button label
+  )
+}
+
+
 #' Link to Pubmed
 #'
 #' @param val Character, the gene symbol
@@ -279,20 +295,6 @@ geneinfo_2_html <- function(gene_id,
   return(htmltools::HTML(mycontent))
 }
 
-#' Link to the GeneCards database
-#'
-#' @param val Character, the gene symbol of interest
-#'
-#' @return HTML for an action button
-#' @noRd
-create_link_genecards <- function(val) {
-  sprintf(
-    '<a href = "https://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
-    val, # link portion related to the gene
-    .actionbutton_biocstyle, # button style
-    paste0(val, "@GeneCards") # content of the button label
-  )
-}
 
 
 # Some constant values ----------------------------------------------------

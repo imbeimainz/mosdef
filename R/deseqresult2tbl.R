@@ -16,9 +16,7 @@
 #'
 #' # with simulated data...
 #' library(DESeq2)
-#' dds <- DESeq2::makeExampleDESeqDataSet(n = 100, m = 8, betaSD = 1)
-#' dds <- DESeq2::DESeq(dds)
-#' res <- DESeq2::results(dds)
+#' data(res_airway, package = "mosdef")
 #' deseqresult2tbl(res)
 deseqresult2tbl <- function(res_de) {
   # library("dplyr")

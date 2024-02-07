@@ -43,15 +43,8 @@
 #'
 #' @examples
 #' library(airway)
-#' library(DESeq2)
-#' data(airway)
-#' airway
-#' dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
-#' # Example, performing extraction of enriched functional categories in
-#' # detected significantly expressed genes
-#' \dontrun{
-#' dds_airway <- DESeq(dds_airway)
-#' res_airway <- results(dds_airway)
+#' data(dds_airway, package = "mosdef")
+#' data(res_airway, package = "mosdef")
 #' library("AnnotationDbi")
 #' library("org.Hs.eg.db")
 #'
@@ -63,7 +56,7 @@
 #'   mapping = "org.Hs.eg.db",
 #'   geneID = "symbol",
 #' )
-#' }
+#' 
 #'
 #' @export
 topGOtable <- function(res_de = NULL, # Differentially expressed genes

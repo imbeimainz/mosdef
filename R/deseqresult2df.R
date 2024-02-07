@@ -67,13 +67,7 @@ deseqresult2DEgenes <- function(deseqresult,
 #' @examples
 #' library(airway)
 #' library(DESeq2)
-#' data(airway)
-#' airway
-#' dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
-#' # Example, performing extraction of enriched functional categories in
-#' # detected significantly expressed genes
-#' dds_airway <- DESeq(dds_airway)
-#' res_airway <- results(dds_airway)
+#' data(res_airway, package = "mosdef")
 #' head(res_airway)
 #' res_df <- deseqresult2df(res_airway)
 #' head(res_df)

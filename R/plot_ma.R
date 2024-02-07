@@ -42,12 +42,9 @@
 #'
 #' @examples
 #' library(airway)
+#' library(DESeq2)
 #' data(airway)
-#' airway
-#' dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
-#'   colData = colData(airway),
-#'   design = ~ cell + dex
-#' )
+#' data(dds_airway, package = "mosdef")
 #' # subsetting for quicker run, ignore the next two commands if regularly using the function
 #' gene_subset <- c(
 #'   "ENSG00000103196", # CRISPLD2

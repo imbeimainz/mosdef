@@ -59,25 +59,17 @@
 #' library(airway)
 #' data(airway)
 #' airway
-#' dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
-#'   colData = colData(airway),
-#'   design = ~ cell + dex
-#' )
-#' dds_airway <- DESeq2::DESeq(dds_airway)
-#' res_airway <- DESeq2::results(dds_airway)
-#'
-#' res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:100, ]
-#' myde <- res_subset$id
-#' myassayed <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
-#' \dontrun{
+#' data(dds_airway, package = "mosdef")
+#' data(res_airway, package = "mosdef")
+#' res_de <- res_airway
 #' mygo <- goseqTable(
-#'   de_genes = myde,
-#'   bg_genes = myassayed,
+#'   res_de = res_airway,
+#'   dds = dds_airway,
 #'   testCats = "GO:BP",
 #'   add_gene_to_terms = TRUE
 #' )
 #' head(mygo)
-#' }
+#' 
 #'
 goseqTable <- function(res_de = NULL,
                        dds = NULL,
