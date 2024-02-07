@@ -37,14 +37,7 @@ library(ggrepel) # for nice annotations
 library(airway)
 library(DESeq2)
 library("org.Hs.eg.db")
-data(airway)
-airway
-dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
-# Example, performing extraction of enriched functional categories in
-# detected significantly expressed genes
-## Not run:
-dds_airway <- DESeq(dds_airway)
-res_airway <- results(dds_airway)
+data(res_airway, package = "mosdef")
 p <- de_volcano(res_airway,
   L2FC_cutoff = 1,
   labeled_genes = 20,

@@ -81,25 +81,19 @@ documentation of the \code{topGO} package itself
 }
 \examples{
 library(airway)
-library(DESeq2)
-data(airway)
-airway
-dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
-# Example, performing extraction of enriched functional categories in
-# detected significantly expressed genes
-\dontrun{
-dds_airway <- DESeq(dds_airway)
-res_airway <- results(dds_airway)
+data(dds_airway, package = "mosdef")
+data(res_airway, package = "mosdef")
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 
 library(topGO)
-topgoDE_airway <- topGOtable(res_de = res_airway,
+topgoDE_airway <- topGOtable(
+  res_de = res_airway,
   dds = dds_airway,
   ontology = "BP",
   mapping = "org.Hs.eg.db",
   geneID = "symbol",
 )
-}
+
 
 }

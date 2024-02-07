@@ -4,7 +4,7 @@
 \alias{geneinfo_2_html}
 \title{Information on a gene}
 \usage{
-geneinfo_2_html(gene_id, res_de = NULL)
+geneinfo_2_html(gene_id, res_de = NULL, col_to_use = "SYMBOL")
 }
 \arguments{
 \item{gene_id}{Character specifying the gene identifier for which to retrieve
