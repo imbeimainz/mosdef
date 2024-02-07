@@ -22,7 +22,7 @@ library("mosdef")
 
 Load an example dataset. We will use the well known airway data.
 
-```{r}
+```{r, warning=FALSE}
 library(airway)
 library(DESeq2)
 data(airway)
