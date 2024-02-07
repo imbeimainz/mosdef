@@ -39,16 +39,20 @@
 #' library("org.Hs.eg.db")
 #' data(dds_airway, package = "mosdef")
 #' data(res_airway, package = "mosdef")
-#' topgoDE_airway <- topGOtable( 
-#' res_airway,
-#' dds_airway,
-#' mapping = "org.Hs.eg.db"
+#' topgoDE_airway <- topGOtable(
+#'   res_de = res_airway,
+#'   dds = dds_airway,
+#'   ontology = "BP",
+#'   mapping = "org.Hs.eg.db",
+#'   geneID = "symbol",
 #' )
 #' p <- go_volcano(
 #'   res_airway,
+#'   res_enrich = topgoDE_airway,
+#'   term_index = 1,
 #'   L2FC_cutoff = 1,
-#'   labeled_genes = 20,
-#'   mapping = "org.Hs.eg.db"
+#'   mapping = "org.Hs.eg.db",
+#'   overlaps = 50
 #' )
 #' p
 go_volcano <- function(
@@ -65,7 +69,7 @@ go_volcano <- function(
     overlaps = 20){
   
   if(is.null(col_to_use)){
-    res_de$symbol <- mapIds(org.Hs.eg.db,
+    res_de$symbol <- mapIds(get(mapping),
                             keys = row.names(res_de),
                             column = "SYMBOL",
                             keytype = "ENSEMBL",
@@ -74,7 +78,7 @@ go_volcano <- function(
   }else
     res_de$symbol <- res_de[[col_to_use]]
   
-  df <- deseqresult2df(res_airway)
+  df <- deseqresult2df(res_de)
   
   
   
