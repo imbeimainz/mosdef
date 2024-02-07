@@ -7,12 +7,14 @@
 #' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
 #' @param term_index The location (row) of your GO term of interest in your enrichment result
 #' @param L2FC_cutoff A numeric value that sets the cutoff for the xintercept argument of ggplot
-#' @param col_to_use The column in your differential expression results containing your gene symbols. If you don't have one it is created automatically
+#' @param col_to_use The column in your differential expression results containing your gene symbols.
+#'  If you don't have one it is created automatically
 #' @param enrich_col coloumn name from your res_enrich where the genes associated with your GOterm are stored (for example see the topGOtable result in mosdef)
 #' @param down_col The colour for your downregulated genes, default is "grey"
 #' @param up_col The colour for your upregulated genes, default is "grey"
 #' @param highlight_col The coloir for the genes associated with your GOterm default is "tomato"
-#' @param overlaps number of overlaps ggrepel is supposed to allow when labelling (for more info chcek ggrepel documentation)
+#' @param overlaps number of overlaps ggrepel is supposed to allow when labelling
+#'  (for more info chcek ggrepel documentation)
 #'
 #' @return A  \code{ggplot2} volcano plot object that can be extended upon by the user
 #' @export

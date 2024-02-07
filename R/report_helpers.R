@@ -239,6 +239,8 @@ go_2_html <- function(go_id,
 #' shown, and only some generic info on the identifier is displayed.
 #' The information about the gene is retrieved by matching on the `SYMBOL` column,
 #' which should be provided in `res_de`.
+#' @param col_to_use The column of your res_de object containing the gene symbols. 
+#' Default is "SYMBOL"
 #'
 #' @return HTML content related to a gene identifier, to be displayed in
 #' web applications (or inserted in Rmd documents)
