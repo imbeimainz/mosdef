@@ -26,6 +26,8 @@
 #' theme_classic scale_color_manual coord_cartesian scale_x_continuous
 #' @importFrom ggrepel geom_label_repel geom_text_repel
 #' @importFrom rlang .data
+#' @importFrom topGO runTest GenTable score sigGenes genesInTerm showSigOfNodes
+#' annFUN annFUN.org
 #'
 #'
 #'
@@ -35,18 +37,13 @@
 #' library(ggrepel) # for nice annotations
 #' library(airway)
 #' library(DESeq2)
+#' library("topGO")
 #' library(AnnotationDbi)
 #' library("org.Hs.eg.db")
-#' library(topGO)
+#' 
 #' data(dds_airway, package = "mosdef")
 #' data(res_airway, package = "mosdef")
-#' topgoDE_airway <- topGOtable(
-#'   res_de = res_airway,
-#'   dds = dds_airway,
-#'   ontology = "BP",
-#'   mapping = "org.Hs.eg.db",
-#'   geneID = "symbol",
-#' )
+#' data(topgoDE_airway, package = "mosdef")
 #' p <- go_volcano(
 #'   res_airway,
 #'   res_enrich = topgoDE_airway,
