@@ -11,3 +11,13 @@ dds_airway <- DESeq(dds_airway)
 
 #Get a res_de object
 res_airway <- results(dds_airway)
+
+# Get an enrichment object
+
+topgoDE_airway <- topGOtable(
+   res_de = res_airway,
+   dds = dds_airway,
+   ontology = "BP",
+   mapping = "org.Hs.eg.db",
+   geneID = "symbol",
+ )
