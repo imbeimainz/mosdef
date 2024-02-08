@@ -152,6 +152,34 @@ volcPlot +
 ```
 For further possibilities please look at the ggplot2 documentation.
 
+In the volcanoPlot you can also highlight genes associated with a certain GOterm of interest.
+
+```{r}
+Volc_GO <-go_volcano(
+  res_airway,
+  res_enrich = topgoDE_airway,
+  term_index = 1, # the index(row) where your term of interest is located in your enrichment result
+  L2FC_cutoff = 1,
+  mapping = "org.Hs.eg.db",
+  overlaps = 50, # the number of overlaps ggrepell is supposed to use for labelling (increases label number)
+  col_to_use = "symbol", # columnname of the column in your res_de containing the gene symbols
+  enrich_col = "genes", # columnname of the column in your res_enrich containing the gene symbols (see topgotable example)
+  down_col ="black", # colour for your downregulated genes (genes with a L2FC below your cutoff here -1 and padj < 0.05) 
+  up_col = "black", # colour for your upregulated genes (genes with a L2FC above your cutoff here 1 and padj < 0.05)
+  highlight_col = "tomato",) # colour for your genes of interest associated with the given term
+```
+
+*Gene Plot*
+
+An elegant way to plot the counts of a certain gene of interest as for example treated vs untreated.
+```{r}
+ gene_plot(dds_airway,
+   gene = "ENSG00000152583",
+   intgroup = "dex" 
+ )
+```
+
+
 *MA plot*
 Plotting the counts of a gene vs it's expression (Log2 FoldChange). Granting an overview of the amount of differentially expressed genes vs the amount of genes overall. As well as an overview of the amount of up vs. downregulated genes.
 
