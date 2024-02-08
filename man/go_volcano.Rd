@@ -59,17 +59,13 @@ library(RColorBrewer) # for a colourful plot
 library(ggrepel) # for nice annotations
 library(airway)
 library(DESeq2)
+library("topGO")
 library(AnnotationDbi)
 library("org.Hs.eg.db")
+
 data(dds_airway, package = "mosdef")
 data(res_airway, package = "mosdef")
-topgoDE_airway <- topGOtable(
-  res_de = res_airway,
-  dds = dds_airway,
-  ontology = "BP",
-  mapping = "org.Hs.eg.db",
-  geneID = "symbol",
-)
+data(topgoDE_airway, package = "mosdef")
 p <- go_volcano(
   res_airway,
   res_enrich = topgoDE_airway,
