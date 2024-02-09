@@ -12,8 +12,11 @@
 #'
 #' @name res_airway
 #' @docType data 
-#' 
-#' A sample `DESeqDataset` objecz
+#'
+NULL
+
+
+#' A sample `DESeqDataset` object
 #' 
 #' A sample `DESeqDataset` object, generated in the `DESeq2` framework
 #'
@@ -28,6 +31,10 @@
 #' @name dds_airway
 #' @docType data
 #' 
+NULL
+
+
+
 #' A sample enrichment object
 #' 
 #' A sample enrichment object, generated in the `mosdef` and `topGO` framework
