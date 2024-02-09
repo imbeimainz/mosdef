@@ -166,7 +166,9 @@ Volc_GO <-go_volcano(
   enrich_col = "genes", # columnname of the column in your res_enrich containing the gene symbols (see topgotable example)
   down_col ="black", # colour for your downregulated genes (genes with a L2FC below your cutoff here -1 and padj < 0.05) 
   up_col = "black", # colour for your upregulated genes (genes with a L2FC above your cutoff here 1 and padj < 0.05)
-  highlight_col = "tomato",) # colour for your genes of interest associated with the given term
+  highlight_col = "tomato") # colour for your genes of interest associated with the given term
+
+Volc_GO
 ```
 
 *Gene Plot*
@@ -212,9 +214,7 @@ maplot_genes
 
 # Functions that create gene-centric content/Report helpers
 
-RMDs are a great way of handing over reports to colaborators. These functions are supposed to improve the report quality by upgrading the report turning normal tables into interactive tables linking to further websites.
-
-buttons, links, yadda
+RMDs are a great way of handing over reports to colaborators. These functions are supposed to improve report quality by upgrading the report turning normal tables into interactive tables linking to further websites.
 
 *GO terms*
 ```{r}
