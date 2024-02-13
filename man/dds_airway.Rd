@@ -3,7 +3,7 @@
 \docType{data}
 \name{dds_airway}
 \alias{dds_airway}
-\title{A sample \code{DESeqDataset} objecz}
+\title{A sample \code{DESeqDataset} object}
 \description{
 A sample \code{DESeqDataset} object, generated in the \code{DESeq2} framework
 }
