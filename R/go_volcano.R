@@ -150,10 +150,3 @@ go_volcano <- function(
   
 }
 
-#Ideas:
-# dont split into up and down (by color) but by goterm and not goterm in maybe red and black
-# add an alpha = 0.5 to the original alyer and alpha 1 to the second layer
-# somehow filter terms with more gnees for the most significant by padj
-# maybe a loop that extraxts all genes from test vec out of the res_de together with their padj
-# then filter by that padj and take top 30 + add a message maybe even a parameter
-# or just let ggrepell do the work for us
