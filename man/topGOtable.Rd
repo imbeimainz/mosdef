@@ -34,7 +34,7 @@ topGOtable(
 \item{bg_genes}{A vector of background genes, e.g. all (expressed) genes in the assays}
 
 \item{top_de}{numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
-Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).}
+Attempts to reduce redundancy. Assumes the data is sorted by padj (default in DESeq2).}
 
 \item{min_counts}{numeric, min number of counts a gene needs to have to be included
 in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.}

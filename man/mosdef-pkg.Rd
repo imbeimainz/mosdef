@@ -14,7 +14,7 @@ mostly useful differential expression functions
 
 Authors:
 \itemize{
-  \item Leon Dammer \email{TODO} (\href{https://orcid.org/0009-0008-4132-7639}{ORCID})
+  \item Leon Dammer \email{dammerle@uni-mainz.de} (\href{https://orcid.org/0009-0008-4132-7639}{ORCID})
 }
 
 }

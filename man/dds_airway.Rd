@@ -14,5 +14,8 @@ Details on how this object has been created are included in the \code{create_mos
 script, included in the \code{scripts} folder of the \code{mosdef} package.
 }
 \references{
-TODO
+Himes BE et al "RNA-Seq transcriptome profiling identifies
+CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function
+in airway smooth muscle cells". PLoS One. 2014 Jun
+doi: 10.1371/journal.pone.0099625.
 }

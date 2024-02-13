@@ -2,7 +2,7 @@
 % Please edit documentation in R/gene_symbol_buttons.R
 \name{gene_symbol_buttons}
 \alias{gene_symbol_buttons}
-\title{Create a button for gene symbols in an RMD}
+\title{Create a button for gene symbols in an Rmd}
 \usage{
 gene_symbol_buttons(
   df,
@@ -26,9 +26,9 @@ or a simple dataframe (DF).In the latter case it is important that if the data i
 TODO
 }
 \description{
-A function to turn Gene Symbols into buttons in an RMD linking to various Portals for further info
+A function to turn Gene Symbols into buttons in an Rmd linking to various Portals for further info
 about these genes.
-Current supported portals are: Genecards, NCBI, GTEX, Uniprot, dbPTM, Human Protein Atlas
+Current supported portals are: GeneCards, NCBI, GTEX, Uniprot, dbPTM, Human Protein Atlas
 }
 \examples{
 library(dplyr)

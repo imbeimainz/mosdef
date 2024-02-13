@@ -18,7 +18,8 @@ de_volcano(
 
 \item{L2FC_cutoff}{A numeric value that sets the cutoff for the xintercept argument of ggplot}
 
-\item{labeled_genes}{A numeric value describing the amount of genes to be labeled. This uses the Top(x) highest differntially expressed genes}
+\item{labeled_genes}{A numeric value describing the amount of genes to be labeled. This uses the Top(x) highest
+differentially expressed genes}
 
 \item{mapping}{Which \code{org.XX.eg.db} to use for annotation - select according to the species}
 }

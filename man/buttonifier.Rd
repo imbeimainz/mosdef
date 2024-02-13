@@ -2,7 +2,7 @@
 % Please edit documentation in R/buttonifier.R
 \name{buttonifier}
 \alias{buttonifier}
-\title{Create a button for gene symbols in an RMD}
+\title{Create a button for gene symbols in an Rmd}
 \usage{
 buttonifier(
   df,
@@ -26,9 +26,9 @@ or a simple dataframe (DF).In the latter case it is important that if the data i
 A dataframe or a \code{DT} datatable object with columns adding HTML objects that link to websites with further information on the genes in question.
 }
 \description{
-A function to turn Gene Symbols into buttons in an RMD linking to various Portals for further info
+A function to turn Gene Symbols into buttons in an Rmd linking to various Portals for further info
 about these genes.
-Current supported portals are: Genecards, NCBI, GTEX, Uniprot, dbPTM, Human Protein Atlas
+Current supported portals are: GeneCards, NCBI, GTEx, Uniprot, dbPTM, Human Protein Atlas
 }
 \examples{
 data(res_airway, package = "mosdef")

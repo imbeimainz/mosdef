@@ -3,7 +3,7 @@
 \name{go_volcano}
 \alias{go_volcano}
 \title{Generates a volcano plot using ggplot2
-This function generates a base volcanoplot highlighting genes associated with a certain GOTerm
+This function generates a base volcanoplot highlighting genes associated with a certain GOterm
 that can then be expanded upon using further ggplot functions.}
 \usage{
 go_volcano(
@@ -14,8 +14,8 @@ go_volcano(
   L2FC_cutoff = 1,
   col_to_use = NULL,
   enrich_col = "genes",
-  down_col = "grey",
-  up_col = "grey",
+  down_col = "gray",
+  up_col = "gray",
   highlight_col = "tomato",
   overlaps = 20
 )
@@ -34,23 +34,23 @@ go_volcano(
 \item{col_to_use}{The column in your differential expression results containing your gene symbols.
 If you don't have one it is created automatically}
 
-\item{enrich_col}{coloumn name from your res_enrich where the genes associated with your GOterm are stored (for example see the topGOtable result in mosdef)}
+\item{enrich_col}{column name from your res_enrich where the genes associated with your GOterm are stored (for example see the topGOtable result in mosdef)}
 
-\item{down_col}{The colour for your downregulated genes, default is "grey"}
+\item{down_col}{The colour for your downregulated genes, default is "gray"}
 
-\item{up_col}{The colour for your upregulated genes, default is "grey"}
+\item{up_col}{The colour for your upregulated genes, default is "gray"}
 
-\item{highlight_col}{The coloir for the genes associated with your GOterm default is "tomato"}
+\item{highlight_col}{The colour for the genes associated with your GOterm default is "tomato"}
 
 \item{overlaps}{number of overlaps ggrepel is supposed to allow when labelling
-(for more info chcek ggrepel documentation)}
+(for more info check ggrepel documentation)}
 }
 \value{
 A  \code{ggplot2} volcano plot object that can be extended upon by the user
 }
 \description{
 Generates a volcano plot using ggplot2
-This function generates a base volcanoplot highlighting genes associated with a certain GOTerm
+This function generates a base volcanoplot highlighting genes associated with a certain GOterm
 that can then be expanded upon using further ggplot functions.
 }
 \examples{
