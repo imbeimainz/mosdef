@@ -4,7 +4,8 @@
 #'
 #' @param res_de A DESeqResults object created using \code{DESeq2}
 #' @param L2FC_cutoff A numeric value that sets the cutoff for the xintercept argument of ggplot
-#' @param labeled_genes A numeric value describing the amount of genes to be labeled. This uses the Top(x) highest differntially expressed genes
+#' @param labeled_genes A numeric value describing the amount of genes to be labeled. This uses the Top(x) highest
+#' differentially expressed genes
 #' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
 #'
 #' @return A  \code{ggplot2} volcano plot object that can be extended upon by the user
@@ -80,7 +81,7 @@ de_volcano <- function(res_de,
     geom_point() +
     theme_classic() +
     scale_color_manual(
-      values = c("skyblue", "grey", "tomato"), # to set the colours of our variable
+      values = c("skyblue", "gray", "tomato"), # to set the colours of our variable
       labels = c("Downregulated", "Not significant", "Upregulated")
     ) +
     coord_cartesian(ylim = c(0, max(-log10(df$pvalue))), xlim = c(-x_limit, x_limit)) +

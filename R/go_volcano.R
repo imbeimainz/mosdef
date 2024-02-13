@@ -1,5 +1,5 @@
 #' Generates a volcano plot using ggplot2
-#' This function generates a base volcanoplot highlighting genes associated with a certain GOTerm 
+#' This function generates a base volcanoplot highlighting genes associated with a certain GOterm 
 #' that can then be expanded upon using further ggplot functions.
 #'
 #' @param res_de A DESeqResults object created using \code{DESeq2}
@@ -9,12 +9,12 @@
 #' @param L2FC_cutoff A numeric value that sets the cutoff for the xintercept argument of ggplot
 #' @param col_to_use The column in your differential expression results containing your gene symbols.
 #'  If you don't have one it is created automatically
-#' @param enrich_col coloumn name from your res_enrich where the genes associated with your GOterm are stored (for example see the topGOtable result in mosdef)
-#' @param down_col The colour for your downregulated genes, default is "grey"
-#' @param up_col The colour for your upregulated genes, default is "grey"
-#' @param highlight_col The coloir for the genes associated with your GOterm default is "tomato"
+#' @param enrich_col column name from your res_enrich where the genes associated with your GOterm are stored (for example see the topGOtable result in mosdef)
+#' @param down_col The colour for your downregulated genes, default is "gray"
+#' @param up_col The colour for your upregulated genes, default is "gray"
+#' @param highlight_col The colour for the genes associated with your GOterm default is "tomato"
 #' @param overlaps number of overlaps ggrepel is supposed to allow when labelling
-#'  (for more info chcek ggrepel documentation)
+#'  (for more info check ggrepel documentation)
 #'
 #' @return A  \code{ggplot2} volcano plot object that can be extended upon by the user
 #' @export
@@ -61,8 +61,8 @@ go_volcano <- function(
     L2FC_cutoff = 1,
     col_to_use = NULL,
     enrich_col = "genes",
-    down_col ="grey",
-    up_col = "grey",
+    down_col ="gray",
+    up_col = "gray",
     highlight_col = "tomato",
     overlaps = 20){
   
@@ -139,14 +139,14 @@ go_volcano <- function(
   # Define the genes to highlight
   genes_to_highlight <- c(test_vec[[1]])
   # Define a custom color scale
-  custom_color_scale <- c("DOWN" = down_col, "NO" = "grey", "UP" = up_col, "Highlighted" = highlight_col)
+  custom_color_scale <- c("DOWN" = down_col, "NO" = "gray", "UP" = up_col, "Highlighted" = highlight_col)
   
   # Add another geom_point layer to highlight specific genes
   q <- p +
     geom_point(data = df[df$symbol %in% genes_to_highlight, ],
                aes(color = "Highlighted"), size = 3, shape = 16) +
     scale_color_manual(values = custom_color_scale,
-                       labels = c("Downregulated", "GOTerm","Not significant", "Upregulated"))
+                       labels = c("Downregulated", "GOterm","Not significant", "Upregulated"))
   
 }
 

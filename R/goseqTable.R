@@ -1,21 +1,3 @@
-# When running I got this error:
-#   Can't find hg38/ensGene length data in genLenDataBase...
-# A TxDb annotation package exists for hg38. Consider installing it to get the gene lengths.
-# Trying to download from UCSC. This might take a couple of minutes.
-# Error in value[[3L]](cond) :
-#   Length information for genome hg38 and gene ID ensGene is not available. You will have to specify bias.data manually.
-# fixed by installing https://bioconductor.org/packages/release/data/annotation/html/TxDb.Hsapiens.UCSC.hg38.knownGene.html
-# not sure if that is correct but we might need to fix that
-
-
-# TODO remove Ntop parameter, problem: you get multiple thousands of this message:
-# 'select()' returned 1:1 mapping between keys and columns
-# and then it fails with the error:
-# Error in mapIds_base(x, keys, column, keytype, ..., multiVals = multiVals) :
-# apIds must have at least one key to match against.
-# I assume for one of the background genes there is no database entry which then crashes everything
-
-
 #' Extract functional terms enriched in the DE genes, based on goseq
 #'
 #' A wrapper for extracting functional GO terms enriched in a list of (DE) genes,
@@ -30,7 +12,7 @@
 #' @param dds A DESeqDataset object created using \code{DESeq2}
 #' @param res_de A DESeqResults object created using \code{DESeq2}
 #' @param top_de numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
-#'  Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).
+#'  Attempts to reduce redundancy. Assumes the data is sorted by padj (default in DESeq2).
 #' @param min_counts numeric, min number of counts a gene needs to have to be included
 #' in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.
 #' @param genome A string identifying the genome that genes refer to, as in the

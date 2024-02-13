@@ -98,7 +98,7 @@ create_link_UniProt <- function(val) {
   ) # content of the button label
 }
 
-#' Link to dbptm database
+#' Link to dbPTM database
 #'
 #' @param val Character, the gene symbol
 #'

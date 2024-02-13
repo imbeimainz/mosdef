@@ -1,8 +1,8 @@
-#' Create a button for gene symbols in an RMD
+#' Create a button for gene symbols in an Rmd
 #'
-#' A function to turn Gene Symbols into buttons in an RMD linking to various Portals for further info
+#' A function to turn Gene Symbols into buttons in an Rmd linking to various Portals for further info
 #' about these genes.
-#' Current supported portals are: Genecards, NCBI, GTEX, Uniprot, dbPTM, Human Protein Atlas
+#' Current supported portals are: GeneCards, NCBI, GTEX, Uniprot, dbPTM, Human Protein Atlas
 #'
 #' @param df A dataframe with at least on column with gene Symbols named: SYMBOL
 #' @param new_cols At least one of: "GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA"

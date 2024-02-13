@@ -34,7 +34,7 @@ test_that("enrich_result is created  when using vectors not res_De/dds", {
   expect_s3_class(goseqde_airway_vec, "data.frame")
 })
 
-test_that("top_de works propperly", {
+test_that("top_de works properly", {
   goseqde_airway_topde <- goseqTable(
     res_de = res_airway,
     dds = dds_airway,

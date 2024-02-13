@@ -35,7 +35,7 @@ test_that("enrich_result is created  when using vectors not res_De/dds", {
   expect_s4_class(CluProde_airway_vec, "enrichResult")
 })
 
-test_that("top_de works propperly", {
+test_that("top_de works properly", {
   CluProde_airway_topde <- cluproTable(
     res_de = res_airway,
     dds = dds_airway,

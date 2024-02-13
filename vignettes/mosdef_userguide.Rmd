@@ -40,7 +40,7 @@ goseq
 clusterProfiler
 For more information on the differences between these algorithms we refer to their individual vignettes and publications.
 
-All of these algorithms reguire an annotation to function propperly so make sure you have installed and use the correct one for your experiment. The default is org.Mm.eg.db (Mus musculus). The airway data however stems from human so we need org.Hs.eg.db
+All of these algorithms require an annotation to function properly so make sure you have installed and use the correct one for your experiment. The default is org.Mm.eg.db (Mus musculus). The airway data however stems from human so we need org.Hs.eg.db
 
 ```{r}
 library("AnnotationDbi")
@@ -100,13 +100,13 @@ head(goseq_airway)
 
 ## clusterProfiler
 Parameters like top_de, min_counts, verbose and de_type can also be used here.
-If you want to further customize the call of go_enrich inside the function, have a look at the documentation for go_enrich from clusterprofiler. Those parameters can be added to the cluprotable function call
+If you want to further customize the call of go_enrich inside the function, have a look at the documentation for go_enrich from clusterProfiler. Those parameters can be added to the cluprotable function call
 ```{r}
 clupro_airway <- cluproTable(
   res_de = res_airway,
   dds = dds_airway,
   mapping = "org.Hs.eg.db",
-  keyType = "SYMBOL" # Important for the goenrich function that is run later on.                                                If using dds and res_de has to be "SYMBOL" which is also                                                  the default
+  keyType = "SYMBOL" # Important for the enrichGO function that is run later on.                                                If using dds and res_de has to be "SYMBOL" which is also                                                  the default
 )
 head(clupro_airway)
 ```
@@ -214,7 +214,7 @@ maplot_genes
 
 # Functions that create gene-centric content/Report helpers
 
-RMDs are a great way of handing over reports to colaborators. These functions are supposed to improve report quality by upgrading the report turning normal tables into interactive tables linking to further websites.
+RMDs are a great way of handing over reports to collaborators. These functions are supposed to improve report quality by upgrading the report turning normal tables into interactive tables linking to further websites.
 
 *GO terms*
 ```{r}
@@ -237,12 +237,12 @@ Ensemble
 GeneCards
 Pubmed
 NCBI
-dbptm
+dbPTM
 GTEX
 UniProt
 Human Protein Atlas
 
-You can use acces all of these easily by using one function
+You can use access all of these easily by using one function
 ```{r}
 # creating a smaller subset for visulisation purposes and to keep the main res_de 
 res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
@@ -253,8 +253,8 @@ buttonifier(res_subset,
             # all of the supported websites y0u can pick however many you want
             )
 ```
-Important to know is that the buttonifier function returns a DT:datatable not a df. This is to ensure that the excape = FALSE parameter of datatable is set and not forgotten as the links/buttons will not work otherwise.
-Advanced users that want further customisation options to their datatable can ensure a dataframe is returned (then the escape = FALSE must be set by hand):
+Important to know is that the buttonifier function returns a DT:datatable not a df. This is to ensure that the escape = FALSE parameter of datatable is set and not forgotten as the links/buttons will not work otherwise.
+Advanced users that want further customization options to their datatable can ensure a dataframe is returned (then the escape = FALSE must be set by hand):
 ```{r}
 res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
 
@@ -271,7 +271,7 @@ DT::datatable(res_subset,
 )
 ```
 
-All of the functions included inside the buttonifier function are also avaiulable as singular functions in case you are only interested in one of them:
+All of the functions included inside the buttonifier function are also available as singular functions in case you are only interested in one of them:
 ```{r}
 res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
 
