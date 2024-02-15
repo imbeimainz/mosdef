@@ -30,12 +30,3 @@ deseqresult2tbl <- function(res_de) {
   dplyr::arrange(res_de, .data$padj)
 }
 
-
-geneinfo <- function(gene_id) {
-  # the gene id has to be entrez_id
-
-  ## TODO: will need to finish implementation
-  entrezinfo <- rentrez::entrez_summary("gene", gene_id)
-
-  return(entrezinfo)
-}
