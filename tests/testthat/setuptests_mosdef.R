@@ -70,14 +70,7 @@ res_macrophage_IFNg_vs_naive <- results(
 summary(res_macrophage_IFNg_vs_naive)
 res_macrophage_IFNg_vs_naive$SYMBOL <- rowData(dds_macrophage)$SYMBOL
 
-topgoDE_airway <- topGOtable( 
-  res_airway,
-  dds_airway,
-  mapping = "org.Hs.eg.db"
-)
+data(topgoDE_airway, package = "mosdef")
 
-goseqde_airway <- goseqTable(
-  res_de = res_airway,
-  dds = dds_airway,
-  mapping = "org.Hs.eg.db"
-)
+
+
