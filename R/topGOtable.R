@@ -252,17 +252,23 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
 
 
   # instantiating the topGOdata object
-  GOdata <- new("topGOdata",
-    ontology = ontology,
-    allGenes = de_genes_input,
-    nodeSize = 10,
-    annot = annot,
-    mapping = mapping,
-    ID = geneID
-  )
+  suppressMessages({
+    GOdata <- new("topGOdata",
+                  ontology = ontology,
+                  allGenes = de_genes_input,
+                  nodeSize = 10,
+                  annot = annot,
+                  mapping = mapping,
+                  ID = geneID
+    )
+  })
   # performing the test(s)
-  result_method2 <- runTest(GOdata, algorithm = topGO_method2, statistic = "fisher")
-  resultClassic <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
+  suppressMessages({
+    result_method2 <- runTest(GOdata, algorithm = topGO_method2, statistic = "fisher")
+  })
+    suppressMessages({
+      resultClassic <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
+    })
   sTab <- GenTable(GOdata,
     p.value_method2 = result_method2,
     p.value_classic = resultClassic,
