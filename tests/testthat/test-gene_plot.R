@@ -1,5 +1,3 @@
-context("Testing function for plotting the gene expression levels")
-
 test_that("Basic gene plot is generated", {
   p <- gene_plot(
     dds = dds_macrophage,
