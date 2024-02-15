@@ -174,12 +174,7 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
       keytype = "ENSEMBL",
       multiVals = "first"
     )
-    res_de$entrez <- AnnotationDbi::mapIds(annot_to_map_to,
-      keys = row.names(res_de),
-      column = "ENTREZID",
-      keytype = "ENSEMBL",
-      multiVals = "first"
-    )
+
     resOrdered <- as.data.frame(res_de[order(res_de$padj), ])
 
 
