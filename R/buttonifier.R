@@ -81,10 +81,8 @@ buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL"
     df$SYMBOL_PUBM <- create_link_pubmed(df[[col_to_use]])
   }
 
-  df <- df |>
-    select(-.data[[col_to_use]])
   if (output_format == "DT") {
-    return(DT::datatable(df, escape = FALSE))
+    return(DT::datatable(df, escape = FALSE, rownames = FALSE))
   } else if (output_format == "DF") {
     df <- data.frame(df)
     return(df)
