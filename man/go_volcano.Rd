@@ -14,8 +14,8 @@ go_volcano(
   L2FC_cutoff = 1,
   col_to_use = NULL,
   enrich_col = "genes",
-  down_col = "gray",
-  up_col = "gray",
+  down_col = "black",
+  up_col = "black",
   highlight_col = "tomato",
   overlaps = 20
 )

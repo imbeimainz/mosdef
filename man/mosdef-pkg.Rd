@@ -9,6 +9,14 @@
 \description{
 mostly useful differential expression functions
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/imbeimainz/mosdef}
+  \item Report bugs at \url{https://github.com/imbeimainz/mosdef/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Federico Marini \email{marinif@uni-mainz.de} (\href{https://orcid.org/0000-0003-3252-7758}{ORCID})
 

@@ -52,8 +52,7 @@ A wrapper for extracting functional GO terms enriched in a list of (DE) genes,
 based on the algorithm and the implementation in the clusterProfiler package
 }
 \details{
-#' Note: the feature length retrieval is based on the \code{\link{enrichGO}} function,
-and requires that the corresponding TxDb packages are installed and available
+Note: the feature length retrieval is based on the \code{\link{enrichGO}} function
 }
 \examples{
 library(airway)
