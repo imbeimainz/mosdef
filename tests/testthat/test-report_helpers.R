@@ -1,8 +1,8 @@
 test_that("Functions to create buttons work", {
-  goseqde_airway$button <- create_link_GO(goseqde_airway$category)
-  expect_type(goseqde_airway$button, "character")
+  topgoDE_airway$button <- create_link_GO(topgoDE_airway$GO.ID)
+  expect_type(topgoDE_airway$button, "character")
   value <- "http"
-  chars <- as.character(goseqde_airway$button[1])
+  chars <- as.character(topgoDE_airway$button[1])
 
   # expect that http is in the strings to check if they are created properlly
   expect_true(grepl(value, chars, fixed = TRUE))
@@ -72,7 +72,7 @@ test_that("go_2_html works", {
   test_go <- go_2_html("GO:0009653")
   expect_s3_class(test_go, "html")
 
-  test_go_res_enrich <- go_2_html("GO:0009653", goseqde_airway)
+  test_go_res_enrich <- go_2_html("GO:0009653", topgoDE_airway)
   expect_s3_class(test_go, "html")
 
 
