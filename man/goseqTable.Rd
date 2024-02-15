@@ -32,7 +32,7 @@ goseqTable(
 in the assays}
 
 \item{top_de}{numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
-Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).}
+Attempts to reduce redundancy. Assumes the data is sorted by padj (default in DESeq2).}
 
 \item{min_counts}{numeric, min number of counts a gene needs to have to be included
 in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.}
@@ -74,24 +74,16 @@ and requires that the corresponding TxDb packages are installed and available
 library(airway)
 data(airway)
 airway
-dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
-  colData = colData(airway),
-  design = ~ cell + dex
-)
-dds_airway <- DESeq2::DESeq(dds_airway)
-res_airway <- DESeq2::results(dds_airway)
-
-res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:100, ]
-myde <- res_subset$id
-myassayed <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
-\dontrun{
+data(dds_airway, package = "mosdef")
+data(res_airway, package = "mosdef")
+res_de <- res_airway
 mygo <- goseqTable(
-  de_genes = myde,
-  bg_genes = myassayed,
+  res_de = res_airway,
+  dds = dds_airway,
   testCats = "GO:BP",
   add_gene_to_terms = TRUE
 )
 head(mygo)
-}
+
 
 }

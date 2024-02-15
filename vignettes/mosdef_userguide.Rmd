@@ -15,25 +15,21 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(mosdef)
+library("mosdef")
 ```
 
 # Functions that beautify an interactive table
 
 Load an example dataset. We will use the well known airway data.
 
-```{r}
-
- library(airway)
- library(DESeq2)
- data(airway)
- airway
- dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
- dds_airway <- DESeq(dds_airway)
- res_airway <- results(dds_airway)
-
-
-
+```{r, warning=FALSE}
+library(airway)
+library(DESeq2)
+data(airway)
+airway
+dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
+dds_airway <- DESeq(dds_airway)
+res_airway <- results(dds_airway)
 ```
 
 # Functions that generate enrichment results
@@ -44,117 +40,278 @@ goseq
 clusterProfiler
 For more information on the differences between these algorithms we refer to their individual vignettes and publications.
 
-All of these algorithms reguire an annotation to function propperly so make sure you have installed and use the correct one for your experiment. The default is org.Mm.eg.db (Mus musculus). The airway data however stems from human so we need org.Hs.eg.db
+All of these algorithms require an annotation to function properly so make sure you have installed and use the correct one for your experiment. The default is org.Mm.eg.db (Mus musculus). The airway data however stems from human so we need org.Hs.eg.db
 
 ```{r}
+library("AnnotationDbi")
+library("org.Hs.eg.db")
+```
+We also want to add a symbol column for later use:
+```{r}
 
- library("AnnotationDbi")
- library("org.Hs.eg.db")
-
+res_airway$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
+                                           keys = row.names(res_airway),
+                                           column = "SYMBOL",
+                                           keytype = "ENSEMBL",
+                                           multiVals = "first"
+)
 ```
 
-*topGO*
+
+## topGO
 ```{r}
 library(topGO)
- topgoDE_airway <- topGOtable(res_de = res_airway,
-   dds = dds_airway,
-   ontology = "BP", #which gene ontology to analyse, default is "BP"
-   mapping = "org.Hs.eg.db",# the annotation
-   geneID = "symbol", #Which format the genes are provided. If you provide a res_de and a dds mosdef does                        #it for you and uses symbols if you provide vectors please specify
-   de_type = "up_and_down", #which genes to analyse. default is all ("up_and_down"), other possibilities                               #are only upregulated ("up") or  ("down") genes
-   add_gene_to_terms = TRUE, #Logical, whether to add a column with all genes annotated to each GO term
-   topGO_method2 = "elim", #Character, specifying which of the methods implemented by topGO default is elim
-                           #For more info look at the documentation of topGO
-   min_counts = 20,  #minimum number of counts a gene has to have to be considered for the background. 
-                    # Default is 0 and we advise this parameter is only used by expert users
-   top_de = 700, # number of genes to be considered in the enrich analysis default is all, can be reduced                   # to reduce redundancy. Takes the top 700 highest DE genes absed of padj score. IF this                    # number is bigger than the total amount of de genes the parameter defaults to all genes
-   verbose = TRUE # weather or not to summarise the analysis in a message
- )
-
+topgoDE_airway <- topGOtable(
+  res_de = res_airway,
+  dds = dds_airway,
+  ontology = "BP", # which gene ontology to analyse, default is "BP"
+  mapping = "org.Hs.eg.db", # the annotation
+  geneID = "symbol", # Which format the genes are provided. If you provide a res_de and a dds mosdef does                        #it for you and uses symbols if you provide vectors please specify
+  de_type = "up_and_down", # which genes to analyse. default is all ("up_and_down"), other possibilities                               #are only upregulated ("up") or  ("down") genes
+  add_gene_to_terms = TRUE, # Logical, whether to add a column with all genes annotated to each GO term
+  topGO_method2 = "elim", # Character, specifying which of the methods implemented by topGO default is elim
+  # For more info look at the documentation of topGO
+  min_counts = 20, # minimum number of counts a gene has to have to be considered for the background.
+  # Default is 0 and we advise this parameter is only used by expert users
+  top_de = 700, # number of genes to be considered in the enrich analysis default is all, can be reduced                   # to reduce redundancy. Takes the top 700 highest DE genes absed of padj score. IF this                    # number is bigger than the total amount of de genes the parameter defaults to all genes
+  verbose = TRUE # whether or not to summarise the analysis in a message
+)
 ```
 
 This will give an analysis for all possible GO terms (when using the BP ontology that is 6547 terms) not all of these results are significant and this list can (should) be further subsetted/ filtered. For example by using a pvalue cutoff.
 ```{r}
 head(topgoDE_airway)
-
 ```
 
-*goseq*
+## goseq
 parameters like top_de, min_counts, verbose and de_type can also be used here
-Important; goseqTable needs a genome to compare gene lengths to, so make sure one is installed on your PC for human we recommend:https://bioconductor.org/packages/release/data/annotation/html/TxDb.Hsapiens.UCSC.hg38.knownGene.html
-# TODO: Can we say that here? maybe also provide a good mouse reference genome
+Important: the feature length retrieval is based on the `goseq` function,
+and requires that the corresponding TxDb packages are installed and available
+so make sure one is installed on your PC for human we recommend: `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
+
 
 ```{r}
-goseq_airway <- goseqTable(res_de = res_airway,
-                           dds = dds_airway,
-                           mapping = "org.Hs.eg.db",
-                           testCats = "GO:BP" # which categories to test of ("GO:BP, "GO:MF", "GO:CC")
-                           )
-```
-
-*clusterProfiler*
-Parameters like top_de, min_counts, verbose and de_type can also be used here.
-If you want to further customize the call of go_enrich inside the function, have a look at the documentation for go_enrich from clusterprofiler. Those parameters can be added to the cluprotable function call
-```{r}
-clupro_airway <- cluproTable(res_de = res_airway,
-                           dds = dds_airway,
-                           mapping = "org.Hs.eg.db",
-                           keyType = "SYMBOL" #Important for the goenrich function that is run later on.                                                If using dds and res_de has to be "SYMBOL" which is also                                                  the default
+goseq_airway <- goseqTable(
+  res_de = res_airway,
+  dds = dds_airway,
+  mapping = "org.Hs.eg.db",
+  testCats = "GO:BP" # which categories to test of ("GO:BP, "GO:MF", "GO:CC")
 )
+head(goseq_airway)
 ```
+
+## clusterProfiler
+Parameters like top_de, min_counts, verbose and de_type can also be used here.
+If you want to further customize the call of go_enrich inside the function, have a look at the documentation for go_enrich from clusterProfiler. Those parameters can be added to the cluprotable function call
+```{r}
+clupro_airway <- cluproTable(
+  res_de = res_airway,
+  dds = dds_airway,
+  mapping = "org.Hs.eg.db",
+  keyType = "SYMBOL" # Important for the enrichGO function that is run later on.                                                If using dds and res_de has to be "SYMBOL" which is also                                                  the default
+)
+head(clupro_airway)
+```
+
+All of these functions also work if you only have/provide a vector of differentially expressed genes and a vector of background genes. Most of the above mentioned parameters work here as well (top_de, verbose), however parameters like min_counts and de_type will not work since they need further information which can only be found in the dds/res_de. Namely the counts from the dds and the Log2FoldChange from the res_de.
+
+```{r}
+res_subset <- deseqresult2df(res_airway)[1:500, ] #reduce size to increase computational speed
+myde <- res_subset$id
+myassayed <- rownames(res_airway)
+#Here Keys are ensemble not symbols
+topGOde_airway_vec <- topGOtable(
+  de_genes = myde,
+  bg_genes = myassayed,
+  mapping = "org.Hs.eg.db",
+  geneID = "ensembl"
+)
+head(topGOde_airway_vec)
+```
+
 
 # Functions to generate summary plots
 
-*VolcanoPlot*
+## VolcanoPlot
+
 One of the most well known and used plots to display highly differentially expressed genes. Easy to read while providing a lot of data.
 A basic gg plot object including the most important parts when creating a volcano plot. Can be later expanded upon like any regular gg object by the user.
 
 ```{r}
-volcPlot <- de_volcano(res_de = res_airway,
-                       mapping = "org.Hs.eg.db", # important to generate symbols for labelling
-                       labeled_genes = 25, # number of the top DE genes to be labeled. Default 30
-                       L2FC_cutoff = 1 # Where to draw the lines in the plot and which genes to mark as                                           significant default is one (meaning L2FC +/-1)
-                       )
+volcPlot <- de_volcano(
+  res_de = res_airway,
+  mapping = "org.Hs.eg.db", # important to generate symbols for labelling
+  labeled_genes = 25, # number of the top DE genes to be labeled. Default 30
+  L2FC_cutoff = 1 # Where to draw the lines in the plot and which genes to mark as                                           significant default is one (meaning L2FC +/-1)
+)
 volcPlot
-
 ```
+
 As mentioned above the user can now expand upon this with all the tools in the ggplot2 toolbox. For example:
+
 ```{r}
 library(ggplot2)
 
 volcPlot +
-  ggtitle("Airway Volcano")+
-  ylab("-log10 PValue")+
+  ggtitle("Airway Volcano") +
+  ylab("-log10 PValue") +
   xlab("Log 2 FoldChange (Cutoff 1/-1)")
 ```
 For further possibilities please look at the ggplot2 documentation.
 
-*MA plot*
-Plotting the counts of a gene vs it's expression (Log2 FoldChange). Granting an overview of the amount of differentially expressed genes vs the amount of genes overall. As well as an overview of the amount of up vs. downregulated genes.
-plot_ma further allows you to highlight certain genes of interest to you if provided the ensemble ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as wether it is up or down regulated. 
-plot_ma also allows you to set x and y labels right away but has defaults. However, similar to de_volcano these can also be set later on. For all possible parameters please look at the documentation
-
-
+In the volcanoPlot you can also highlight genes associated with a certain GOterm of interest.
 
 ```{r}
- maplot <- plot_ma(res_airway,
-                   FDR = 0.05, # which padj to set to count genes as DE
-                   intgenes = c(
-                     "ENSG00000103196", # CRISPLD2
-                     "ENSG00000120129", # DUSP1
-                     "ENSG00000163884", # KLF15
-                     "ENSG00000179094" # PER1
-                   ), # suggested genes of interest
-                   hlines = 1 #weather or not (and where) to draw the horizontal line (optional)
-                   
+Volc_GO <-go_volcano(
+  res_airway,
+  res_enrich = topgoDE_airway,
+  term_index = 1, # the index(row) where your term of interest is located in your enrichment result
+  L2FC_cutoff = 1,
+  mapping = "org.Hs.eg.db",
+  overlaps = 50, # the number of overlaps ggrepell is supposed to use for labelling (increases label number)
+  col_to_use = "symbol", # columnname of the column in your res_de containing the gene symbols
+  enrich_col = "genes", # columnname of the column in your res_enrich containing the gene symbols (see topgotable example)
+  down_col ="black", # colour for your downregulated genes (genes with a L2FC below your cutoff here -1 and padj < 0.05) 
+  up_col = "black", # colour for your upregulated genes (genes with a L2FC above your cutoff here 1 and padj < 0.05)
+  highlight_col = "tomato") # colour for your genes of interest associated with the given term
+
+Volc_GO
+```
+
+*Gene Plot*
+
+An elegant way to plot the counts of a certain gene of interest as for example treated vs untreated.
+```{r}
+ gene_plot(dds_airway,
+   gene = "ENSG00000152583",
+   intgroup = "dex" 
  )
 ```
 
 
-# Functions that create gene-centric content
+*MA plot*
+Plotting the counts of a gene vs it's expression (Log2 FoldChange). Granting an overview of the amount of differentially expressed genes vs the amount of genes overall. As well as an overview of the amount of up vs. downregulated genes.
 
-buttons, links, yadda
+plot_ma also allows you to set x and y labels right away but has defaults. However, similar to de_volcano these can also be set later on. For all possible parameters please look at the documentation
 
 ```{r}
+maplot <- plot_ma(res_airway,
+                  FDR = 0.05, # which padj to set to count genes as DE (default 0.05)
+                  hlines = 1 # whether or not (and where) to draw the horizontal line (optional)
+                  )
+
+maplot
 ```
+
+plot_ma further allows you to highlight certain genes of interest to you if provided the ensemble ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as whether it is up or down regulated. 
+```{r}
+maplot_genes <- plot_ma(res_airway,
+  FDR = 0.1, 
+  intgenes = c(
+    "ENSG00000103196", # CRISPLD2
+    "ENSG00000120129", # DUSP1
+    "ENSG00000163884", # KLF15
+    "ENSG00000179094" # PER1
+  ), # suggested genes of interest
+  hlines = 1 
+)
+maplot_genes
+```
+
+
+# Functions that create gene-centric content/Report helpers
+
+RMDs are a great way of handing over reports to collaborators. These functions are supposed to improve report quality by upgrading the report turning normal tables into interactive tables linking to further websites.
+
+*GO terms*
+```{r}
+topgoDE_airway$GO.ID <- create_link_GO(topgoDE_airway$GO.ID)
+
+DT::datatable(topgoDE_airway, escape = FALSE) # the esxape =FALSE is important to ensure the link is turned into a button
+
+```
+
+To get information on a singular GOterm of interest you can use:
+```{r}
+ go_2_html("GO:0001525")
+
+```
+
+*Genes*
+
+There are various websites that can give more information on genes. Currently we have functions to create links to:
+Ensemble
+GeneCards
+Pubmed
+NCBI
+dbPTM
+GTEX
+UniProt
+Human Protein Atlas
+
+You can use access all of these easily by using one function
+```{r}
+# creating a smaller subset for visulisation purposes and to keep the main res_de 
+res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
+
+buttonifier(res_subset,
+            col_to_use = "symbol", # col where the gene names are stored, default is "SYMBOL", in this example however the col is named "symbol"
+            new_cols = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED") 
+            # all of the supported websites y0u can pick however many you want
+            )
+```
+Important to know is that the buttonifier function returns a DT:datatable not a df. This is to ensure that the escape = FALSE parameter of datatable is set and not forgotten as the links/buttons will not work otherwise.
+Advanced users that want further customization options to their datatable can ensure a dataframe is returned (then the escape = FALSE must be set by hand):
+```{r}
+res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
+
+res_subset <- buttonifier(res_subset,
+                          col_to_use = "symbol", 
+                          new_cols = c("GC", "NCBI", "HPA"),
+                          output_format = "DF"
+)
+
+DT::datatable(res_subset,
+              escape = FALSE,
+              rownames = FALSE
+              #other parameters...
+)
+```
+
+All of the functions included inside the buttonifier function are also available as singular functions in case you are only interested in one of them:
+```{r}
+res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
+
+row.names(res_subset) <- create_link_ENS(row.names(res_subset), species = "Homo_sapiens")
+res_subset$symbol_GC <- create_link_genecards(res_subset$symbol)
+res_subset$symbol_Pub <- create_link_pubmed(res_subset$symbol)
+res_subset$symbol_NCBI <- create_link_NCBI(res_subset$symbol)
+res_subset$symbol_dbptm <-create_link_dbPTM(res_subset$symbol)
+res_subset$symbol_GTEX <- create_link_GTEX(res_subset$symbol)
+res_subset$symbol_UniP <- create_link_UniProt(res_subset$symbol)
+res_subset$symbol_HPA <- create_link_HPA(res_subset$symbol)
+
+DT::datatable(res_subset, escape = FALSE)
+```
+
+For information on singular genes you can use:
+
+```{r}
+ geneinfo_2_html("SPARCL1",
+                 res_de = res_airway,
+                 col_to_use = "symbol" # similar to before: the default is "SYMBOL" but we have a different name so we have to specify it here
+                 )
+```
+It can however also be used without a res_de for a general overview
+
+```{r}
+geneinfo_2_html("ACTB")
+```
+
+# Session Info {-}
+
+```{r}
+sessionInfo()
+```
+
 

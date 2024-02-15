@@ -12,6 +12,22 @@ create_link_GO <- function(val) {
   )
 }
 
+#' Link to the GeneCards database
+#'
+#' @param val Character, the gene symbol of interest
+#'
+#' @return HTML for an action button
+#' @export
+create_link_genecards <- function(val) {
+  sprintf(
+    '<a href = "https://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
+    val, # link portion related to the gene
+    .actionbutton_biocstyle, # button style
+    paste0(val, "@GeneCards") # content of the button label
+  )
+}
+
+
 #' Link to Pubmed
 #'
 #' @param val Character, the gene symbol
@@ -82,7 +98,7 @@ create_link_UniProt <- function(val) {
   ) # content of the button label
 }
 
-#' Link to dbptm database
+#' Link to dbPTM database
 #'
 #' @param val Character, the gene symbol
 #'
@@ -223,6 +239,8 @@ go_2_html <- function(go_id,
 #' shown, and only some generic info on the identifier is displayed.
 #' The information about the gene is retrieved by matching on the `SYMBOL` column,
 #' which should be provided in `res_de`.
+#' @param col_to_use The column of your res_de object containing the gene symbols. 
+#' Default is "SYMBOL"
 #'
 #' @return HTML content related to a gene identifier, to be displayed in
 #' web applications (or inserted in Rmd documents)
@@ -236,7 +254,8 @@ go_2_html <- function(go_id,
 #' geneinfo_2_html("ACTB")
 #' geneinfo_2_html("Pf4")
 geneinfo_2_html <- function(gene_id,
-                            res_de = NULL) {
+                            res_de = NULL,
+                            col_to_use = "SYMBOL") {
   gene_ncbi_button <- create_link_NCBI(gene_id)
   gene_genecards_button <- create_link_genecards(gene_id)
   gene_gtex_button <- create_link_GTEX(gene_id)
@@ -244,7 +263,7 @@ geneinfo_2_html <- function(gene_id,
   gene_pubmed_button <- create_link_pubmed(gene_id)
 
   if (!is.null(res_de)) {
-    gid <- match(gene_id, res_de$SYMBOL)
+    gid <- match(gene_id, res_de[[col_to_use]])
     if (is.na(gid)) {
       message(
         "Could not find the specified gene (`", gene_id,
@@ -278,20 +297,6 @@ geneinfo_2_html <- function(gene_id,
   return(htmltools::HTML(mycontent))
 }
 
-#' Link to the GeneCards database
-#'
-#' @param val Character, the gene symbol of interest
-#'
-#' @return HTML for an action button
-#' @noRd
-create_link_genecards <- function(val) {
-  sprintf(
-    '<a href = "https://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
-    val, # link portion related to the gene
-    .actionbutton_biocstyle, # button style
-    paste0(val, "@GeneCards") # content of the button label
-  )
-}
 
 
 # Some constant values ----------------------------------------------------

@@ -34,7 +34,7 @@ topGOtable(
 \item{bg_genes}{A vector of background genes, e.g. all (expressed) genes in the assays}
 
 \item{top_de}{numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
-Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).}
+Attempts to reduce redundancy. Assumes the data is sorted by padj (default in DESeq2).}
 
 \item{min_counts}{numeric, min number of counts a gene needs to have to be included
 in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.}
@@ -81,25 +81,19 @@ documentation of the \code{topGO} package itself
 }
 \examples{
 library(airway)
-library(DESeq2)
-data(airway)
-airway
-dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
-# Example, performing extraction of enriched functional categories in
-# detected significantly expressed genes
-\dontrun{
-dds_airway <- DESeq(dds_airway)
-res_airway <- results(dds_airway)
+data(dds_airway, package = "mosdef")
+data(res_airway, package = "mosdef")
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 
 library(topGO)
-topgoDE_airway <- topGOtable(res_de = res_airway,
+topgoDE_airway <- topGOtable(
+  res_de = res_airway,
   dds = dds_airway,
   ontology = "BP",
   mapping = "org.Hs.eg.db",
   geneID = "symbol",
 )
-}
+
 
 }

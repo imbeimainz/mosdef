@@ -2,8 +2,27 @@
 % Please edit documentation in R/mosdef-pkg.R
 \docType{package}
 \name{mosdef-pkg}
+\alias{mosdef}
+\alias{mosdef-package}
 \alias{mosdef-pkg}
 \title{mosdef: mostly useful differential expression functions}
 \description{
 mostly useful differential expression functions
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/imbeimainz/mosdef}
+  \item Report bugs at \url{https://github.com/imbeimainz/mosdef/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Federico Marini \email{marinif@uni-mainz.de} (\href{https://orcid.org/0000-0003-3252-7758}{ORCID})
+
+Authors:
+\itemize{
+  \item Leon Dammer \email{dammerle@uni-mainz.de} (\href{https://orcid.org/0009-0008-4132-7639}{ORCID})
+}
+
 }

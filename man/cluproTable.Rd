@@ -2,7 +2,7 @@
 % Please edit documentation in R/cluProtable.R
 \name{cluproTable}
 \alias{cluproTable}
-\title{Title}
+\title{Extract functional terms enriched in the DE genes, based on clusterProfiler}
 \usage{
 cluproTable(
   res_de = NULL,
@@ -28,7 +28,7 @@ cluproTable(
 \item{bg_genes}{A vector of background genes, e.g. all (expressed) genes in the assays}
 
 \item{top_de}{numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
-Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).}
+Attempts to reduce redundancy. Assumes the data is sorted by padj (default in DESeq2).}
 
 \item{min_counts}{numeric, min number of counts a gene needs to have to be included
 in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.}
@@ -37,8 +37,8 @@ in the geneset that the de genes are compared to. Default is 0, recommended only
 
 \item{de_type}{One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:}
 
-\item{keyType}{Gene format to input into goenrich from clusterProfiler. If res_de and dds are used use "SYMBOL" for more
-information check the goEnrich documentation}
+\item{keyType}{Gene format to input into enrichGO from clusterProfiler. If res_de and dds are used use "SYMBOL" for more
+information check the enrichGO documentation}
 
 \item{verbose}{Logical, whether to add messages telling the user which steps were taken}
 
@@ -48,19 +48,17 @@ information check the goEnrich documentation}
 A table containing the computed GO Terms and related enrichment scores
 }
 \description{
-Title
+A wrapper for extracting functional GO terms enriched in a list of (DE) genes,
+based on the algorithm and the implementation in the clusterProfiler package
+}
+\details{
+Note: the feature length retrieval is based on the \code{\link{enrichGO}} function
 }
 \examples{
 library(airway)
 library(DESeq2)
-data(airway)
-airway
-dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
-# Example, performing extraction of enriched functional categories in
-# detected significantly expressed genes
-\dontrun{
-dds_airway <- DESeq(dds_airway)
-res_airway <- results(dds_airway)
+data(dds_airway, package = "mosdef")
+data(res_airway, package = "mosdef")
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 library(clusterProfiler)
@@ -69,6 +67,5 @@ CluProde_airway <- cluproTable(
   dds = dds_airway,
   mapping = "org.Hs.eg.db"
 )
-}
 
 }

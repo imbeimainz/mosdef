@@ -1,21 +1,3 @@
-# When running I got this error:
-#   Can't find hg38/ensGene length data in genLenDataBase...
-# A TxDb annotation package exists for hg38. Consider installing it to get the gene lengths.
-# Trying to download from UCSC. This might take a couple of minutes.
-# Error in value[[3L]](cond) :
-#   Length information for genome hg38 and gene ID ensGene is not available. You will have to specify bias.data manually.
-# fixed by installing https://bioconductor.org/packages/release/data/annotation/html/TxDb.Hsapiens.UCSC.hg38.knownGene.html
-# not sure if that is correct but we might need to fix that
-
-
-# TODO remove Ntop parameter, problem: you get multiple thousands of this message:
-# 'select()' returned 1:1 mapping between keys and columns
-# and then it fails with the error:
-# Error in mapIds_base(x, keys, column, keytype, ..., multiVals = multiVals) :
-# apIds must have at least one key to match against.
-# I assume for one of the background genes there is no database entry which then crashes everything
-
-
 #' Extract functional terms enriched in the DE genes, based on goseq
 #'
 #' A wrapper for extracting functional GO terms enriched in a list of (DE) genes,
@@ -30,8 +12,8 @@
 #' @param dds A DESeqDataset object created using \code{DESeq2}
 #' @param res_de A DESeqResults object created using \code{DESeq2}
 #' @param top_de numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
-#'  Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).
-#' @param min_counts numeric, min number of counts a gene needs to have to be included 
+#'  Attempts to reduce redundancy. Assumes the data is sorted by padj (default in DESeq2).
+#' @param min_counts numeric, min number of counts a gene needs to have to be included
 #' in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.
 #' @param genome A string identifying the genome that genes refer to, as in the
 #' \code{\link{goseq}} function
@@ -59,25 +41,17 @@
 #' library(airway)
 #' data(airway)
 #' airway
-#' dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
-#'   colData = colData(airway),
-#'   design = ~ cell + dex
-#' )
-#' dds_airway <- DESeq2::DESeq(dds_airway)
-#' res_airway <- DESeq2::results(dds_airway)
-#'
-#' res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:100, ]
-#' myde <- res_subset$id
-#' myassayed <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
-#' \dontrun{
+#' data(dds_airway, package = "mosdef")
+#' data(res_airway, package = "mosdef")
+#' res_de <- res_airway
 #' mygo <- goseqTable(
-#'   de_genes = myde,
-#'   bg_genes = myassayed,
+#'   res_de = res_airway,
+#'   dds = dds_airway,
 #'   testCats = "GO:BP",
 #'   add_gene_to_terms = TRUE
 #' )
 #' head(mygo)
-#' }
+#' 
 #'
 goseqTable <- function(res_de = NULL,
                        dds = NULL,
@@ -186,48 +160,48 @@ goseqTable <- function(res_de = NULL,
       res_de_subset <- deseqresult2df(res_de, FDR = 0.05)
       res_de_subset <- res_de_subset[res_de_subset$log2FoldChange <= 0, ]
     }
-    
-    
+
+
 
 
     # in example top 100 but this makes more sense no?
     de_genes <- res_de_subset$id
 
 
-    if(!is.null(top_de)) {
+    if (!is.null(top_de)) {
       top_de <- min(top_de, length(de_genes))
       de_genes <- de_genes[seq_len(top_de)]
     }
     bg_genes <- rownames(dds)[rowSums(counts(dds)) > min_counts]
     if (verbose) {
-      message("Your dataset has ",
-              nrow(res_de_subset),
-              " DE genes. You selected ",
-              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(res_de_subset))*100), # sprintf format with 2 decimal places
-              ") genes. You analysed all ",
-              de_type,
-              "-regulated genes")
+      message(
+        "Your dataset has ",
+        nrow(res_de_subset),
+        " DE genes. You selected ",
+        length(de_genes), " (", sprintf("%.2f%%", (length(de_genes) / nrow(res_de_subset)) * 100), # sprintf format with 2 decimal places
+        ") genes. You analysed all ",
+        de_type,
+        "-regulated genes"
+      )
     }
-    
-
   } else if (!is.null(c(bg_genes, de_genes))) {
-    
     all_de <- length(de_genes)
-    
-    if(!is.null(top_de)) {
+
+    if (!is.null(top_de)) {
       top_de <- min(top_de, length(de_genes))
       de_genes <- de_genes[seq_len(top_de)]
     }
     if (verbose) {
-      message("Your dataset has ",
-              all_de,
-              " DE genes.You selected ",
-              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/all_de)*100), # sprintf format with 2 decimal places
-              ") genes. You analysed all ",
-              de_type,
-              "-regulated genes")
+      message(
+        "Your dataset has ",
+        all_de,
+        " DE genes.You selected ",
+        length(de_genes), " (", sprintf("%.2f%%", (length(de_genes) / all_de) * 100), # sprintf format with 2 decimal places
+        ") genes. You analysed all ",
+        de_type,
+        "-regulated genes"
+      )
     }
-    
   }
 
 
@@ -271,10 +245,11 @@ goseqTable <- function(res_de = NULL,
     )
 
     all_genesymbols <- mapIds(get(mapping),
-                              keys = all_ens_ids,
-                              keytype = "ENSEMBL",
-                              column = "SYMBOL",
-                              multiVals = "first")
+      keys = all_ens_ids,
+      keytype = "ENSEMBL",
+      column = "SYMBOL",
+      multiVals = "first"
+    )
 
     # building the lookup table
     lut_genes <- data.frame(

@@ -2,17 +2,63 @@
 #'
 #' A sample `DESeqResults` object, generated in the `DESeq2` framework
 #'
-#' @details This `DESeqResults` object on the data from the `macrophage` package
-#' has been created comparing IFNg treated samples vs naive samples, accounting
-#' for the different cell lines included.
+#' @details This `DESeqResults` object is on the data from the `airway` package
 #'
-#' Details on how this object has been created are included in the `create_gt_data.R`
-#' script, included in the `scripts` folder of the `GeneTonic` package.
 #'
-#' @references Alasoo, et al. "Shared genetic effects on chromatin and gene
-#' expression indicate a role for enhancer priming in immune response",
-#' Nature Genetics, January 2018 doi: 10.1038/s41588-018-0046-7.
+#' Details on how this object has been created are included in the `create_mosdef_data`
+#' script, included in the `scripts` folder of the `mosdef` package.
 #'
-#' @name res_macrophage_IFNg_vs_naive
+#' @references Himes BE et al "RNA-Seq transcriptome profiling identifies 
+#' CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function
+#' in airway smooth muscle cells". PLoS One. 2014 Jun
+#' doi: 10.1371/journal.pone.0099625. 
+#'
+#' @name res_airway
+#' @docType data 
+#'
+NULL
+
+
+#' A sample `DESeqDataset` object
+#' 
+#' A sample `DESeqDataset` object, generated in the `DESeq2` framework
+#'
+#' @details This `DESeqDataset` object is on the data from the `airway` package
+#'
+#'
+#' Details on how this object has been created are included in the `create_mosdef_data`
+#' script, included in the `scripts` folder of the `mosdef` package.
+#' 
+#' @references Himes BE et al "RNA-Seq transcriptome profiling identifies 
+#' CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function
+#' in airway smooth muscle cells". PLoS One. 2014 Jun
+#' doi: 10.1371/journal.pone.0099625. 
+#'
+#' 
+#' @name dds_airway
 #' @docType data
+#' 
+NULL
+
+
+
+#' A sample enrichment object
+#' 
+#' A sample enrichment object, generated in the `mosdef` and `topGO` framework
+#' 
+#' @details This enrichment object is on the data from the `airway` package
+#'
+#'
+#' Details on how this object has been created are included in the `create_mosdef_data`
+#' script, included in the `scripts` folder of the `mosdef` package.
+#' 
+#' @references Himes BE et al "RNA-Seq transcriptome profiling identifies 
+#' CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function
+#' in airway smooth muscle cells". PLoS One. 2014 Jun
+#' doi: 10.1371/journal.pone.0099625. 
+#'
+#' 
+#' @name topgoDE_airway
+#' @docType data
+#' 
 NULL

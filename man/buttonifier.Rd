@@ -2,7 +2,7 @@
 % Please edit documentation in R/buttonifier.R
 \name{buttonifier}
 \alias{buttonifier}
-\title{Create a button for gene symbols in an RMD}
+\title{Create a button for gene symbols in an Rmd}
 \usage{
 buttonifier(
   df,
@@ -14,7 +14,7 @@ buttonifier(
 \arguments{
 \item{df}{A dataframe with at least on column with gene Symbols named: SYMBOL}
 
-\item{new_cols}{At least one of: "GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA"}
+\item{new_cols}{At least one of: "GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA" "PUBMED"}
 
 \item{col_to_use}{name of the columns were the gene symbols are stored. Default is SYMBOL}
 
@@ -26,30 +26,15 @@ or a simple dataframe (DF).In the latter case it is important that if the data i
 A dataframe or a \code{DT} datatable object with columns adding HTML objects that link to websites with further information on the genes in question.
 }
 \description{
-A function to turn Gene Symbols into buttons in an RMD linking to various Portals for further info
+A function to turn Gene Symbols into buttons in an Rmd linking to various Portals for further info
 about these genes.
-Current supported portals are: Genecards, NCBI, GTEX, Uniprot, dbPTM, Human Protein Atlas
+Current supported portals are: GeneCards, NCBI, GTEx, Uniprot, dbPTM, Human Protein Atlas
 }
 \examples{
-library(dplyr)
-library(DESeq2)
-data("gse", package = "macrophage")
-
-dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
-# changing the ids to Ensembl instead of the Gencode used in the object
-rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
-dds_macrophage
-keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
-dds_macrophage <- dds_macrophage[keep, ]
-dds_macrophage
-dds_macrophage <- DESeq(dds_macrophage)
-
-res_macrophage_IFNg_vs_naive <- results(dds_macrophage,
-  contrast = c("condition", "IFNg", "naive"),
-  lfcThreshold = 1, alpha = 0.05
-)
-res_macrophage_IFNg_vs_naive$SYMBOL <- rowData(dds_macrophage)$SYMBOL
-res_df <- as.data.frame(res_macrophage_IFNg_vs_naive@listData)
-res_df <- res_df[1:100, ]
+data(res_airway, package = "mosdef")
+res_de <- res_airway
+res_df <- deseqresult2df(res_de)
+# Subsetting for quicker run
+res_df <- res_df[1:100,]
 buttonifier(res_df)
 }

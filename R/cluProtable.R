@@ -1,17 +1,22 @@
-#' Title
+#' Extract functional terms enriched in the DE genes, based on clusterProfiler
+#'
+#' A wrapper for extracting functional GO terms enriched in a list of (DE) genes,
+#' based on the algorithm and the implementation in the clusterProfiler package
+#' 
+#' Note: the feature length retrieval is based on the \code{\link{enrichGO}} function
 #'
 #' @param res_de A DESeqResults object created using \code{DESeq2}
 #' @param dds A DESeqDataset object created using \code{DESeq2}
 #' @param de_genes A vector of (differentially expressed) genes
 #' @param bg_genes A vector of background genes, e.g. all (expressed) genes in the assays
 #' @param top_de numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
-#'  Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).
-#' @param min_counts numeric, min number of counts a gene needs to have to be included 
+#'  Attempts to reduce redundancy. Assumes the data is sorted by padj (default in DESeq2).
+#' @param min_counts numeric, min number of counts a gene needs to have to be included
 #' in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.
 #' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
 #' @param de_type One of: 'up', 'down', or 'up_and_down' Which genes to use for GOterm calculations:
-#' @param keyType Gene format to input into goenrich from clusterProfiler. If res_de and dds are used use "SYMBOL" for more
-#' information check the goEnrich documentation
+#' @param keyType Gene format to input into enrichGO from clusterProfiler. If res_de and dds are used use "SYMBOL" for more
+#' information check the enrichGO documentation
 #' @param verbose Logical, whether to add messages telling the user which steps were taken
 #' @param ... Further parameters to use for the go_enrich function from \code{clusterProfiler}
 #'
@@ -29,14 +34,8 @@
 #' @examples
 #' library(airway)
 #' library(DESeq2)
-#' data(airway)
-#' airway
-#' dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
-#' # Example, performing extraction of enriched functional categories in
-#' # detected significantly expressed genes
-#' \dontrun{
-#' dds_airway <- DESeq(dds_airway)
-#' res_airway <- results(dds_airway)
+#' data(dds_airway, package = "mosdef")
+#' data(res_airway, package = "mosdef")
 #' library("AnnotationDbi")
 #' library("org.Hs.eg.db")
 #' library(clusterProfiler)
@@ -45,7 +44,6 @@
 #'   dds = dds_airway,
 #'   mapping = "org.Hs.eg.db"
 #' )
-#' }
 #'
 cluproTable <- function(res_de = NULL,
                         dds = NULL,
@@ -174,50 +172,51 @@ cluproTable <- function(res_de = NULL,
     }
 
     de_genes <- de_df$symbol
-    if(!is.null(top_de)) {
+    if (!is.null(top_de)) {
       top_de <- min(top_de, length(de_genes))
       de_genes <- de_genes[seq_len(top_de)]
     }
     bg_ids <- rownames(dds)[rowSums(counts(dds)) > min_counts]
     bg_genes <- AnnotationDbi::mapIds(annot_to_map_to,
-                                      keys = bg_ids,
-                                      column = "SYMBOL",
-                                      keytype = "ENSEMBL",
-                                      multiVals = "first"
+      keys = bg_ids,
+      column = "SYMBOL",
+      keytype = "ENSEMBL",
+      multiVals = "first"
     )
     if (verbose) {
-      message("Your dataset has ",
-              nrow(de_df),
-              " DE genes. You selected ",
-              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(de_df))*100), # sprintf format with 2 decimal places
-              ") genes. You analysed all ",
-              de_type,
-              "-regulated genes")
-    }  
+      message(
+        "Your dataset has ",
+        nrow(de_df),
+        " DE genes. You selected ",
+        length(de_genes), " (", sprintf("%.2f%%", (length(de_genes) / nrow(de_df)) * 100), # sprintf format with 2 decimal places
+        ") genes. You analysed all ",
+        de_type,
+        "-regulated genes"
+      )
+    }
   } else if (!is.null(c(bg_genes, de_genes))) {
-    
     all_de <- length(de_genes)
-    
-    if(!is.null(top_de)) {
-      
+
+    if (!is.null(top_de)) {
       top_de <- min(top_de, length(de_genes))
       de_genes <- de_genes[seq_len(top_de)]
-      
+
       if (verbose) {
-        message("Your dataset has ",
-                all_de,
-                " DE genes.You selected ",
-                length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/all_de)*100), # sprintf format with 2 decimal places
-                ") genes. You analysed all ",
-                de_type,
-                "-regulated genes")
+        message(
+          "Your dataset has ",
+          all_de,
+          " DE genes.You selected ",
+          length(de_genes), " (", sprintf("%.2f%%", (length(de_genes) / all_de) * 100), # sprintf format with 2 decimal places
+          ") genes. You analysed all ",
+          de_type,
+          "-regulated genes"
+        )
       }
-      
     }
   }
-  
 
-  
+
+
   # bg_genes <- mapIds(annot_to_map_to,
   #     keys = bg_ids,
   #     column = "SYMBOL",
@@ -228,15 +227,15 @@ cluproTable <- function(res_de = NULL,
 
 
 
-   
-    res_enrich <- enrichGO(
-      gene = de_genes,
-      universe = bg_genes,
-      OrgDb = mapping,
-      keyType = keyType,
-      ...
-    )
-  
+
+  res_enrich <- enrichGO(
+    gene = de_genes,
+    universe = bg_genes,
+    OrgDb = mapping,
+    keyType = keyType,
+    ...
+  )
+
 
   return(res_enrich)
 }

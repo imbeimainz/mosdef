@@ -13,8 +13,8 @@
 #' @param de_genes A vector of (differentially expressed) genes
 #' @param bg_genes A vector of background genes, e.g. all (expressed) genes in the assays
 #' @param top_de numeric, how many of the top differentially expressed genes to use for the enrichment analysis.
-#'  Attempts to reduce redundancy. Asumes the data is sorted by padj (default in DESeq2).
-#' @param min_counts numeric, min number of counts a gene needs to have to be included 
+#'  Attempts to reduce redundancy. Assumes the data is sorted by padj (default in DESeq2).
+#' @param min_counts numeric, min number of counts a gene needs to have to be included
 #' in the geneset that the de genes are compared to. Default is 0, recommended only for advanced users.
 #' @param ontology Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)
 #' @param annot Which function to use for annotating genes to GO terms. Defaults to \code{annFUN.org}
@@ -43,26 +43,20 @@
 #'
 #' @examples
 #' library(airway)
-#' library(DESeq2)
-#' data(airway)
-#' airway
-#' dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
-#' # Example, performing extraction of enriched functional categories in
-#' # detected significantly expressed genes
-#' \dontrun{
-#' dds_airway <- DESeq(dds_airway)
-#' res_airway <- results(dds_airway)
+#' data(dds_airway, package = "mosdef")
+#' data(res_airway, package = "mosdef")
 #' library("AnnotationDbi")
 #' library("org.Hs.eg.db")
-#' 
+#'
 #' library(topGO)
-#' topgoDE_airway <- topGOtable(res_de = res_airway,
+#' topgoDE_airway <- topGOtable(
+#'   res_de = res_airway,
 #'   dds = dds_airway,
 #'   ontology = "BP",
 #'   mapping = "org.Hs.eg.db",
 #'   geneID = "symbol",
 #' )
-#' }
+#' 
 #'
 #' @export
 topGOtable <- function(res_de = NULL, # Differentially expressed genes
@@ -79,9 +73,9 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
                        full_names_in_rows = TRUE,
                        add_gene_to_terms = TRUE,
                        de_type = "up_and_down",
-                       #plot_graph = FALSE,
-                       #plot_nodes = 10,
-                       #write_output = FALSE,
+                       # plot_graph = FALSE,
+                       # plot_nodes = 10,
+                       # write_output = FALSE,
                        output_file = "",
                        topGO_method2 = "elim",
                        do_padj = FALSE,
@@ -180,12 +174,7 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
       keytype = "ENSEMBL",
       multiVals = "first"
     )
-    res_de$entrez <- AnnotationDbi::mapIds(annot_to_map_to,
-      keys = row.names(res_de),
-      column = "ENTREZID",
-      keytype = "ENSEMBL",
-      multiVals = "first"
-    )
+
     resOrdered <- as.data.frame(res_de[order(res_de$padj), ])
 
 
@@ -199,78 +188,87 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
       de_df <- de_df[de_df$log2FoldChange <= 0, ]
     }
     de_genes <- de_df$symbol
-    if(!is.null(top_de)) {
+    if (!is.null(top_de)) {
       top_de <- min(top_de, length(de_genes))
       de_genes <- de_genes[seq_len(top_de)]
     }
     bg_ids <- rownames(dds)[rowSums(counts(dds)) > min_counts]
     bg_genes <- AnnotationDbi::mapIds(annot_to_map_to,
-                                      keys = bg_ids,
-                                      column = "SYMBOL",
-                                      keytype = "ENSEMBL",
-                                      multiVals = "first"
+      keys = bg_ids,
+      column = "SYMBOL",
+      keytype = "ENSEMBL",
+      multiVals = "first"
     )
     if (verbose) {
-      message("Your dataset has ",
-              nrow(de_df),
-              " DE genes. You selected ",
-              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/nrow(de_df))*100), # sprintf format with 2 decimal places
-              ") genes. You analysed all ",
-              de_type,
-              "-regulated genes")
-    } 
+      message(
+        "Your dataset has ",
+        nrow(de_df),
+        " DE genes. You selected ",
+        length(de_genes), " (", sprintf("%.2f%%", (length(de_genes) / nrow(de_df)) * 100), # sprintf format with 2 decimal places
+        ") genes. You analysed all ",
+        de_type,
+        "-regulated genes"
+      )
+    }
   } else if (!is.null(c(bg_genes, de_genes))) {
-    
     all_de <- length(de_genes)
-    
-    if(!is.null(top_de)) {
+
+    if (!is.null(top_de)) {
       top_de <- min(top_de, length(de_genes))
       de_genes <- de_genes[seq_len(top_de)]
     }
     if (verbose) {
-      message("Your dataset has ",
-              all_de,
-              " DE genes.You selected ",
-              length(de_genes), " (", sprintf("%.2f%%", (length(de_genes)/all_de)*100), # sprintf format with 2 decimal places
-              ") genes. You analysed all ",
-              de_type,
-              "-regulated genes")
+      message(
+        "Your dataset has ",
+        all_de,
+        " DE genes.You selected ",
+        length(de_genes), " (", sprintf("%.2f%%", (length(de_genes) / all_de) * 100), # sprintf format with 2 decimal places
+        ") genes. You analysed all ",
+        de_type,
+        "-regulated genes"
+      )
     }
-  #   de_genes <- mapIds(annot_to_map_to,
-  #                      keys = de_genes,
-  #                      column = "SYMBOL",
-  #                      keytype = "ENSEMBL",
-  #                      multiVals = "first")
-  #   
-  #   bg_genes <- mapIds(annot_to_map_to,
-  #                      keys = bg_genes,
-  #                      column = "SYMBOL",
-  #                      keytype = "ENSEMBL",
-  #                      multiVals = "first")
-  #   
-  # 
-   }
-   
+    #   de_genes <- mapIds(annot_to_map_to,
+    #                      keys = de_genes,
+    #                      column = "SYMBOL",
+    #                      keytype = "ENSEMBL",
+    #                      multiVals = "first")
+    #
+    #   bg_genes <- mapIds(annot_to_map_to,
+    #                      keys = bg_genes,
+    #                      column = "SYMBOL",
+    #                      keytype = "ENSEMBL",
+    #                      multiVals = "first")
+    #
+    #
+  }
 
 
-    # creating the vectors
-    de_genes_input <- factor(as.integer(bg_genes %in% de_genes))
-    names(de_genes_input) <- bg_genes
-  
+
+  # creating the vectors
+  de_genes_input <- factor(as.integer(bg_genes %in% de_genes))
+  names(de_genes_input) <- bg_genes
+
 
 
   # instantiating the topGOdata object
-  GOdata <- new("topGOdata",
-    ontology = ontology,
-    allGenes = de_genes_input,
-    nodeSize = 10,
-    annot = annot,
-    mapping = mapping,
-    ID = geneID
-  )
+  suppressMessages({
+    GOdata <- new("topGOdata",
+                  ontology = ontology,
+                  allGenes = de_genes_input,
+                  nodeSize = 10,
+                  annot = annot,
+                  mapping = mapping,
+                  ID = geneID
+    )
+  })
   # performing the test(s)
-  result_method2 <- runTest(GOdata, algorithm = topGO_method2, statistic = "fisher")
-  resultClassic <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
+  suppressMessages({
+    result_method2 <- runTest(GOdata, algorithm = topGO_method2, statistic = "fisher")
+  })
+    suppressMessages({
+      resultClassic <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
+    })
   sTab <- GenTable(GOdata,
     p.value_method2 = result_method2,
     p.value_classic = resultClassic,
@@ -321,7 +319,7 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
 
   # write all entries of the table
   # if (write_output) write.table(sTab, file = output_file, sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
-  #if (plot_graph) showSigOfNodes(GOdata, topGO::score(result_method2), firstSigNodes = plot_nodes, useInfo = "all")
+  # if (plot_graph) showSigOfNodes(GOdata, topGO::score(result_method2), firstSigNodes = plot_nodes, useInfo = "all")
   #   if(outputToLatex) sTabSig <- xtable(apply(sTabSig[1:15,], 2, as.character)) # take a smaller subset
 
   # and returns the significant ones # or all, like here

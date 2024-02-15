@@ -4,7 +4,8 @@
 #'
 #' @param res_de A DESeqResults object created using \code{DESeq2}
 #' @param L2FC_cutoff A numeric value that sets the cutoff for the xintercept argument of ggplot
-#' @param labeled_genes A numeric value describing the amount of genes to be labeled. This uses the Top(x) highest differntially expressed genes
+#' @param labeled_genes A numeric value describing the amount of genes to be labeled. This uses the Top(x) highest
+#' differentially expressed genes
 #' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
 #'
 #' @return A  \code{ggplot2} volcano plot object that can be extended upon by the user
@@ -27,14 +28,7 @@
 #' library(airway)
 #' library(DESeq2)
 #' library("org.Hs.eg.db")
-#' data(airway)
-#' airway
-#' dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
-#' # Example, performing extraction of enriched functional categories in
-#' # detected significantly expressed genes
-#' ## Not run:
-#' dds_airway <- DESeq(dds_airway)
-#' res_airway <- results(dds_airway)
+#' data(res_airway, package = "mosdef")
 #' p <- de_volcano(res_airway,
 #'   L2FC_cutoff = 1,
 #'   labeled_genes = 20,
@@ -45,14 +39,13 @@ de_volcano <- function(res_de,
                        L2FC_cutoff = 1,
                        labeled_genes = 30,
                        mapping = "org.Mm.eg.db") {
-  
   if (!is(res_de, "DESeqResults")) {
     stop("The provided `res_de` is not a DESeqResults object, please check your input parameters.")
   }
-  
-  
+
+
   annot_to_map_to <- get(mapping)
-  
+
   res_de$symbol <- mapIds(annot_to_map_to,
     keys = row.names(res_de),
     column = "SYMBOL",
@@ -88,7 +81,7 @@ de_volcano <- function(res_de,
     geom_point() +
     theme_classic() +
     scale_color_manual(
-      values = c("skyblue", "grey", "tomato"), # to set the colours of our variable
+      values = c("skyblue", "gray", "tomato"), # to set the colours of our variable
       labels = c("Downregulated", "Not significant", "Upregulated")
     ) +
     coord_cartesian(ylim = c(0, max(-log10(df$pvalue))), xlim = c(-x_limit, x_limit)) +

@@ -22,7 +22,7 @@
 #' @return A plot returned by the [ggplot()] function
 #' @export
 #'
-#' @importFrom ggplot2 ggplot aes_string geom_point labs scale_x_continuous
+#' @importFrom ggplot2 ggplot aes geom_point labs scale_x_continuous
 #' scale_color_manual scale_alpha_manual theme_bw theme ggtitle guides
 #' element_text margin
 #' @importFrom ggrepel geom_text_repel
@@ -112,11 +112,11 @@ signature_volcano <- function(res_de,
   #   }
   # } else {
   # overwritable via a list
-  
+
   if (!is(res_de, "DESeqResults")) {
     stop("The provided `res_de` is not a DESeqResults object, please check your input parameters.")
   }
-  
+
   if (!all(genelist %in% rownames(res_de))) {
     not_there <- genelist[!(genelist %in% rownames(res_de))]
     warning(
@@ -180,11 +180,11 @@ signature_volcano <- function(res_de,
   # Plot data
   p <- ggplot(
     volcano_df_complete,
-    aes_string(x = "log2FoldChange", y = "logTransformedpvalue")
+    aes(x = .data$log2FoldChange, y = .data$logTransformedpvalue)
   ) +
-    geom_point(aes_string(
-      color = "significant",
-      alpha = "belonging"
+    geom_point(aes(
+      color = .data$significant,
+      alpha = .data$belonging
     )) +
     labs(
       x = "log2 Fold Change",
@@ -211,7 +211,7 @@ signature_volcano <- function(res_de,
   # adding labels to the significant points of the geneset
   p <- p + geom_text_repel(
     data = subset(volcano_df_complete, filter_info_complete),
-    aes_string(label = "genes_name"),
+    aes(label = .data$genes_name),
     size = 4,
     max.overlaps = volcano_labels
   )

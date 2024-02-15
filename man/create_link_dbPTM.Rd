@@ -2,7 +2,7 @@
 % Please edit documentation in R/report_helpers.R
 \name{create_link_dbPTM}
 \alias{create_link_dbPTM}
-\title{Link to dbptm database}
+\title{Link to dbPTM database}
 \usage{
 create_link_dbPTM(val)
 }
@@ -13,5 +13,5 @@ create_link_dbPTM(val)
 HTML for an action button
 }
 \description{
-Link to dbptm database
+Link to dbPTM database
 }
