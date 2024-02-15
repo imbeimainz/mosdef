@@ -85,8 +85,10 @@ head(topgoDE_airway)
 
 ## goseq
 parameters like top_de, min_counts, verbose and de_type can also be used here
-Important; goseqTable needs a genome to compare gene lengths to, so make sure one is installed on your PC for human we recommend:https://bioconductor.org/packages/release/data/annotation/html/TxDb.Hsapiens.UCSC.hg38.knownGene.html
-# TODO: Can we say that here? maybe also provide a good mouse reference genome
+Important: the feature length retrieval is based on the `goseq` function,
+and requires that the corresponding TxDb packages are installed and available
+so make sure one is installed on your PC for human we recommend: `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
+
 
 ```{r}
 goseq_airway <- goseqTable(
@@ -110,7 +112,9 @@ clupro_airway <- cluproTable(
 )
 head(clupro_airway)
 ```
+
 All of these functions also work if you only have/provide a vector of differentially expressed genes and a vector of background genes. Most of the above mentioned parameters work here as well (top_de, verbose), however parameters like min_counts and de_type will not work since they need further information which can only be found in the dds/res_de. Namely the counts from the dds and the Log2FoldChange from the res_de.
+
 ```{r}
 res_subset <- deseqresult2df(res_airway)[1:500, ] #reduce size to increase computational speed
 myde <- res_subset$id
@@ -128,7 +132,8 @@ head(topGOde_airway_vec)
 
 # Functions to generate summary plots
 
-*VolcanoPlot*
+## VolcanoPlot
+
 One of the most well known and used plots to display highly differentially expressed genes. Easy to read while providing a lot of data.
 A basic gg plot object including the most important parts when creating a volcano plot. Can be later expanded upon like any regular gg object by the user.
 
@@ -141,7 +146,9 @@ volcPlot <- de_volcano(
 )
 volcPlot
 ```
+
 As mentioned above the user can now expand upon this with all the tools in the ggplot2 toolbox. For example:
+
 ```{r}
 library(ggplot2)
 
@@ -299,6 +306,12 @@ It can however also be used without a res_de for a general overview
 
 ```{r}
 geneinfo_2_html("ACTB")
+```
+
+# Session Info {-}
+
+```{r}
+sessionInfo()
 ```
 
 
