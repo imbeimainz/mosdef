@@ -35,9 +35,10 @@
 #' @export
 #'
 #'
-#' @importFrom ggplot2 ggplot aes_string aes geom_hline geom_point geom_text geom_rug
+#' @importFrom ggplot2 ggplot aes geom_hline geom_point geom_text geom_rug
 #'  scale_colour_manual coord_cartesian xlab ylab ggtitle theme_bw
 #' @importFrom ggrepel geom_text_repel
+#' @importFrom rlang .data
 #'
 #'
 #' @examples
@@ -108,7 +109,7 @@ plot_ma <- function(res_de,
   # ma_df$DE <- ifelse(ma_df$isDE,"yes","no")
   ma_df$DE <- ifelse(ma_df$isDE, "red", "black")
 
-  p <- ggplot(ma_df, aes_string(x = "logmean", y = "lfc", colour = "DE"))
+  p <- ggplot(ma_df, aes(x = .data$logmean, y = .data$lfc, colour = .data$DE))
 
   if (!is.null(hlines)) {
     p <- p + geom_hline(aes(yintercept = hlines), col = "lightblue", alpha = 0.4) +
@@ -152,17 +153,17 @@ plot_ma <- function(res_de,
     }
 
     # df_intgenes <- res_df[res_df$symbol %in% intgenes,]
-    p <- p + geom_point(data = df_intgenes, aes_string("logmean", "log2FoldChange"), color = intgenes_color, size = 4)
+    p <- p + geom_point(data = df_intgenes, aes(.data$logmean, .data$log2FoldChange), color = intgenes_color, size = 4)
 
     if (labels_intgenes) {
       if (labels_repel) {
         p <- p + geom_text_repel(
-          data = df_intgenes, aes_string("logmean", "log2FoldChange", label = "myids"),
+          data = df_intgenes, aes(.data$logmean, .data$log2FoldChange, label = .data$myids),
           color = intgenes_color, size = 5
         )
       } else {
         p <- p + geom_text(
-          data = df_intgenes, aes_string("logmean", "log2FoldChange", label = "myids"),
+          data = df_intgenes, aes(.data$logmean, .data$log2FoldChange, label = .data$myids),
           color = intgenes_color, size = 5, hjust = 0.25, vjust = -0.75
         )
       }
