@@ -7,7 +7,8 @@
 #' @export
 #'
 #' @examples
-#' mosdef_res_check(res_de)
+#' # TODO: load data
+#' # mosdef_res_check(res_de)
 mosdef_res_check <- function(res_de,
                              verbose = FALSE){
   if ("symbol" %in% colnames(res_de)) {

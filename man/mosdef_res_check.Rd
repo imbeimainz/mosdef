@@ -15,5 +15,6 @@ mosdef_res_check(res_de, verbose = FALSE)
 A function checking if your res_de contains everything you need
 }
 \examples{
-mosdef_res_check(res_de)
+# TODO: load data
+# mosdef_res_check(res_de)
 }
