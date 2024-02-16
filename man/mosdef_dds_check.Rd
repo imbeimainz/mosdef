@@ -11,6 +11,9 @@ mosdef_dds_check(dds, verbose = FALSE)
 
 \item{verbose}{Logical, whether to add messages telling the user which steps were taken}
 }
+\value{
+An invisible \code{NULL} after performing the checks
+}
 \description{
 A function checking if your dds contains everything you need
 }

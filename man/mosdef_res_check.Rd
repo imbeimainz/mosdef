@@ -11,6 +11,9 @@ mosdef_res_check(res_de, verbose = FALSE)
 
 \item{verbose}{Logical, whether to add messages telling the user which steps were taken}
 }
+\value{
+An invisible \code{NULL} after performing the checks
+}
 \description{
 A function checking if your res_de contains everything you need
 }

@@ -3,7 +3,7 @@
 #' @param res_de A DESeqResults object created using \code{DESeq2}
 #' @param verbose  Logical, whether to add messages telling the user which steps were taken
 #'
-#' @return
+#' @return An invisible `NULL` after performing the checks
 #' @export
 #'
 #' @examples
@@ -52,7 +52,7 @@ mosdef_res_check <- function(res_de,
             AnnotationDbis 'mapIDs'")
   }
 
-  invisible(NULL)
+  return(invisible(NULL))
 }
 
 #' A function checking if your dds contains everything you need
@@ -60,7 +60,7 @@ mosdef_res_check <- function(res_de,
 #' @param dds A DESeqDataset object created using \code{DESeq2}
 #' @param verbose  Logical, whether to add messages telling the user which steps were taken
 #'
-#' @return
+#' @return An invisible `NULL` after performing the checks
 #' @export
 #'
 #' @examples
@@ -86,5 +86,5 @@ mosdef_dds_check <- function(dds,
 
 
 
-
+  return(invisible(NULL))
 }
