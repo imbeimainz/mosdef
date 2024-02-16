@@ -17,3 +17,7 @@ HTML for an action button
 \description{
 Link to Ensemble database
 }
+\examples{
+create_link_ENS("ENSMUSG00000024406")
+
+}

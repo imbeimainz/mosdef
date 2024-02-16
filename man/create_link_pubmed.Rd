@@ -15,3 +15,7 @@ HTML for an action button
 \description{
 Link to Pubmed
 }
+\examples{
+create_link_pubmed("Oct4")
+
+}

@@ -15,3 +15,7 @@ HTML for an action button
 \description{
 Link to AMIGO database
 }
+\examples{
+create_link_GO("GO:0008150")
+
+}

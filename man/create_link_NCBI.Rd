@@ -15,3 +15,7 @@ HTML for an action button
 \description{
 Link to NCBI database
 }
+\examples{
+create_link_NCBI("Oct4")
+
+}

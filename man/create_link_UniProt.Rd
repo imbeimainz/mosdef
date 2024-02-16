@@ -15,3 +15,7 @@ HTML for an action button
 \description{
 Link to Uniprot database
 }
+\examples{
+create_link_UniProt("Oct4")
+
+}

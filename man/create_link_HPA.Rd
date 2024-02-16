@@ -15,3 +15,7 @@ HTML for an action button
 \description{
 Link to the Human Protein Atlas
 }
+\examples{
+create_link_HPA("Oct4")
+
+}
