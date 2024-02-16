@@ -15,5 +15,6 @@ mosdef_dds_check(dds, verbose = FALSE)
 A function checking if your dds contains everything you need
 }
 \examples{
-mosdef_dds_check(res_de)
+# TODO: load data
+# mosdef_dds_check(dds)
 }
