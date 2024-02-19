@@ -11,9 +11,13 @@ mosdef_dds_check(dds, verbose = FALSE)
 
 \item{verbose}{Logical, whether to add messages telling the user which steps were taken}
 }
+\value{
+If everything needed exists returns NULL else returns messages stating which columns are missing
+}
 \description{
 A function checking if your dds contains everything you need
 }
 \examples{
-mosdef_dds_check(res_de)
+data(dds_airway, package = "mosdef")
+mosdef_dds_check(dds_airway)
 }

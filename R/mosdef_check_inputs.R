@@ -3,11 +3,12 @@
 #' @param res_de A DESeqResults object created using \code{DESeq2}
 #' @param verbose  Logical, whether to add messages telling the user which steps were taken
 #'
-#' @return
+#' @return If everything needed exists returns NULL else returns messages stating which columns are missing
 #' @export
 #'
 #' @examples
-#' mosdef_res_check(res_de)
+#' data(res_airway, package = "mosdef")
+#' mosdef_res_check(res_airway)
 mosdef_res_check <- function(res_de,
                              verbose = FALSE){
   if ("symbol" %in% colnames(res_de)) {
@@ -59,11 +60,12 @@ mosdef_res_check <- function(res_de,
 #' @param dds A DESeqDataset object created using \code{DESeq2}
 #' @param verbose  Logical, whether to add messages telling the user which steps were taken
 #'
-#' @return
+#' @return If everything needed exists returns NULL else returns messages stating which columns are missing
 #' @export
 #'
 #' @examples
-#' mosdef_dds_check(res_de)
+#' data(dds_airway, package = "mosdef")
+#' mosdef_dds_check(dds_airway)
 mosdef_dds_check <- function(dds,
                              verbose = FALSE){
   
@@ -73,7 +75,7 @@ mosdef_dds_check <- function(dds,
     message("Rownames are not ENSEMBL IDs. Please change them to ENSEMBL IDs by using 
             AnnotationDbis 'mapIDs'")
   }
-  if ("counts" %in% colnames(res_de)) {
+  if ("counts" %in% colnames(dds)) {
     if(verbose) message("Found a 'counts' column!")
   } else {
     message("Could not find a 'counts' column. Please ensure you have these values
@@ -82,6 +84,6 @@ mosdef_dds_check <- function(dds,
   
   
   
-  
+  invisible(NULL)
   
 }
