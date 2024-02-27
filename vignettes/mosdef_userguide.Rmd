@@ -208,10 +208,10 @@ plot_ma further allows you to highlight certain genes of interest to you if prov
 maplot_genes <- plot_ma(res_airway,
   FDR = 0.1,
   intgenes = c(
-    "ENSG00000103196", # CRISPLD2
-    "ENSG00000120129", # DUSP1
-    "ENSG00000163884", # KLF15
-    "ENSG00000179094" # PER1
+     "SPARCL1",
+     "CACNB2",
+     "MCHR1",
+    "COL1A1"
   ), # suggested genes of interest
   hlines = 1
 )
@@ -237,7 +237,8 @@ go_2_html("GO:0001525")
 
 *Genes*
 
-There are various websites that can give more information on genes. Currently we have functions to create links to:
+There are various websites that can give more information on genes. All of these (except ensemble) require gene symbols as the input.
+Currently we have functions to create links to:
 Ensemble
 GeneCards
 Pubmed
@@ -258,8 +259,10 @@ buttonifier(res_subset,
   # all of the supported websites y0u can pick however many you want
 )
 ```
+
 Important to know is that the buttonifier function returns a DT:datatable not a df. This is to ensure that the escape = FALSE parameter of datatable is set and not forgotten as the links/buttons will not work otherwise.
 Advanced users that want further customization options to their datatable can ensure a dataframe is returned (then the escape = FALSE must be set by hand):
+
 ```{r}
 res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
 
@@ -276,7 +279,7 @@ DT::datatable(res_subset,
 )
 ```
 
-All of the functions included inside the buttonifier function are also available as singular functions in case you are only interested in one of them:
+All of the functions included inside the buttonifier function are also available as singular functions in case you are only interested in one of them (Reminder: All except ensemble need gene symbols as input):
 ```{r}
 res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
 
