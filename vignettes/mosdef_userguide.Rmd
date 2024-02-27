@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 library("mosdef")
 ```
 
-# Functions that beautify an interactive table
+# Load the data
 
 Load an example dataset. We will use the well known airway data.
 
