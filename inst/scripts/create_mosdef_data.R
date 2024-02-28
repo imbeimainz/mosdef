@@ -47,10 +47,10 @@ save(res_enrich_macrophage_goseq, file = "data/res_enrich_macrophage_goseq.RData
 
 # res_enrich object clusterProfiler --------------------------------------------
 library(clusterProfiler)
-es_enrich_macrophage_cluPro <- cluproTable(
+res_enrich_macrophage_cluPro <- cluproTable(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   mapping = "org.Hs.eg.db"
 )
-save(es_enrich_macrophage_cluPro, file = "data/res_enrich_macrophage_cluPro.RData", compress = "xz")
+save(res_enrich_macrophage_cluPro, file = "data/res_enrich_macrophage_cluPro.RData", compress = "xz")
 
