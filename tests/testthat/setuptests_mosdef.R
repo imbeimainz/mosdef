@@ -1,4 +1,3 @@
-library(airway)
 library(DESeq2)
 library(topGO)
 library("AnnotationDbi")
@@ -7,71 +6,50 @@ library("macrophage")
 library("scales")
 #library("TxDb.Hsapiens.UCSC.hg38.knownGene")
 
-# Get a dds ad a res_de
-data(airway)
-airway
-dds_airway_nodeseq <- DESeqDataSet(airway, design = ~ cell + dex)
+data(gse)
+dds_macrophage_nodeseq <- DESeqDataSet(gse, design = ~line + condition)
 # Example, performing extraction of enriched functional categories in
 # detected significantly expressed genes
 
-data(dds_airway, package = "mosdef")
-data(res_airway, package = "mosdef")
-res_airway_nosymbols <- results(dds_airway)
+dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
+rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
+keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
+dds_macrophage <- dds_macrophage[keep, ]
 
-res_airway$SYMBOL <- AnnotationDbi::mapIds(org.Hs.eg.db,
-                                           keys = row.names(res_airway),
+# res_de
+
+data(res_de_macrophage, package = "mosdef")
+
+res_macrophage_IFNg_vs_naive$SYMBOL <- AnnotationDbi::mapIds(org.Hs.eg.db,
+                                           keys = row.names(res_macrophage_IFNg_vs_naive),
                                            column = "SYMBOL",
                                            keytype = "ENSEMBL",
                                            multiVals = "first"
 )
-res_airway$symbol <- res_airway$SYMBOL
-airway_df <- deseqresult2df(res_airway)
+res_macrophage_IFNg_vs_naive$symbol <- res_macrophage_IFNg_vs_naive$SYMBOL
+macrophage_df <- deseqresult2df(res_macrophage_IFNg_vs_naive)
 
 # get a vector of de and bg genes
-res_subset <- deseqresult2df(res_airway)[1:500, ]
+res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive)[1:500, ]
 myde <- res_subset$id
-myassayed <- rownames(res_airway)
-annotationobject <- deseqresult2df(res_airway)
+myassayed <- rownames(res_macrophage_IFNg_vs_naive)
+annotationobject <- deseqresult2df(res_macrophage_IFNg_vs_naive)
 annotationobject <- annotationobject["SYMBOL"]
-# Macrophage
 
 
-# dds --------------------------------------------------------------------------
-data(gse)
-dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
-rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
+# airway 
+library(airway)
+#Get  the base data
+data(airway)
 
-# annotation -------------------------------------------------------------------
-anno_df <- data.frame(
-  gene_id = rownames(dds_macrophage),
-  gene_name = mapIds(org.Hs.eg.db,
-                     keys = rownames(dds_macrophage),
-                     column = "SYMBOL",
-                     keytype = "ENSEMBL"
-  ),
-  stringsAsFactors = FALSE,
-  row.names = rownames(dds_macrophage)
-)
-# alternatively, one could use the wrapper in ...
-# anno_df <- pcaExplorer::get_annotation_orgdb(dds_macrophage, "org.Hs.eg.db", "ENSEMBL")
-
-# res_de -----------------------------------------------------------------------
-## using counts and average transcript lengths from tximeta
-keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
-dds_macrophage <- dds_macrophage[keep, ]
-dds_unnormalized <- dds_macrophage
-
+# Get a dds object and a res object
+dds_macrophage <- DESeqDataSet(airway, design = ~ cell + dex)
 dds_macrophage <- DESeq(dds_macrophage)
-vst_macrophage <- vst(dds_macrophage)
-res_macrophage_IFNg_vs_naive <- results(
-  dds_macrophage,
-  contrast = c("condition", "IFNg", "naive"),
-  lfcThreshold = 1, alpha = 0.05
-)
-summary(res_macrophage_IFNg_vs_naive)
-res_macrophage_IFNg_vs_naive$SYMBOL <- rowData(dds_macrophage)$SYMBOL
 
-data(topgoDE_airway, package = "mosdef")
+res_macrophage_IFNg_vs_naive_nosymbols <- results(dds_macrophage)
+
+# res_enrich
+data(res_enrich_macrophage_topGO, package = "mosdef")
 
 
 

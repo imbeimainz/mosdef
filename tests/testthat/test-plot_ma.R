@@ -1,10 +1,10 @@
 test_that("ggplot is created", {
-  p <- plot_ma(res_airway, FDR = 0.05, hlines = 1)
+  p <- plot_ma(res_macrophage_IFNg_vs_naive, FDR = 0.05, hlines = 1)
   expect_s3_class(p, "gg")
 })
 
 test_that("intgenes can be used", code = {
-  p_intgenes <- plot_ma(res_airway,
+  p_intgenes <- plot_ma(res_macrophage_IFNg_vs_naive,
     FDR = 0.1,
     intgenes = c(
       "ENSG00000103196", # CRISPLD2
@@ -17,7 +17,7 @@ test_that("intgenes can be used", code = {
 })
 
 test_that("Other parameters can be used if not at default value", {
-  p_other <- plot_ma(res_airway,
+  p_other <- plot_ma(res_macrophage_IFNg_vs_naive,
     point_alpha = 0.02,
     draw_y0 = FALSE,
     hlines = 2,
@@ -34,7 +34,7 @@ test_that("Other parameters can be used if not at default value", {
 })
 
 test_that("intgenes can be used without label", code = {
-  p_intgenes_nolabel <- plot_ma(res_airway,
+  p_intgenes_nolabel <- plot_ma(res_macrophage_IFNg_vs_naive,
     FDR = 0.1,
     intgenes = c(
       "ENSG00000103196", # CRISPLD2
@@ -48,7 +48,7 @@ test_that("intgenes can be used without label", code = {
 })
 
 test_that("annotation obj can be used ", code = {
-  p_intgenes_nolabel <- plot_ma(res_airway,
+  p_intgenes_nolabel <- plot_ma(res_macrophage_IFNg_vs_naive,
     FDR = 0.1,
     intgenes = c(
       "ENSG00000103196", # CRISPLD2
@@ -64,7 +64,7 @@ test_that("annotation obj can be used ", code = {
 
 # test_that("label_repel = FALSE works ",code = {
 #
-#   p_intgenes_nolabel <- plot_ma(res_airway,
+#   p_intgenes_nolabel <- plot_ma(res_macrophage_IFNg_vs_naive,
 #                                 FDR = 0.1,
 #                                 label_repel = FALSE,
 #                                 intgenes = c(
@@ -81,7 +81,7 @@ test_that("annotation obj can be used ", code = {
 # })
 
 test_that("plot is created if there is no symbol column in the res_de ", code = {
-  p_intgenes_nolabel <- plot_ma(res_airway_nosymbols,
+  p_intgenes_nolabel <- plot_ma(res_macrophage_IFNg_vs_naive_nosymbols,
     intgenes = c(
       "ENSG00000103196", # CRISPLD2
       "ENSG00000120129", # DUSP1

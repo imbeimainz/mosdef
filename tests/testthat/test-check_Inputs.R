@@ -3,7 +3,7 @@ test_that("Early fails are triggered", {
   expect_error({
     cluproTable(
       res_de = myde,
-      dds = dds_airway,
+      dds = dds_macrophage,
       mapping = "org.Hs.eg.db"
     )
   })
@@ -35,7 +35,7 @@ test_that("Early fails are triggered", {
   expect_error({
     goseqTable(
       res_de = myde,
-      dds = dds_airway,
+      dds = dds_macrophage,
       mapping = "org.Hs.eg.db"
     )
   })
@@ -51,7 +51,7 @@ test_that("Early fails are triggered", {
   expect_error({
     topGOtable(
       res_de = myde,
-      dds = dds_airway,
+      dds = dds_macrophage,
       ontology = "BP",
       mapping = "org.Hs.eg.db",
       geneID = "symbol"
@@ -61,14 +61,14 @@ test_that("Early fails are triggered", {
 test_that("check if dds are dds and vecs are vecs", {
   expect_error({
     cluproTable(
-      res_de = res_airway,
+      res_de = res_macrophage_IFNg_vs_naive,
       dds = myassayed,
       mapping = "org.Hs.eg.db"
     )
   })
 
   expect_error({
-    gene_plot(res_airway,
+    gene_plot(res_macrophage_IFNg_vs_naive,
       gene = "ENSG00000125347",
       intgroup = "condition",
       annotation_obj = anno_df
@@ -77,7 +77,7 @@ test_that("check if dds are dds and vecs are vecs", {
 
   expect_error({
     goseqTable(
-      res_de = res_airway,
+      res_de = res_macrophage_IFNg_vs_naive,
       dds = myassayed,
       mapping = "org.Hs.eg.db"
     )
@@ -85,7 +85,7 @@ test_that("check if dds are dds and vecs are vecs", {
 
   expect_error({
     topGOtable(
-      res_de = res_airway,
+      res_de = res_macrophage_IFNg_vs_naive,
       dds = myassayed,
       ontology = "BP",
       mapping = "org.Hs.eg.db",
@@ -96,8 +96,8 @@ test_that("check if dds are dds and vecs are vecs", {
   # check if vectors are actually vectors
   expect_error({
     cluproTable(
-      de_genes = res_airway,
-      bg_genes = dds_airway,
+      de_genes = res_macrophage_IFNg_vs_naive,
+      bg_genes = dds_macrophage,
       mapping = "org.Hs.eg.db"
     )
   })
@@ -105,8 +105,8 @@ test_that("check if dds are dds and vecs are vecs", {
 
   expect_error({
     goseqTable(
-      de_genes = res_airway,
-      bg_genes = dds_airway,
+      de_genes = res_macrophage_IFNg_vs_naive,
+      bg_genes = dds_macrophage,
       mapping = "org.Hs.eg.db"
     )
   })
@@ -114,8 +114,8 @@ test_that("check if dds are dds and vecs are vecs", {
 
   expect_error({
     topGOtable(
-      de_genes = res_airway,
-      bg_genes = dds_airway,
+      de_genes = res_macrophage_IFNg_vs_naive,
+      bg_genes = dds_macrophage,
       ontology = "BP",
       mapping = "org.Hs.eg.db",
       geneID = "symbol"
@@ -152,8 +152,8 @@ test_that("Error is thrown with insufficient input", {
 test_that("Check if de_type is correct", {
   expect_error({
     cluproTable(
-      res_de = res_airway,
-      dds = dds_airway,
+      res_de = res_macrophage_IFNg_vs_naive,
+      dds = dds_macrophage,
       mapping = "org.Hs.eg.db",
       de_type = "all"
     )
@@ -161,8 +161,8 @@ test_that("Check if de_type is correct", {
 
   expect_error({
     goseqTable(
-      res_de = res_airway,
-      dds = dds_airway,
+      res_de = res_macrophage_IFNg_vs_naive,
+      dds = dds_macrophage,
       mapping = "org.Hs.eg.db",
       de_type = "all"
     )
@@ -170,8 +170,8 @@ test_that("Check if de_type is correct", {
 
   expect_error({
     topGOtable(
-      res_de = res_airway,
-      dds = dds_airway,
+      res_de = res_macrophage_IFNg_vs_naive,
+      dds = dds_macrophage,
       ontology = "BP",
       mapping = "org.Hs.eg.db",
       geneID = "symbol",
@@ -185,7 +185,7 @@ test_that("res_de and dds are related", {
     {
       cluproTable(
         res_de = res_macrophage_IFNg_vs_naive,
-        dds = dds_airway,
+        dds = dds_macrophage,
         mapping = "org.Hs.eg.db"
       )
     },
@@ -198,7 +198,7 @@ test_that("res_de and dds are related", {
     {
       goseqTable(
         res_de = res_macrophage_IFNg_vs_naive,
-        dds = dds_airway,
+        dds = dds_macrophage,
         mapping = "org.Hs.eg.db",
         add_gene_to_terms = FALSE
       )
@@ -212,7 +212,7 @@ test_that("res_de and dds are related", {
     {
       topGOtable(
         res_de = res_macrophage_IFNg_vs_naive,
-        dds = dds_airway,
+        dds = dds_macrophage,
         ontology = "BP",
         mapping = "org.Hs.eg.db",
         geneID = "symbol"
@@ -225,16 +225,16 @@ test_that("res_de and dds are related", {
 test_that("DESeq was run on the dds", {
   expect_error({
     cluproTable(
-      res_de = res_airway,
-      dds = dds_airway_nodeseq,
+      res_de = res_macrophage_IFNg_vs_naive,
+      dds = dds_macrophage_nodeseq,
       mapping = "org.Hs.eg.db"
     )
   })
 
   expect_error({
     goseqTable(
-      res_de = res_airway,
-      dds = dds_airway_nodeseq,
+      res_de = res_macrophage_IFNg_vs_naive,
+      dds = dds_macrophage_nodeseq,
       mapping = "org.Hs.eg.db",
       add_gene_to_terms = FALSE
     )
@@ -242,8 +242,8 @@ test_that("DESeq was run on the dds", {
 
   expect_error({
     topGOtable(
-      res_de = res_airway,
-      dds = dds_airway_nodeseq,
+      res_de = res_macrophage_IFNg_vs_naive,
+      dds = dds_macrophage_nodeseq,
       ontology = "BP",
       mapping = "org.Hs.eg.db",
       geneID = "symbol"
@@ -257,14 +257,14 @@ test_that("Errors are thrown if only one of two needed inputs is provided", {
 
   expect_error({
     cluproTable(
-      dds = dds_airway,
+      dds = dds_macrophage,
       mapping = "org.Hs.eg.db"
     )
   })
 
   expect_error({
     goseqTable(
-      dds = dds_airway,
+      dds = dds_macrophage,
       mapping = "org.Hs.eg.db",
       add_gene_to_terms = FALSE
     )
@@ -272,7 +272,7 @@ test_that("Errors are thrown if only one of two needed inputs is provided", {
 
   expect_error({
     topGOtable(
-      dds = dds_airway,
+      dds = dds_macrophage,
       ontology = "BP",
       mapping = "org.Hs.eg.db",
       geneID = "symbol"
@@ -283,14 +283,14 @@ test_that("Errors are thrown if only one of two needed inputs is provided", {
 
   expect_error({
     cluproTable(
-      res_de = res_airway,
+      res_de = res_macrophage_IFNg_vs_naive,
       mapping = "org.Hs.eg.db"
     )
   })
 
   expect_error({
     goseqTable(
-      res_de = res_airway,
+      res_de = res_macrophage_IFNg_vs_naive,
       mapping = "org.Hs.eg.db",
       add_gene_to_terms = FALSE
     )
@@ -298,7 +298,7 @@ test_that("Errors are thrown if only one of two needed inputs is provided", {
 
   expect_error({
     topGOtable(
-      res_de = res_airway,
+      res_de = res_macrophage_IFNg_vs_naive,
       ontology = "BP",
       mapping = "org.Hs.eg.db",
       geneID = "symbol"

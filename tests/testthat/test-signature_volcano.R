@@ -1,10 +1,10 @@
 test_that(" ggplot object is created", {
-  p <- signature_volcano(res_airway)
+  p <- signature_volcano(res_macrophage_IFNg_vs_naive)
   expect_s3_class(p, "gg")
 })
 
 test_that("Other parameters work", {
-  p_param <- signature_volcano(res_airway, # res_enrich,
+  p_param <- signature_volcano(res_macrophage_IFNg_vs_naive, # res_enrich,
     annotation_obj = NULL,
     genelist = c(
       "ENSG00000108702",
