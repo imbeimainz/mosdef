@@ -1,6 +1,9 @@
 ---
 title: "mosdef_userguide"
-output: rmarkdown::html_vignette
+output: 
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
 vignette: >
   %\VignetteIndexEntry{mosdef_userguide}
   %\VignetteEngine{knitr::rmarkdown}
@@ -10,7 +13,9 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.height = 6,
+  fig.width = 8
 )
 ```
 
