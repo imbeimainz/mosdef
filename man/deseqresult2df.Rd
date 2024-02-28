@@ -22,10 +22,10 @@ with adjusted p-value smaller than the value.
 Generate a tidy table with the results of \code{DESeq2}
 }
 \examples{
-library(airway)
 library(DESeq2)
-data(res_airway, package = "mosdef")
-head(res_airway)
-res_df <- deseqresult2df(res_airway)
+library(macrophage)
+data(res_de_macrophage, package = "mosdef")
+head(res_macrophage_IFNg_vs_naive)
+res_df <- deseqresult2df(res_macrophage_IFNg_vs_naive)
 head(res_df)
 }

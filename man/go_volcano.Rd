@@ -57,22 +57,21 @@ that can then be expanded upon using further ggplot functions.
 library(ggplot2)
 library(RColorBrewer) # for a colourful plot
 library(ggrepel) # for nice annotations
-library(airway)
 library(DESeq2)
 library("topGO")
 library(AnnotationDbi)
 library("org.Hs.eg.db")
 
-data(dds_airway, package = "mosdef")
-data(res_airway, package = "mosdef")
-data(topgoDE_airway, package = "mosdef")
+
+data(res_de_macrophage, package = "mosdef")
+data(res_enrich_macrophage_topGO, package = "mosdef")
 p <- go_volcano(
-  res_airway,
-  res_enrich = topgoDE_airway,
+  res_macrophage_IFNg_vs_naive,
+  res_enrich = topgoDE_macrophage_IFNg_vs_naive,
   term_index = 1,
   L2FC_cutoff = 1,
   mapping = "org.Hs.eg.db",
-  overlaps = 50
+  overlaps = 30
 )
 p
 }

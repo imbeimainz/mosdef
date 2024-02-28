@@ -35,11 +35,10 @@ upon using further ggplot functions.
 library(ggplot2)
 library(RColorBrewer) # for a colourful plot
 library(ggrepel) # for nice annotations
-library(airway)
 library(DESeq2)
 library("org.Hs.eg.db")
-data(res_airway, package = "mosdef")
-p <- de_volcano(res_airway,
+data(res_de_macrophage, package = "mosdef")
+p <- de_volcano(res_macrophage_IFNg_vs_naive,
   L2FC_cutoff = 1,
   labeled_genes = 20,
   mapping = "org.Hs.eg.db"

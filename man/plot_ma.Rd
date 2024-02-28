@@ -74,26 +74,10 @@ column is provided in \code{res_de}, or else by using  the identifiers specified
 in the row names
 }
 \examples{
-library(airway)
-library(DESeq2)
-data(airway)
-data(dds_airway, package = "mosdef")
-# subsetting for quicker run, ignore the next two commands if regularly using the function
-gene_subset <- c(
-  "ENSG00000103196", # CRISPLD2
-  "ENSG00000120129", # DUSP1
-  "ENSG00000163884", # KLF15
-  "ENSG00000179094", # PER1
-  rownames(dds_airway)[rep(c(rep(FALSE, 99), TRUE), length.out = nrow(dds_airway))]
-) # 1\% of ids
-dds_airway <- dds_airway[gene_subset, ]
+data(res_enrich_macrophage_topGO, package = "mosdef")
+plot_ma(res_macrophage_IFNg_vs_naive, FDR = 0.05, hlines = 1)
 
-dds_airway <- DESeq2::DESeq(dds_airway)
-res_airway <- DESeq2::results(dds_airway)
-
-plot_ma(res_airway, FDR = 0.05, hlines = 1)
-
-plot_ma(res_airway,
+plot_ma(res_macrophage_IFNg_vs_naive,
   FDR = 0.1,
   intgenes = c(
     "ENSG00000103196", # CRISPLD2
