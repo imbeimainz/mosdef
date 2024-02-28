@@ -80,9 +80,13 @@ res_enrich_macrophage_topGO <- topGOtable(
   top_de = 700, # number of genes to be considered in the enrich analysis default is all, can be reduced                   # to reduce redundancy. Takes the top 700 highest DE genes absed of padj score. IF this                    # number is bigger than the total amount of de genes the parameter defaults to all genes
   verbose = TRUE # whether or not to summarise the analysis in a message
 )
-head(res_enrich_macrophage_topGO)
+
 ```
 This will give an analysis for all possible GO terms (when using the BP ontology that is 6547 terms) not all of these results are significant and this list can (should) be further subsetted/ filtered. For example by using a pvalue cutoff. 
+```{r}
+head(res_enrich_macrophage_topGO)
+```
+
 
 
 ## goseq
