@@ -4,6 +4,10 @@
 #'
 #' @return HTML for an action button
 #' @export
+#'
+#' @examples
+#' create_link_GO("GO:0008150")
+#'
 create_link_GO <- function(val) {
   sprintf(
     '<a href="http://amigo.geneontology.org/amigo/term/%s" target="_blank" class="btn btn-primary">%s</a>',
@@ -18,6 +22,10 @@ create_link_GO <- function(val) {
 #'
 #' @return HTML for an action button
 #' @export
+#'
+#' @examples
+#' create_link_genecards("Oct4")
+#'
 create_link_genecards <- function(val) {
   sprintf(
     '<a href = "https://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
@@ -34,6 +42,10 @@ create_link_genecards <- function(val) {
 #'
 #' @return HTML for an action button
 #' @export
+#'
+#' @examples
+#' create_link_pubmed("Oct4")
+#'
 create_link_pubmed <- function(val) {
   paste0(
     '<a href="https://pubmed.ncbi.nlm.nih.gov/?term=', val, '" target="_blank" class="btn btn-primary">',
@@ -48,6 +60,10 @@ create_link_pubmed <- function(val) {
 #'
 #' @return HTML for an action button
 #' @export
+#'
+#' @examples
+#' create_link_ENS("ENSMUSG00000024406")
+#'
 create_link_ENS <- function(val, species = "Mus_musculus") {
   paste0('<a href="http://www.ensembl.org/', species, "/Gene/Summary?g=", val, '" target="_blank" class="btn btn-primary">', val, "</a>")
 }
@@ -58,6 +74,10 @@ create_link_ENS <- function(val, species = "Mus_musculus") {
 #'
 #' @return HTML for an action button
 #' @export
+#'
+#' @examples
+#' create_link_NCBI("Oct4")
+#'
 create_link_NCBI <- function(val) {
   paste0(
     '<a href="http://www.ncbi.nlm.nih.gov/gene/?term=', val, '[sym]" target="_blank" class="btn btn-primary">',
@@ -71,6 +91,9 @@ create_link_NCBI <- function(val) {
 #'
 #' @return HTML for an action button
 #' @export
+#' @examples
+#' create_link_GTEX("Oct4")
+#'
 create_link_GTEX <- function(val) {
   sprintf(
     '<a href = "https://www.gtexportal.org/home/gene/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-dna"></i>%s</a>',
@@ -89,6 +112,10 @@ create_link_GTEX <- function(val) {
 #'
 #' @return HTML for an action button
 #' @export
+#'
+#' @examples
+#' create_link_UniProt("Oct4")
+#'
 create_link_UniProt <- function(val) {
   sprintf(
     '<a href = "https://www.uniprot.org/uniprot/?query=%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-spinner"></i>%s</a>',
@@ -104,6 +131,10 @@ create_link_UniProt <- function(val) {
 #'
 #' @return HTML for an action button
 #' @export
+#'
+#' @examples
+#' create_link_dbPTM("Oct4")
+#'
 create_link_dbPTM <- function(val) {
   base_link_old <- "http://dbptm.mbc.nctu.edu.tw/"
   base_link_new <- "https://awi.cuhk.edu.cn/dbPTM/"
@@ -124,6 +155,10 @@ create_link_dbPTM <- function(val) {
 #'
 #' @return HTML for an action button
 #' @export
+#'
+#' @examples
+#' create_link_HPA("Oct4")
+#'
 create_link_HPA <- function(val) {
   sprintf(
     '<a href = "https://www.proteinatlas.org/search/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-cubes"></i>%s</a>',
@@ -239,7 +274,7 @@ go_2_html <- function(go_id,
 #' shown, and only some generic info on the identifier is displayed.
 #' The information about the gene is retrieved by matching on the `SYMBOL` column,
 #' which should be provided in `res_de`.
-#' @param col_to_use The column of your res_de object containing the gene symbols. 
+#' @param col_to_use The column of your res_de object containing the gene symbols.
 #' Default is "SYMBOL"
 #'
 #' @return HTML content related to a gene identifier, to be displayed in

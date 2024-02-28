@@ -15,3 +15,7 @@ HTML for an action button
 \description{
 Link to dbPTM database
 }
+\examples{
+create_link_dbPTM("Oct4")
+
+}

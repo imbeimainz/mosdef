@@ -15,3 +15,7 @@ HTML for an action button
 \description{
 Link to the GeneCards database
 }
+\examples{
+create_link_genecards("Oct4")
+
+}

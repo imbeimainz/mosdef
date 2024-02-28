@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 library("mosdef")
 ```
 
-# Functions that beautify an interactive table
+# Load the data
 
 Load an example dataset. We will use the well known airway data.
 
@@ -48,12 +48,11 @@ library("org.Hs.eg.db")
 ```
 We also want to add a symbol column for later use:
 ```{r}
-
 res_airway$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
-                                           keys = row.names(res_airway),
-                                           column = "SYMBOL",
-                                           keytype = "ENSEMBL",
-                                           multiVals = "first"
+  keys = row.names(res_airway),
+  column = "SYMBOL",
+  keytype = "ENSEMBL",
+  multiVals = "first"
 )
 ```
 
@@ -116,10 +115,10 @@ head(clupro_airway)
 All of these functions also work if you only have/provide a vector of differentially expressed genes and a vector of background genes. Most of the above mentioned parameters work here as well (top_de, verbose), however parameters like min_counts and de_type will not work since they need further information which can only be found in the dds/res_de. Namely the counts from the dds and the Log2FoldChange from the res_de.
 
 ```{r}
-res_subset <- deseqresult2df(res_airway)[1:500, ] #reduce size to increase computational speed
+res_subset <- deseqresult2df(res_airway)[1:500, ] # reduce size to increase computational speed
 myde <- res_subset$id
 myassayed <- rownames(res_airway)
-#Here Keys are ensemble not symbols
+# Here Keys are ensemble not symbols
 topGOde_airway_vec <- topGOtable(
   de_genes = myde,
   bg_genes = myassayed,
@@ -162,7 +161,7 @@ For further possibilities please look at the ggplot2 documentation.
 In the volcanoPlot you can also highlight genes associated with a certain GOterm of interest.
 
 ```{r}
-Volc_GO <-go_volcano(
+Volc_GO <- go_volcano(
   res_airway,
   res_enrich = topgoDE_airway,
   term_index = 1, # the index(row) where your term of interest is located in your enrichment result
@@ -171,9 +170,10 @@ Volc_GO <-go_volcano(
   overlaps = 50, # the number of overlaps ggrepell is supposed to use for labelling (increases label number)
   col_to_use = "symbol", # columnname of the column in your res_de containing the gene symbols
   enrich_col = "genes", # columnname of the column in your res_enrich containing the gene symbols (see topgotable example)
-  down_col ="black", # colour for your downregulated genes (genes with a L2FC below your cutoff here -1 and padj < 0.05) 
+  down_col = "black", # colour for your downregulated genes (genes with a L2FC below your cutoff here -1 and padj < 0.05)
   up_col = "black", # colour for your upregulated genes (genes with a L2FC above your cutoff here 1 and padj < 0.05)
-  highlight_col = "tomato") # colour for your genes of interest associated with the given term
+  highlight_col = "tomato"
+) # colour for your genes of interest associated with the given term
 
 Volc_GO
 ```
@@ -182,10 +182,10 @@ Volc_GO
 
 An elegant way to plot the counts of a certain gene of interest as for example treated vs untreated.
 ```{r}
- gene_plot(dds_airway,
-   gene = "ENSG00000152583",
-   intgroup = "dex" 
- )
+gene_plot(dds_airway,
+  gene = "ENSG00000152583",
+  intgroup = "dex"
+)
 ```
 
 
@@ -196,9 +196,9 @@ plot_ma also allows you to set x and y labels right away but has defaults. Howev
 
 ```{r}
 maplot <- plot_ma(res_airway,
-                  FDR = 0.05, # which padj to set to count genes as DE (default 0.05)
-                  hlines = 1 # whether or not (and where) to draw the horizontal line (optional)
-                  )
+  FDR = 0.05, # which padj to set to count genes as DE (default 0.05)
+  hlines = 1 # whether or not (and where) to draw the horizontal line (optional)
+)
 
 maplot
 ```
@@ -206,14 +206,14 @@ maplot
 plot_ma further allows you to highlight certain genes of interest to you if provided the ensemble ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as whether it is up or down regulated. 
 ```{r}
 maplot_genes <- plot_ma(res_airway,
-  FDR = 0.1, 
+  FDR = 0.1,
   intgenes = c(
-    "ENSG00000103196", # CRISPLD2
-    "ENSG00000120129", # DUSP1
-    "ENSG00000163884", # KLF15
-    "ENSG00000179094" # PER1
+     "SPARCL1",
+     "CACNB2",
+     "MCHR1",
+    "COL1A1"
   ), # suggested genes of interest
-  hlines = 1 
+  hlines = 1
 )
 maplot_genes
 ```
@@ -228,18 +228,17 @@ RMDs are a great way of handing over reports to collaborators. These functions a
 topgoDE_airway$GO.ID <- create_link_GO(topgoDE_airway$GO.ID)
 
 DT::datatable(topgoDE_airway, escape = FALSE) # the esxape =FALSE is important to ensure the link is turned into a button
-
 ```
 
 To get information on a singular GOterm of interest you can use:
 ```{r}
- go_2_html("GO:0001525")
-
+go_2_html("GO:0001525")
 ```
 
 *Genes*
 
-There are various websites that can give more information on genes. Currently we have functions to create links to:
+There are various websites that can give more information on genes. All of these (except ensemble) require gene symbols as the input.
+Currently we have functions to create links to:
 Ensemble
 GeneCards
 Pubmed
@@ -251,34 +250,36 @@ Human Protein Atlas
 
 You can use access all of these easily by using one function
 ```{r}
-# creating a smaller subset for visulisation purposes and to keep the main res_de 
+# creating a smaller subset for visulisation purposes and to keep the main res_de
 res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
 
 buttonifier(res_subset,
-            col_to_use = "symbol", # col where the gene names are stored, default is "SYMBOL", in this example however the col is named "symbol"
-            new_cols = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED") 
-            # all of the supported websites y0u can pick however many you want
-            )
+  col_to_use = "symbol", # col where the gene names are stored, default is "SYMBOL", in this example however the col is named "symbol"
+  new_cols = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED")
+  # all of the supported websites y0u can pick however many you want
+)
 ```
+
 Important to know is that the buttonifier function returns a DT:datatable not a df. This is to ensure that the escape = FALSE parameter of datatable is set and not forgotten as the links/buttons will not work otherwise.
 Advanced users that want further customization options to their datatable can ensure a dataframe is returned (then the escape = FALSE must be set by hand):
+
 ```{r}
 res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
 
 res_subset <- buttonifier(res_subset,
-                          col_to_use = "symbol", 
-                          new_cols = c("GC", "NCBI", "HPA"),
-                          output_format = "DF"
+  col_to_use = "symbol",
+  new_cols = c("GC", "NCBI", "HPA"),
+  output_format = "DF"
 )
 
 DT::datatable(res_subset,
-              escape = FALSE,
-              rownames = FALSE
-              #other parameters...
+  escape = FALSE,
+  rownames = FALSE
+  # other parameters...
 )
 ```
 
-All of the functions included inside the buttonifier function are also available as singular functions in case you are only interested in one of them:
+All of the functions included inside the buttonifier function are also available as singular functions in case you are only interested in one of them (Reminder: All except ensemble need gene symbols as input):
 ```{r}
 res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
 
@@ -286,7 +287,7 @@ row.names(res_subset) <- create_link_ENS(row.names(res_subset), species = "Homo_
 res_subset$symbol_GC <- create_link_genecards(res_subset$symbol)
 res_subset$symbol_Pub <- create_link_pubmed(res_subset$symbol)
 res_subset$symbol_NCBI <- create_link_NCBI(res_subset$symbol)
-res_subset$symbol_dbptm <-create_link_dbPTM(res_subset$symbol)
+res_subset$symbol_dbptm <- create_link_dbPTM(res_subset$symbol)
 res_subset$symbol_GTEX <- create_link_GTEX(res_subset$symbol)
 res_subset$symbol_UniP <- create_link_UniProt(res_subset$symbol)
 res_subset$symbol_HPA <- create_link_HPA(res_subset$symbol)
@@ -297,10 +298,10 @@ DT::datatable(res_subset, escape = FALSE)
 For information on singular genes you can use:
 
 ```{r}
- geneinfo_2_html("SPARCL1",
-                 res_de = res_airway,
-                 col_to_use = "symbol" # similar to before: the default is "SYMBOL" but we have a different name so we have to specify it here
-                 )
+geneinfo_2_html("SPARCL1",
+  res_de = res_airway,
+  col_to_use = "symbol" # similar to before: the default is "SYMBOL" but we have a different name so we have to specify it here
+)
 ```
 It can however also be used without a res_de for a general overview
 

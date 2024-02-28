@@ -13,6 +13,7 @@ mosdef_dds_check(dds, verbose = FALSE)
 }
 \value{
 If everything needed exists returns NULL else returns messages stating which columns are missing
+An invisible \code{NULL} after performing the checks
 }
 \description{
 A function checking if your dds contains everything you need
@@ -20,4 +21,6 @@ A function checking if your dds contains everything you need
 \examples{
 data(dds_airway, package = "mosdef")
 mosdef_dds_check(dds_airway)
+# TODO: load data
+# mosdef_dds_check(dds)
 }

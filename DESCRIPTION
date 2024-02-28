@@ -47,6 +47,7 @@ Suggests:
     GeneTonic,
     testthat (>= 3.0.0),
     TxDb.Hsapiens.UCSC.hg38.knownGene,
+    BiocStyle,
     scales
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -58,4 +59,4 @@ BugReports: https://github.com/imbeimainz/mosdef/issues
 Config/testthat/edition: 3
 biocViews:
     GeneExpression, Software, Transcription, Transcriptomics, DifferentialExpression,
-    Visualization, ReportWriting, GeneSetEnrichment, GO, GeneExpressionWorkflow
+    Visualization, ReportWriting, GeneSetEnrichment, GO

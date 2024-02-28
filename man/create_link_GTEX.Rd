@@ -15,3 +15,7 @@ HTML for an action button
 \description{
 Link to the GTEx Portal
 }
+\examples{
+create_link_GTEX("Oct4")
+
+}

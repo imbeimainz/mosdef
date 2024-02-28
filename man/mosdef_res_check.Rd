@@ -13,11 +13,10 @@ mosdef_res_check(res_de, verbose = FALSE)
 }
 \value{
 If everything needed exists returns NULL else returns messages stating which columns are missing
+An invisible \code{NULL} after performing the checks
 }
 \description{
 A function checking if your res_de contains everything you need
 }
 \examples{
-data(res_airway, package = "mosdef")
-mosdef_res_check(res_airway)
 }
