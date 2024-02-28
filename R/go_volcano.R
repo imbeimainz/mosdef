@@ -35,22 +35,21 @@
 #' library(ggplot2)
 #' library(RColorBrewer) # for a colourful plot
 #' library(ggrepel) # for nice annotations
-#' library(airway)
 #' library(DESeq2)
 #' library("topGO")
 #' library(AnnotationDbi)
 #' library("org.Hs.eg.db")
 #' 
-#' data(dds_airway, package = "mosdef")
-#' data(res_airway, package = "mosdef")
-#' data(topgoDE_airway, package = "mosdef")
+#' 
+#' data(res_de_macrophage, package = "mosdef")
+#' data(res_enrich_macrophage_topGO, package = "mosdef")
 #' p <- go_volcano(
-#'   res_airway,
-#'   res_enrich = topgoDE_airway,
+#'   res_macrophage_IFNg_vs_naive,
+#'   res_enrich = topgoDE_macrophage_IFNg_vs_naive,
 #'   term_index = 1,
 #'   L2FC_cutoff = 1,
 #'   mapping = "org.Hs.eg.db",
-#'   overlaps = 50
+#'   overlaps = 30
 #' )
 #' p
 go_volcano <- function(
@@ -87,9 +86,9 @@ go_volcano <- function(
   
   
   df$diffexpressed <- "NO"
-  # if log2Foldchange > Cutoff and pvalue < 0.05, set as "UP"
+  
   df$diffexpressed[df$log2FoldChange > L2FC_cutoff & df$pvalue < 0.05] <- "UP"
-  # if log2Foldchange < -Cutoff and pvalue < 0.05, set as "DOWN"
+  
   df$diffexpressed[df$log2FoldChange < -L2FC_cutoff & df$pvalue < 0.05] <- "DOWN"
   
   # calculate top 30 degenes based on pvalue
@@ -102,7 +101,7 @@ go_volcano <- function(
   
   #or have the user tell us at which index the term of interest is
   
-  test_vec <- res_enrich$genes[term_index]
+  test_vec <- res_enrich[[enrich_col]][term_index]
   test_vec <- strsplit(test_vec, ",")
   test_vec <- as.vector(test_vec)
   #test_for_plot <- test_vec[[1]][1:30]
