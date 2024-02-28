@@ -12,8 +12,9 @@ mosdef_dds_check(dds, verbose = FALSE)
 \item{verbose}{Logical, whether to add messages telling the user which steps were taken}
 }
 \value{
-If everything needed exists returns NULL else returns messages stating which columns are missing
-An invisible \code{NULL} after performing the checks
+@return An invisible \code{NULL} after performing the checks on the \code{DESeqDataset} object;
+if not all conditions are satisfied, this function returns messages stating which elements
+are missing
 }
 \description{
 A function checking if your dds contains everything you need
@@ -21,6 +22,4 @@ A function checking if your dds contains everything you need
 \examples{
 data(dds_airway, package = "mosdef")
 mosdef_dds_check(dds_airway)
-# TODO: load data
-# mosdef_dds_check(dds)
 }

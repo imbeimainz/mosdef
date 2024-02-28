@@ -12,11 +12,14 @@ mosdef_res_check(res_de, verbose = FALSE)
 \item{verbose}{Logical, whether to add messages telling the user which steps were taken}
 }
 \value{
-If everything needed exists returns NULL else returns messages stating which columns are missing
-An invisible \code{NULL} after performing the checks
+An invisible \code{NULL} after performing the checks on the \code{DESeqResult} object;
+if not all conditions are satisfied, this function returns messages stating which columns
+are missing
 }
 \description{
 A function checking if your res_de contains everything you need
 }
 \examples{
+data(res_airway, package = "mosdef")
+mosdef_res_check(res_airway)
 }
