@@ -1,4 +1,4 @@
-library("GeneTonic")
+library("mosdef")
 library("macrophage")
 data(gse)
 
@@ -24,7 +24,7 @@ save(res_macrophage_IFNg_vs_naive, file = "data/res_de_macrophage.RData", compre
 
 # res_enrich object topGO ------------------------------------------------------
 library("topGO")
-topgoDE_macrophage_IFNg_vs_naive <-topGOtable(
+res_enrich_macrophage_topGO <-topGOtable(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   ontology = "BP",
@@ -32,25 +32,25 @@ topgoDE_macrophage_IFNg_vs_naive <-topGOtable(
   geneID = "symbol",
 )
 
-save(topgoDE_macrophage_IFNg_vs_naive, file = "data/res_enrich_macrophage_topGO.RData", compress = "xz")
+save(res_enrich_macrophage_topGO, file = "data/res_enrich_macrophage_topGO.RData", compress = "xz")
 
 # res_enrich object goseq ------------------------------------------------------
 library("goseq")
-goseqDE_macrophage_IFNg_vs_naive <-goseqTable(
+res_enrich_macrophage_goseq <-goseqTable(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   mapping = "org.Hs.eg.db",
   testCats = "GO:BP",
   add_gene_to_terms = TRUE
 )
-save(goseqDE_macrophage_IFNg_vs_naive, file = "data/res_enrich_macrophage_goseq.RData", compress = "xz")
+save(res_enrich_macrophage_goseq, file = "data/res_enrich_macrophage_goseq.RData", compress = "xz")
 
 # res_enrich object clusterProfiler --------------------------------------------
 library(clusterProfiler)
-cluProDE_macrophage_IFNg_vs_naive <- cluproTable(
+es_enrich_macrophage_cluPro <- cluproTable(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   mapping = "org.Hs.eg.db"
 )
-save(topgoDE_macrophage_IFNg_vs_naive, file = "data/res_enrich_macrophage_cluPro.RData", compress = "xz")
+save(es_enrich_macrophage_cluPro, file = "data/res_enrich_macrophage_cluPro.RData", compress = "xz")
 
