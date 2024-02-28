@@ -67,7 +67,7 @@ data(res_de_macrophage, package = "mosdef")
 data(res_enrich_macrophage_topGO, package = "mosdef")
 p <- go_volcano(
   res_macrophage_IFNg_vs_naive,
-  res_enrich = topgoDE_macrophage_IFNg_vs_naive,
+  res_enrich = res_enrich_macrophage_topGO,
   term_index = 1,
   L2FC_cutoff = 1,
   mapping = "org.Hs.eg.db",
