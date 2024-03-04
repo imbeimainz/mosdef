@@ -75,19 +75,27 @@ res_enrich_macrophage_topGO <- topGOtable(
   dds = dds_macrophage,
   ontology = "BP", # which gene ontology to analyse, default is "BP"
   mapping = "org.Hs.eg.db", # the annotation
-  geneID = "symbol", # Which format the genes are provided. If you provide a res_de and a dds mosdef does                        #it for you and uses symbols if you provide vectors please specify
-  de_type = "up_and_down", # which genes to analyse. default is all ("up_and_down"), other possibilities                               #are only upregulated ("up") or  ("down") genes
+  geneID = "symbol", # Which format the genes are provided.
+  # If you provide a res_de and a dds mosdef does it for you and uses symbols.
+  # If you provide vectors please specify
+  de_type = "up_and_down", # which genes to analyse.
+  # Default is all ("up_and_down")
+  # Other possibilities are only up-/down-regulated ("up"/"down") genes
   add_gene_to_terms = TRUE, # Logical, whether to add a column with all genes annotated to each GO term
-  topGO_method2 = "elim", # Character, specifying which of the methods implemented by topGO default is elim
+  topGO_method2 = "elim", # Character, specifying which of the methods implemented by topGO
+  # Default is elim
   # For more info look at the documentation of topGO
   min_counts = 20, # minimum number of counts a gene has to have to be considered for the background.
   # Default is 0 and we advise this parameter is only used by expert users
-  top_de = 700, # number of genes to be considered in the enrich analysis default is all, can be reduced                   # to reduce redundancy. Takes the top 700 highest DE genes absed of padj score. IF this                    # number is bigger than the total amount of de genes the parameter defaults to all genes
+  top_de = 700, # number of genes to be considered in the enrich analysis
+  # Default is all, can be reduced to reduce redundancy.
+  # In this case Takes the top 700 highest DE genes based of padj score.
+  # If this number is bigger than the total amount of de genes the parameter defaults to all genes.
   verbose = TRUE # whether or not to summarise the analysis in a message
 )
 
 ```
-This will give an analysis for all possible GO terms (when using the BP ontology that is 6547 terms) not all of these results are significant and this list can (should) be further subsetted/ filtered. For example by using a pvalue cutoff. 
+This will give an analysis for all possible GO terms (when using the BP ontology that is 6547 terms) not all of these results are significant and this list can (should) be further subset/filtered. For example by using a pvalue cutoff. 
 ```{r}
 head(res_enrich_macrophage_topGO)
 ```
@@ -110,7 +118,7 @@ goseq_macrophage <- goseqTable(
 )
 head(goseq_macrophage)
 ```
-To save time when rendering here we use the prerendered objects to demonstrate the output.
+To save time when rendering here we use the provided objects in mosdef to demonstrate the output.
 
 ```{r}
 data(res_enrich_macrophage_goseq, package = "mosdef")
@@ -126,11 +134,12 @@ clupro_macrophage <- cluproTable(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   mapping = "org.Hs.eg.db",
-  keyType = "SYMBOL" # Important for the enrichGO function that is run later on.                                                If using dds and res_de has to be "SYMBOL" which is also                                                  the default
+  keyType = "SYMBOL" # Important for the enrichGO function that is run later on.
+  # If using dds and res_de has to be "SYMBOL" which is also the default
 )
 head(clupro_macrophage)
 ```
-Again to save time when rendering we use the prerendered objects to demonstrate the output
+Again to save time when rendering we use the provided objects to demonstrate the output
 
 ```{r}
 data(res_enrich_macrophage_cluPro, package = "mosdef")
@@ -166,7 +175,8 @@ volcPlot <- de_volcano(
   res_de = res_macrophage_IFNg_vs_naive,
   mapping = "org.Hs.eg.db", # important to generate symbols for labelling
   labeled_genes = 25, # number of the top DE genes to be labeled. Default 30
-  L2FC_cutoff = 1 # Where to draw the lines in the plot and which genes to mark as                                           significant default is one (meaning L2FC +/-1)
+  L2FC_cutoff = 1 # Where to draw the lines in the plot and which genes to mark 
+  # as significant default is one (meaning L2FC +/-1)
 )
 volcPlot
 ```
@@ -194,7 +204,8 @@ Volc_GO <- go_volcano(
   mapping = "org.Hs.eg.db",
   overlaps = 50, # the number of overlaps ggrepell is supposed to use for labelling (increases label number)
   col_to_use = "symbol", # columnname of the column in your res_de containing the gene symbols
-  enrich_col = "genes", # columnname of the column in your res_enrich containing the gene symbols (see topgotable example)
+  enrich_col = "genes", # columnname of the column in your res_enrich containing the gene symbols
+  # For an example see topgotable data provided in mosdef: data(res_enrich_macrophage_topGO, package = "mosdef")
   down_col = "black", # colour for your downregulated genes (genes with a L2FC below your cutoff here -1 and padj < 0.05)
   up_col = "black", # colour for your upregulated genes (genes with a L2FC above your cutoff here 1 and padj < 0.05)
   highlight_col = "tomato"
