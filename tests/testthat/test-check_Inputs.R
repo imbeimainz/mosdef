@@ -185,7 +185,7 @@ test_that("res_de and dds are related", {
     {
       cluproTable(
         res_de = res_macrophage_IFNg_vs_naive,
-        dds = dds_macrophage,
+        dds = dds_airway,
         mapping = "org.Hs.eg.db"
       )
     },
@@ -198,7 +198,7 @@ test_that("res_de and dds are related", {
     {
       goseqTable(
         res_de = res_macrophage_IFNg_vs_naive,
-        dds = dds_macrophage,
+        dds = dds_airway,
         mapping = "org.Hs.eg.db",
         add_gene_to_terms = FALSE
       )
@@ -212,7 +212,7 @@ test_that("res_de and dds are related", {
     {
       topGOtable(
         res_de = res_macrophage_IFNg_vs_naive,
-        dds = dds_macrophage,
+        dds = dds_airway,
         ontology = "BP",
         mapping = "org.Hs.eg.db",
         geneID = "symbol"
