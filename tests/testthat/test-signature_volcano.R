@@ -8,7 +8,6 @@ test_that("Other parameters work", {
     annotation_obj = NULL,
     genelist = c(
       "ENSG00000108702",
-      "ENSG00000172156",
       "ENSG00000181374",
       "ENSG00000276409"
     ),
