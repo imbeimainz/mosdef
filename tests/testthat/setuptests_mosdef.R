@@ -6,16 +6,32 @@ library("macrophage")
 library("scales")
 #library("TxDb.Hsapiens.UCSC.hg38.knownGene")
 
+# dds --------------------------------------------------------------------------
 data(gse)
-dds_macrophage_nodeseq <- DESeqDataSet(gse, design = ~line + condition)
-# Example, performing extraction of enriched functional categories in
-# detected significantly expressed genes
-
-dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
+dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
+
+# annotation -------------------------------------------------------------------
+anno_df <- data.frame(
+  gene_id = rownames(dds_macrophage),
+  gene_name = mapIds(org.Hs.eg.db,
+                     keys = rownames(dds_macrophage),
+                     column = "SYMBOL",
+                     keytype = "ENSEMBL"
+  ),
+  stringsAsFactors = FALSE,
+  row.names = rownames(dds_macrophage)
+)
+# alternatively, one could use the wrapper in ...
+# anno_df <- pcaExplorer::get_annotation_orgdb(dds_macrophage, "org.Hs.eg.db", "ENSEMBL")
+
+# res_de -----------------------------------------------------------------------
+## using counts and average transcript lengths from tximeta
 keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
 dds_macrophage <- dds_macrophage[keep, ]
+dds_unnormalized <- dds_macrophage
 
+dds_macrophage <- DESeq(dds_macrophage)
 # res_de
 
 data(res_de_macrophage, package = "mosdef")
@@ -43,10 +59,10 @@ library(airway)
 data(airway)
 
 # Get a dds object and a res object
-dds_macrophage <- DESeqDataSet(airway, design = ~ cell + dex)
-dds_macrophage <- DESeq(dds_macrophage)
+dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
+dds_airway  <- DESeq(dds_airway )
 
-res_macrophage_IFNg_vs_naive_nosymbols <- results(dds_macrophage)
+res_macrophage_IFNg_vs_naive_nosymbols <- results(dds_airway )
 
 # res_enrich
 data(res_enrich_macrophage_topGO, package = "mosdef")
