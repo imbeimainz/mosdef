@@ -78,7 +78,7 @@ res_de <- res_macrophage_IFNg_vs_naive
 
 # res_enrich object
 data(res_enrich_macrophage, package = "GeneTonic")
-res_enrich <- shake_topGOtableResult(res_enrich_macrophage_topGO)
+res_enrich <- shake_topGOtableResult(topgoDE_macrophage_IFNg_vs_naive)
 res_enrich <- get_aggrscores(res_enrich, res_de, anno_df)
 
 signature_volcano(res_de,

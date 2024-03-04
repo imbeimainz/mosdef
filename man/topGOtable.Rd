@@ -87,6 +87,7 @@ dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
 rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
 dds_macrophage <- dds_macrophage[keep, ]
+dds_macrophage <- DESeq(dds_macrophage)
 data(res_de_macrophage, package = "mosdef")
 library("AnnotationDbi")
 library("org.Hs.eg.db")
