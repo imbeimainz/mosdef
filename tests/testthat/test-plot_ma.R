@@ -23,7 +23,7 @@ test_that("Other parameters can be used if not at default value", {
     hlines = 2,
     title = "test",
     xlab = "mean of normalized counts - log10 scale",
-    ylim = 5,
+    ylim = c(-5, 5),
     add_rug = FALSE,
     intgenes_color = "steelblue",
     labels_intgenes = FALSE,
