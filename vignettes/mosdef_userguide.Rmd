@@ -1,6 +1,9 @@
 ---
 title: "mosdef_userguide"
-output: rmarkdown::html_vignette
+output: 
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
 vignette: >
   %\VignetteIndexEntry{mosdef_userguide}
   %\VignetteEngine{knitr::rmarkdown}
@@ -10,7 +13,9 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.height = 6,
+  fig.width = 8
 )
 ```
 
@@ -20,16 +25,20 @@ library("mosdef")
 
 # Load the data
 
-Load an example dataset. We will use the well known airway data.
+Load your dataset. We will use the well known macrophage data as an example.
 
 ```{r, warning=FALSE}
-library(airway)
-library(DESeq2)
-data(airway)
-airway
-dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
-dds_airway <- DESeq(dds_airway)
-res_airway <- results(dds_airway)
+library("macrophage")
+library("DESeq2")
+library("org.Hs.eg.db")
+data(gse)
+dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
+rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
+keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
+dds_macrophage <- dds_macrophage[keep, ]
+
+dds_macrophage <- DESeq(dds_macrophage)
+res_macrophage_IFNg_vs_naive <- results(dds_macrophage)
 ```
 
 # Functions that generate enrichment results
@@ -40,7 +49,7 @@ goseq
 clusterProfiler
 For more information on the differences between these algorithms we refer to their individual vignettes and publications.
 
-All of these algorithms require an annotation to function properly so make sure you have installed and use the correct one for your experiment. The default is org.Mm.eg.db (Mus musculus). The airway data however stems from human so we need org.Hs.eg.db
+All of these algorithms require an annotation to function properly so make sure you have installed and use the correct one for your experiment. The default is org.Mm.eg.db (Mus musculus). The macrophage data however stems from human so we need org.Hs.eg.db
 
 ```{r}
 library("AnnotationDbi")
@@ -48,8 +57,8 @@ library("org.Hs.eg.db")
 ```
 We also want to add a symbol column for later use:
 ```{r}
-res_airway$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
-  keys = row.names(res_airway),
+res_macrophage_IFNg_vs_naive$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
+  keys = row.names(res_macrophage_IFNg_vs_naive),
   column = "SYMBOL",
   keytype = "ENSEMBL",
   multiVals = "first"
@@ -58,29 +67,40 @@ res_airway$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
 
 
 ## topGO
+
 ```{r}
 library(topGO)
-topgoDE_airway <- topGOtable(
-  res_de = res_airway,
-  dds = dds_airway,
+res_enrich_macrophage_topGO <- topGOtable(
+  res_de = res_macrophage_IFNg_vs_naive,
+  dds = dds_macrophage,
   ontology = "BP", # which gene ontology to analyse, default is "BP"
   mapping = "org.Hs.eg.db", # the annotation
-  geneID = "symbol", # Which format the genes are provided. If you provide a res_de and a dds mosdef does                        #it for you and uses symbols if you provide vectors please specify
-  de_type = "up_and_down", # which genes to analyse. default is all ("up_and_down"), other possibilities                               #are only upregulated ("up") or  ("down") genes
+  geneID = "symbol", # Which format the genes are provided.
+  # If you provide a res_de and a dds mosdef does it for you and uses symbols.
+  # If you provide vectors please specify
+  de_type = "up_and_down", # which genes to analyse.
+  # Default is all ("up_and_down")
+  # Other possibilities are only up-/down-regulated ("up"/"down") genes
   add_gene_to_terms = TRUE, # Logical, whether to add a column with all genes annotated to each GO term
-  topGO_method2 = "elim", # Character, specifying which of the methods implemented by topGO default is elim
+  topGO_method2 = "elim", # Character, specifying which of the methods implemented by topGO
+  # Default is elim
   # For more info look at the documentation of topGO
   min_counts = 20, # minimum number of counts a gene has to have to be considered for the background.
   # Default is 0 and we advise this parameter is only used by expert users
-  top_de = 700, # number of genes to be considered in the enrich analysis default is all, can be reduced                   # to reduce redundancy. Takes the top 700 highest DE genes absed of padj score. IF this                    # number is bigger than the total amount of de genes the parameter defaults to all genes
+  top_de = 700, # number of genes to be considered in the enrich analysis
+  # Default is all, can be reduced to reduce redundancy.
+  # In this case Takes the top 700 highest DE genes based of padj score.
+  # If this number is bigger than the total amount of de genes the parameter defaults to all genes.
   verbose = TRUE # whether or not to summarise the analysis in a message
 )
+
+```
+This will give an analysis for all possible GO terms (when using the BP ontology that is 6547 terms) not all of these results are significant and this list can (should) be further subset/filtered. For example by using a pvalue cutoff. 
+```{r}
+head(res_enrich_macrophage_topGO)
 ```
 
-This will give an analysis for all possible GO terms (when using the BP ontology that is 6547 terms) not all of these results are significant and this list can (should) be further subsetted/ filtered. For example by using a pvalue cutoff.
-```{r}
-head(topgoDE_airway)
-```
+
 
 ## goseq
 parameters like top_de, min_counts, verbose and de_type can also be used here
@@ -89,43 +109,57 @@ and requires that the corresponding TxDb packages are installed and available
 so make sure one is installed on your PC for human we recommend: `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
 
 
-```{r}
-goseq_airway <- goseqTable(
-  res_de = res_airway,
-  dds = dds_airway,
+```{r, eval = FALSE}
+goseq_macrophage <- goseqTable(
+  res_de = res_macrophage_IFNg_vs_naive,
+  dds = dds_macrophage,
   mapping = "org.Hs.eg.db",
   testCats = "GO:BP" # which categories to test of ("GO:BP, "GO:MF", "GO:CC")
 )
-head(goseq_airway)
+head(goseq_macrophage)
 ```
+To save time when rendering here we use the provided objects in mosdef to demonstrate the output.
+
+```{r}
+data(res_enrich_macrophage_goseq, package = "mosdef")
+head(res_enrich_macrophage_goseq)
+```
+
 
 ## clusterProfiler
 Parameters like top_de, min_counts, verbose and de_type can also be used here.
 If you want to further customize the call of go_enrich inside the function, have a look at the documentation for go_enrich from clusterProfiler. Those parameters can be added to the cluprotable function call
-```{r}
-clupro_airway <- cluproTable(
-  res_de = res_airway,
-  dds = dds_airway,
+```{r, eval = FALSE}
+clupro_macrophage <- cluproTable(
+  res_de = res_macrophage_IFNg_vs_naive,
+  dds = dds_macrophage,
   mapping = "org.Hs.eg.db",
-  keyType = "SYMBOL" # Important for the enrichGO function that is run later on.                                                If using dds and res_de has to be "SYMBOL" which is also                                                  the default
+  keyType = "SYMBOL" # Important for the enrichGO function that is run later on.
+  # If using dds and res_de has to be "SYMBOL" which is also the default
 )
-head(clupro_airway)
+head(clupro_macrophage)
+```
+Again to save time when rendering we use the provided objects to demonstrate the output
+
+```{r}
+data(res_enrich_macrophage_cluPro, package = "mosdef")
+head(res_enrich_macrophage_cluPro)
 ```
 
 All of these functions also work if you only have/provide a vector of differentially expressed genes and a vector of background genes. Most of the above mentioned parameters work here as well (top_de, verbose), however parameters like min_counts and de_type will not work since they need further information which can only be found in the dds/res_de. Namely the counts from the dds and the Log2FoldChange from the res_de.
 
 ```{r}
-res_subset <- deseqresult2df(res_airway)[1:500, ] # reduce size to increase computational speed
+res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive)[1:500, ] # reduce size to increase computational speed
 myde <- res_subset$id
-myassayed <- rownames(res_airway)
+myassayed <- rownames(res_macrophage_IFNg_vs_naive)
 # Here Keys are ensemble not symbols
-topGOde_airway_vec <- topGOtable(
+res_enrich_macrophage_topGO_vec <- topGOtable(
   de_genes = myde,
   bg_genes = myassayed,
   mapping = "org.Hs.eg.db",
   geneID = "ensembl"
 )
-head(topGOde_airway_vec)
+head(res_enrich_macrophage_topGO_vec)
 ```
 
 
@@ -138,10 +172,11 @@ A basic gg plot object including the most important parts when creating a volcan
 
 ```{r}
 volcPlot <- de_volcano(
-  res_de = res_airway,
+  res_de = res_macrophage_IFNg_vs_naive,
   mapping = "org.Hs.eg.db", # important to generate symbols for labelling
   labeled_genes = 25, # number of the top DE genes to be labeled. Default 30
-  L2FC_cutoff = 1 # Where to draw the lines in the plot and which genes to mark as                                           significant default is one (meaning L2FC +/-1)
+  L2FC_cutoff = 1 # Where to draw the lines in the plot and which genes to mark 
+  # as significant default is one (meaning L2FC +/-1)
 )
 volcPlot
 ```
@@ -152,7 +187,7 @@ As mentioned above the user can now expand upon this with all the tools in the g
 library(ggplot2)
 
 volcPlot +
-  ggtitle("Airway Volcano") +
+  ggtitle("macrophage Volcano") +
   ylab("-log10 PValue") +
   xlab("Log 2 FoldChange (Cutoff 1/-1)")
 ```
@@ -162,14 +197,15 @@ In the volcanoPlot you can also highlight genes associated with a certain GOterm
 
 ```{r}
 Volc_GO <- go_volcano(
-  res_airway,
-  res_enrich = topgoDE_airway,
+  res_macrophage_IFNg_vs_naive,
+  res_enrich = res_enrich_macrophage_topGO,
   term_index = 1, # the index(row) where your term of interest is located in your enrichment result
   L2FC_cutoff = 1,
   mapping = "org.Hs.eg.db",
   overlaps = 50, # the number of overlaps ggrepell is supposed to use for labelling (increases label number)
   col_to_use = "symbol", # columnname of the column in your res_de containing the gene symbols
-  enrich_col = "genes", # columnname of the column in your res_enrich containing the gene symbols (see topgotable example)
+  enrich_col = "genes", # columnname of the column in your res_enrich containing the gene symbols
+  # For an example see topgotable data provided in mosdef: data(res_enrich_macrophage_topGO, package = "mosdef")
   down_col = "black", # colour for your downregulated genes (genes with a L2FC below your cutoff here -1 and padj < 0.05)
   up_col = "black", # colour for your upregulated genes (genes with a L2FC above your cutoff here 1 and padj < 0.05)
   highlight_col = "tomato"
@@ -182,9 +218,9 @@ Volc_GO
 
 An elegant way to plot the counts of a certain gene of interest as for example treated vs untreated.
 ```{r}
-gene_plot(dds_airway,
-  gene = "ENSG00000152583",
-  intgroup = "dex"
+gene_plot(dds_macrophage,
+  gene = "ENSG00000125347",
+  intgroup = "condition"
 )
 ```
 
@@ -195,7 +231,7 @@ Plotting the counts of a gene vs it's expression (Log2 FoldChange). Granting an 
 plot_ma also allows you to set x and y labels right away but has defaults. However, similar to de_volcano these can also be set later on. For all possible parameters please look at the documentation
 
 ```{r}
-maplot <- plot_ma(res_airway,
+maplot <- plot_ma(res_macrophage_IFNg_vs_naive,
   FDR = 0.05, # which padj to set to count genes as DE (default 0.05)
   hlines = 1 # whether or not (and where) to draw the horizontal line (optional)
 )
@@ -205,7 +241,7 @@ maplot
 
 plot_ma further allows you to highlight certain genes of interest to you if provided the ensemble ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as whether it is up or down regulated. 
 ```{r}
-maplot_genes <- plot_ma(res_airway,
+maplot_genes <- plot_ma(res_macrophage_IFNg_vs_naive,
   FDR = 0.1,
   intgenes = c(
      "SPARCL1",
@@ -225,9 +261,9 @@ RMDs are a great way of handing over reports to collaborators. These functions a
 
 *GO terms*
 ```{r}
-topgoDE_airway$GO.ID <- create_link_GO(topgoDE_airway$GO.ID)
+res_enrich_macrophage_topGO$GO.ID <- create_link_GO(res_enrich_macrophage_topGO$GO.ID)
 
-DT::datatable(topgoDE_airway, escape = FALSE) # the esxape =FALSE is important to ensure the link is turned into a button
+DT::datatable(res_enrich_macrophage_topGO, escape = FALSE) # the esxape =FALSE is important to ensure the link is turned into a button
 ```
 
 To get information on a singular GOterm of interest you can use:
@@ -251,7 +287,7 @@ Human Protein Atlas
 You can use access all of these easily by using one function
 ```{r}
 # creating a smaller subset for visulisation purposes and to keep the main res_de
-res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
+res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
 
 buttonifier(res_subset,
   col_to_use = "symbol", # col where the gene names are stored, default is "SYMBOL", in this example however the col is named "symbol"
@@ -264,7 +300,7 @@ Important to know is that the buttonifier function returns a DT:datatable not a 
 Advanced users that want further customization options to their datatable can ensure a dataframe is returned (then the escape = FALSE must be set by hand):
 
 ```{r}
-res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
+res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
 
 res_subset <- buttonifier(res_subset,
   col_to_use = "symbol",
@@ -281,7 +317,7 @@ DT::datatable(res_subset,
 
 All of the functions included inside the buttonifier function are also available as singular functions in case you are only interested in one of them (Reminder: All except ensemble need gene symbols as input):
 ```{r}
-res_subset <- deseqresult2df(res_airway, FDR = 0.05)[1:500, ]
+res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
 
 row.names(res_subset) <- create_link_ENS(row.names(res_subset), species = "Homo_sapiens")
 res_subset$symbol_GC <- create_link_genecards(res_subset$symbol)
@@ -299,7 +335,7 @@ For information on singular genes you can use:
 
 ```{r}
 geneinfo_2_html("SPARCL1",
-  res_de = res_airway,
+  res_de = res_macrophage_IFNg_vs_naive,
   col_to_use = "symbol" # similar to before: the default is "SYMBOL" but we have a different name so we have to specify it here
 )
 ```

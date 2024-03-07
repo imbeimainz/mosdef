@@ -37,16 +37,20 @@
 #' @importFrom AnnotationDbi mapIds
 #'
 #' @examples
-#'
-#' library(airway)
-#' data(airway)
-#' airway
-#' data(dds_airway, package = "mosdef")
-#' data(res_airway, package = "mosdef")
-#' res_de <- res_airway
+#' library(macrophage)
+#' library(DESeq2)
+#' data(gse)
+#' dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
+#' rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
+#' keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
+#' dds_macrophage <- dds_macrophage[keep, ]
+#' dds_macrophage <- DESeq(dds_macrophage)
+#' data(res_de_macrophage, package = "mosdef")
+#' res_de <- res_macrophage_IFNg_vs_naive
 #' mygo <- goseqTable(
-#'   res_de = res_airway,
-#'   dds = dds_airway,
+#'   res_de = res_macrophage_IFNg_vs_naive,
+#'   dds = dds_macrophage,
+#'   mapping = "org.Hs.eg.db",
 #'   testCats = "GO:BP",
 #'   add_gene_to_terms = TRUE
 #' )

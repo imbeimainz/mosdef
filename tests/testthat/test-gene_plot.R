@@ -1,3 +1,5 @@
+context("Testing function for plotting the gene expression levels")
+
 test_that("Basic gene plot is generated", {
   p <- gene_plot(
     dds = dds_macrophage,
@@ -9,7 +11,7 @@ test_that("Basic gene plot is generated", {
     labels_repel = TRUE
   )
   expect_s3_class(p, "gg")
-
+  
   p2_noanno_normallabels_untransformed <- gene_plot(
     dds = dds_macrophage,
     gene = "ENSG00000285982",
@@ -19,7 +21,7 @@ test_that("Basic gene plot is generated", {
     labels_repel = FALSE
   )
   expect_s3_class(p2_noanno_normallabels_untransformed, "gg")
-
+  
   expect_error({
     gene_plot(
       dds = dds_macrophage,
@@ -96,7 +98,7 @@ test_that("Assays are correctly accessed", {
     normalized = FALSE
   )
   expect_s3_class(p_tpm, "gg")
-
+  
   p_other_assay <- gene_plot(
     dds = dds_macrophage,
     gene = "ENSG00000285982",
@@ -115,7 +117,7 @@ test_that("Extraction of expression values works", {
     assay = "counts"
   )
   expect_s3_class(df_simple, "data.frame")
-
+  
 
   expect_error(get_expr_values(
     dds = dds_macrophage,

@@ -21,8 +21,8 @@
 #' @importFrom rlang .data
 #'
 #' @examples
-#' data(res_airway, package = "mosdef")
-#' res_de <- res_airway
+#' data(res_de_macrophage, package = "mosdef")
+#' res_de <- res_macrophage_IFNg_vs_naive
 #' res_df <- deseqresult2df(res_de)
 #' # Subsetting for quicker run
 #' res_df <- res_df[1:100,]

@@ -19,6 +19,6 @@ Generate a tidy table with the results of DESeq
 
 # with simulated data...
 library(DESeq2)
-data(res_airway, package = "mosdef")
-deseqresult2tbl(res_airway)
+data(res_de_macrophage, package = "mosdef")
+deseqresult2tbl(res_macrophage_IFNg_vs_naive)
 }
