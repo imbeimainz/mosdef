@@ -83,45 +83,51 @@ with adjusted p-value smaller than the value.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">airway</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/thelovelab/DESeq2" class="external-link">DESeq2</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">res_airway</span>, package <span class="op">=</span> <span class="st">"mosdef"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res_airway</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> log2 fold change (MLE): dex untrt vs trt </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Wald test p-value: dex untrt vs trt </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> DataFrame with 6 rows and 8 columns</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   baseMean log2FoldChange     lfcSE      stat      pvalue</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000003 708.602170      0.3812540  0.100654  3.787752 0.000152016</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000005   0.000000             NA        NA        NA          NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419 520.297901     -0.2068126  0.112219 -1.842943 0.065337292</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457 237.163037     -0.0379204  0.143445 -0.264356 0.791505742</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460  57.932633      0.0881682  0.287142  0.307054 0.758801924</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938   0.318098      1.3782270  3.499873  0.393793 0.693733530</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       padj      SYMBOL      symbol</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  &lt;numeric&gt; &lt;character&gt; &lt;character&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000003 0.00128292      TSPAN6      TSPAN6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000005         NA        TNMD        TNMD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419 0.19646985        DPM1        DPM1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457 0.91141962       SCYL3       SCYL3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460 0.89500478       FIRRM       FIRRM</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938         NA         FGR         FGR</span>
-<span class="r-in"><span><span class="va">res_df</span> <span class="op">&lt;-</span> <span class="fu">deseqresult2df</span><span class="op">(</span><span class="va">res_airway</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/thelovelab/DESeq2" class="external-link">DESeq2</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">macrophage</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">res_de_macrophage</span>, package <span class="op">=</span> <span class="st">"mosdef"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res_macrophage_IFNg_vs_naive</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> log2 fold change (MLE): condition IFNg vs naive </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Wald test p-value: condition IFNg vs naive </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DataFrame with 6 rows and 7 columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  baseMean log2FoldChange     lfcSE      stat      pvalue</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   &lt;numeric&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000003   171.571     -0.2822450 0.3005710   0.00000 1.00000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419   967.751      0.0391223 0.0859708   0.00000 1.00000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457   682.433      1.2846179 0.1969067   1.44545 1.48333e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460   262.963     -1.4718762 0.2186916  -2.15772 3.09493e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938  2660.102      0.6754781 0.2360530   0.00000 1.00000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000971  3052.123      4.9871107 0.4964284   8.03159 9.62155e-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                        padj      SYMBOL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   &lt;numeric&gt; &lt;character&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000003 1.00000e+00      TSPAN6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000419 1.00000e+00        DPM1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000457 1.00000e+00       SCYL3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000460 4.09728e-01    C1orf112</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000938 1.00000e+00         FGR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000000971 1.37057e-13         CFH</span>
+<span class="r-in"><span><span class="va">res_df</span> <span class="op">&lt;-</span> <span class="fu">deseqresult2df</span><span class="op">(</span><span class="va">res_macrophage_IFNg_vs_naive</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Direct call of 'as.data.frame.numeric()' is deprecated.  Use 'as.data.frame.vector()' or 'as.data.frame()' instead</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Direct call of 'as.data.frame.numeric()' is deprecated.  Use 'as.data.frame.vector()' or 'as.data.frame()' instead</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Direct call of 'as.data.frame.numeric()' is deprecated.  Use 'as.data.frame.vector()' or 'as.data.frame()' instead</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Direct call of 'as.data.frame.numeric()' is deprecated.  Use 'as.data.frame.vector()' or 'as.data.frame()' instead</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Direct call of 'as.data.frame.numeric()' is deprecated.  Use 'as.data.frame.vector()' or 'as.data.frame()' instead</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Direct call of 'as.data.frame.numeric()' is deprecated.  Use 'as.data.frame.vector()' or 'as.data.frame()' instead</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res_df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                              id   baseMean log2FoldChange     lfcSE      stat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000152583 ENSG00000152583   997.4398      -4.574919 0.1840561 -24.85611</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000165995 ENSG00000165995   495.0929      -3.291062 0.1331737 -24.71255</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000120129 ENSG00000120129  3409.0294      -2.947810 0.1214377 -24.27426</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000101347 ENSG00000101347 12703.3871      -3.766995 0.1554380 -24.23472</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000189221 ENSG00000189221  2341.7673      -3.353580 0.1417823 -23.65301</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000211445 ENSG00000211445 12285.6151      -3.730403 0.1658306 -22.49526</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                        pvalue          padj  SYMBOL  symbol</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000152583 2.220933e-136 4.001677e-132 SPARCL1 SPARCL1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000165995 7.839410e-135 7.062524e-131  CACNB2  CACNB2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000120129 3.666925e-130 2.202355e-126   DUSP1   DUSP1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000101347 9.583815e-130 4.317030e-126  SAMHD1  SAMHD1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000189221 1.098955e-123 3.960194e-120    MAOA    MAOA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000211445 4.618318e-112 1.386881e-108    GPX3    GPX3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              id   baseMean log2FoldChange     lfcSE     stat</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000125347 ENSG00000125347 30585.0749       5.560124 0.2182663 20.89248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000162645 ENSG00000162645 36790.5921       6.665804 0.2865732 19.77088</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000111181 ENSG00000111181   688.5779       4.710592 0.1961023 18.92172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000174944 ENSG00000174944  1324.3975       9.863904 0.4715127 18.79886</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000100336 ENSG00000100336  2551.4789       8.708551 0.4214096 18.29230</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000145365 ENSG00000145365  3637.2221       5.193448 0.2368542 17.70476</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       pvalue         padj  SYMBOL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000125347 6.268469e-97 1.116164e-92    IRF1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000162645 5.304222e-87 4.722349e-83    GBP2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000111181 7.555181e-80 4.484252e-76 SLC6A12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000174944 7.715125e-79 3.434388e-75  P2RY14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000100336 9.530829e-75 3.394119e-71   APOL4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ENSG00000145365 3.853076e-70 1.143465e-66    TIFA</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

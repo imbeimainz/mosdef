@@ -58,9 +58,6 @@
     <loc>/reference/create_link_pubmed.html</loc>
   </url>
   <url>
-    <loc>/reference/dds_airway.html</loc>
-  </url>
-  <url>
     <loc>/reference/de_volcano.html</loc>
   </url>
   <url>
@@ -109,15 +106,21 @@
     <loc>/reference/plot_ma.html</loc>
   </url>
   <url>
-    <loc>/reference/res_airway.html</loc>
+    <loc>/reference/res_enrich_macrophage_cluPro.html</loc>
+  </url>
+  <url>
+    <loc>/reference/res_enrich_macrophage_goseq.html</loc>
+  </url>
+  <url>
+    <loc>/reference/res_enrich_macrophage_topGO.html</loc>
+  </url>
+  <url>
+    <loc>/reference/res_macrophage_IFNg_vs_naive.html</loc>
   </url>
   <url>
     <loc>/reference/signature_volcano.html</loc>
   </url>
   <url>
     <loc>/reference/topGOtable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/topgoDE_airway.html</loc>
   </url>
 </urlset>
