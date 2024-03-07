@@ -45,7 +45,7 @@
 #' library(macrophage)
 #' library(DESeq2)
 #' data(gse)
-#' dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
+#' dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 #' rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 #' keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
 #' dds_macrophage <- dds_macrophage[keep, ]
@@ -62,7 +62,6 @@
 #'   mapping = "org.Hs.eg.db",
 #'   geneID = "symbol",
 #' )
-#' 
 #'
 #' @export
 topGOtable <- function(res_de = NULL, # Differentially expressed genes
@@ -260,21 +259,21 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
   # instantiating the topGOdata object
   suppressMessages({
     GOdata <- new("topGOdata",
-                  ontology = ontology,
-                  allGenes = de_genes_input,
-                  nodeSize = 10,
-                  annot = annot,
-                  mapping = mapping,
-                  ID = geneID
+      ontology = ontology,
+      allGenes = de_genes_input,
+      nodeSize = 10,
+      annot = annot,
+      mapping = mapping,
+      ID = geneID
     )
   })
   # performing the test(s)
   suppressMessages({
     result_method2 <- runTest(GOdata, algorithm = topGO_method2, statistic = "fisher")
   })
-    suppressMessages({
-      resultClassic <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
-    })
+  suppressMessages({
+    resultClassic <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
+  })
   sTab <- GenTable(GOdata,
     p.value_method2 = result_method2,
     p.value_classic = resultClassic,

@@ -25,7 +25,7 @@
 #' res_de <- res_macrophage_IFNg_vs_naive
 #' res_df <- deseqresult2df(res_de)
 #' # Subsetting for quicker run
-#' res_df <- res_df[1:100,]
+#' res_df <- res_df[1:100, ]
 #' buttonifier(res_df)
 buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL", output_format = "DT") {
   if (!(col_to_use %in% colnames(df))) {
@@ -76,7 +76,7 @@ buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL"
   if ("HPA" %in% new_cols) {
     df$SYMBOL_HPA <- create_link_HPA(df[[col_to_use]])
   }
-  
+
   if ("PUBMED" %in% new_cols) {
     df$SYMBOL_PUBM <- create_link_pubmed(df[[col_to_use]])
   }
