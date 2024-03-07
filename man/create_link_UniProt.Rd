@@ -18,4 +18,6 @@ Link to Uniprot database
 \examples{
 create_link_UniProt("Oct4")
 
+data(res_de_macrophage, package = "mosdef")
+res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_UniProt(res_macrophage_IFNg_vs_naive$SYMBOL)
 }
