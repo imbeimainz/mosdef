@@ -6,7 +6,7 @@ test_that("enrich results are created and top_de works properly", {
     top_de = 400
   )
   expect_s4_class(CluProde_macrophage_topde, "enrichResult")
-  
+
   CluProde_macrophage_topde_vectors <- cluproTable(
     de_genes = myde,
     bg_genes = myassayed,

@@ -6,7 +6,7 @@ test_that("enrich results are created and top_de works properly", {
     top_de = 400
   )
   expect_s3_class(goseqde_macrophage_topde, "data.frame")
-  
+
   goseqde_macrophage_topde_vectors <- goseqTable(
     de_genes = myde,
     bg_genes = myassayed,
@@ -34,4 +34,3 @@ test_that("enrich_result is created only for up or down -regulated genes", {
   )
   expect_s3_class(goseqde_macrophage_down, "data.frame")
 })
-
