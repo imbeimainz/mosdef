@@ -49,7 +49,7 @@
 #'   term_index = 1,
 #'   L2FC_cutoff = 1,
 #'   mapping = "org.Hs.eg.db",
-#'   overlaps = 30
+#'   overlaps = 20
 #' )
 #' p
 go_volcano <- function(
@@ -106,7 +106,7 @@ go_volcano <- function(
   test_vec <- as.vector(test_vec)
   # test_for_plot <- test_vec[[1]][1:30]
 
-  for (i in 1:length(df$id)) {
+  for (i in seq_len(length(df$id))) {
     if (df$symbol[i] %in% test_vec[[1]]) {
       df$de_label[i] <- df$symbol[i]
     } else {
