@@ -41,13 +41,13 @@ buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL"
   val <- df[[col_to_use]]
 
   match.arg(new_cols, choices = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED"), several.ok = TRUE)
-  for (i in 1:length(new_cols)) {
+  for (i in seq_len(length(new_cols))) {
     if ((new_cols[i] %in% c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED")) == FALSE) {
-      warning(paste0(
+      warning(
         "Please make sure you used the values suggested in the documentation. \n",
         "One or more of the following values entered into new_cols is not supported: \n",
         new_cols[new_cols %in% c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED") == FALSE]
-      ))
+      )
     }
   }
 
