@@ -3,11 +3,13 @@
 #' A sample `DESeqResults` object, generated in the `DESeq2` framework
 #'
 #' @details This `DESeqResults` object is on the data from the `macrophage` package
-#'
+#' 
 #'
 #' Details on how this object has been created are included in the `create_mosdef_data`
 #' script, included in the `scripts` folder of the `mosdef` package.
 #'
+#' @format Binary R.Data
+#' 
 #' @references Alasoo, et al. "Shared genetic effects on chromatin and gene
 #' expression indicate a role for enhancer priming in immune response",
 #' Nature Genetics, January 2018 doi: 10.1038/s41588-018-0046-7.
@@ -27,6 +29,8 @@ NULL
 #'
 #' Details on how this object has been created are included in the `create_mosdef_data`
 #' script, included in the `scripts` folder of the `mosdef` package.
+#'
+#' @format Binary R.Data
 #'
 #' @references Alasoo, et al. "Shared genetic effects on chromatin and gene
 #' expression indicate a role for enhancer priming in immune response",
@@ -48,6 +52,8 @@ NULL
 #' Details on how this object has been created are included in the `create_mosdef_data`
 #' script, included in the `scripts` folder of the `mosdef` package.
 #'
+#' @format Binary R.Data
+#'
 #' @references Alasoo, et al. "Shared genetic effects on chromatin and gene
 #' expression indicate a role for enhancer priming in immune response",
 #' Nature Genetics, January 2018 doi: 10.1038/s41588-018-0046-7.
@@ -67,6 +73,8 @@ NULL
 #'
 #' Details on how this object has been created are included in the `create_mosdef_data`
 #' script, included in the `scripts` folder of the `mosdef` package.
+#'
+#' @format Binary R.Data
 #'
 #' @references Alasoo, et al. "Shared genetic effects on chromatin and gene
 #' expression indicate a role for enhancer priming in immune response",
