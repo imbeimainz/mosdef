@@ -81,7 +81,7 @@ mosdef_dds_check <- function(dds,
     message("Rownames are not ENSEMBL IDs. Please change them to ENSEMBL IDs by using
             AnnotationDbis 'mapIDs'")
   }
-  if ("counts" %in% names(assays(dds_macrophage))) {
+  if ("counts" %in% names(assays(dds))) {
     # TODO: we probably need to work on assays (and rowData, and a bit more)
     if (verbose) message("Found a 'counts' assay!")
   } else {
