@@ -4,6 +4,9 @@
 \name{res_macrophage_IFNg_vs_naive}
 \alias{res_macrophage_IFNg_vs_naive}
 \title{A sample \code{DESeqResults} object}
+\format{
+Binary R.Data
+}
 \description{
 A sample \code{DESeqResults} object, generated in the \code{DESeq2} framework
 }

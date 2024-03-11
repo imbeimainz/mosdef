@@ -71,7 +71,7 @@ p <- go_volcano(
   term_index = 1,
   L2FC_cutoff = 1,
   mapping = "org.Hs.eg.db",
-  overlaps = 30
+  overlaps = 20
 )
 p
 }
