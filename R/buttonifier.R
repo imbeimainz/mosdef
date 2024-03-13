@@ -27,19 +27,39 @@
 #' # Subsetting for quicker run
 #' res_df <- res_df[1:100, ]
 #' buttonifier(res_df)
-buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL", output_format = "DT") {
+#' 
+#' buttonifier(res_df, 
+#' new_cols = c("NCBI", "HPA"),
+#' ens_col = "id", 
+#' ens_species = "Homo_sapiens")
+buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), 
+                        col_to_use = "SYMBOL",
+                        output_format = "DT",
+                        ens_col = NULL,
+                        ens_species = NULL
+) {
   if (!(col_to_use %in% colnames(df))) {
     stop(
       "The provided dataframe does not contain the column ", col_to_use, ". Please make ",
-      "sure that ther is a colum with gene symbols in your df and that its name is provided",
+      "sure that there is a colum with gene symbols in your df and that its name is provided",
       " to the 'col_to_use' parameter. Please watch spelling as well as capital letters."
     )
   }
-
-
-  .actionbutton_biocstyle <- "color: #ffffff; background-color: #0092AC"
+  
+  
+  
+  if (!is.null(c(ens_col, ens_species))) {
+    df[[ens_col]] <- create_link_ENS(df [[ens_col]], species = ens_species)
+  }  else if (!is.null(ens_col) & is.null(ens_species)){
+    warning("Creating ensemble links requires an ID and the species you are analysing ",
+            "You only provided an ID. ")
+  } else if (is.null(ens_col) & !is.null(ens_species)){
+    warning("Creating ensemble links requires an ID and the species you are analysing ",
+            "You only provided a species.")
+  }
+  
   val <- df[[col_to_use]]
-
+  
   match.arg(new_cols, choices = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED"), several.ok = TRUE)
   for (i in seq_len(length(new_cols))) {
     if ((new_cols[i] %in% c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED")) == FALSE) {
@@ -50,37 +70,37 @@ buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL"
       )
     }
   }
-
-
+  
+  
   match.arg(output_format, choices = c("DT", "DF"))
-
+  
   if ("GC" %in% new_cols) {
     df$SYMBOL_GC <- create_link_genecards(df[[col_to_use]])
   }
   if ("NCBI" %in% new_cols) {
     df$SYMBOL_NCBI <- create_link_NCBI(df[[col_to_use]])
   }
-
+  
   if ("GTEX" %in% new_cols) {
     df$SYMBOL_GTEX <- create_link_GTEX(df[[col_to_use]])
   }
-
+  
   if ("UNIPROT" %in% new_cols) {
     df$SYMBOL_UNIPROT <- create_link_UniProt(df[[col_to_use]])
   }
-
+  
   if ("dbPTM" %in% new_cols) {
     df$SYMBOL_dbPTM <- create_link_dbPTM(df[[col_to_use]])
   }
-
+  
   if ("HPA" %in% new_cols) {
     df$SYMBOL_HPA <- create_link_HPA(df[[col_to_use]])
   }
-
+  
   if ("PUBMED" %in% new_cols) {
     df$SYMBOL_PUBM <- create_link_pubmed(df[[col_to_use]])
   }
-
+  
   if (output_format == "DT") {
     return(DT::datatable(df, escape = FALSE, rownames = FALSE))
   } else if (output_format == "DF") {
