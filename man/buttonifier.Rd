@@ -8,7 +8,9 @@ buttonifier(
   df,
   new_cols = c("GC", "UNIPROT"),
   col_to_use = "SYMBOL",
-  output_format = "DT"
+  output_format = "DT",
+  ens_col = NULL,
+  ens_species = NULL
 )
 }
 \arguments{
@@ -37,4 +39,9 @@ res_df <- deseqresult2df(res_de)
 # Subsetting for quicker run
 res_df <- res_df[1:100, ]
 buttonifier(res_df)
+
+buttonifier(res_df, 
+new_cols = c("NCBI", "HPA"),
+ens_col = "id", 
+ens_species = "Homo_sapiens")
 }
