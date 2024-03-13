@@ -25,7 +25,7 @@ library("mosdef")
 
 # Load the data
 
-Load your dataset. We will use the well known macrophage data as an example.
+Load your dataset. We will use the well known `macrophage` data as an example.
 
 ```{r, warning=FALSE}
 library("macrophage")
@@ -42,7 +42,8 @@ res_macrophage_IFNg_vs_naive <- results(dds_macrophage)
 ```
 
 # Functions that generate enrichment results
-mosdef allows you to create your enrichment results right from your dds and res_de objects using 3 possible algorithms:
+
+`mosdef` allows you to create your enrichment results right from your `DESeqDataset` and `DESeqResults` objects using 3 possible algorithms:
 
 * topGO
 * goseq
@@ -56,7 +57,9 @@ All of these algorithms require an annotation to function properly so make sure 
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 ```
+
 We also want to add a symbol column for later use:
+
 ```{r}
 res_macrophage_IFNg_vs_naive$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
                                                              keys = row.names(res_macrophage_IFNg_vs_naive),
@@ -95,7 +98,9 @@ res_enrich_macrophage_topGO <- topGOtable(
   verbose = TRUE # whether or not to summarise the analysis in a message
 )
 ```
+
 This will give an analysis for all possible GO terms (when using the BP ontology that is 6547 terms) not all of these results are significant and this list can (should) be further subset/filtered. For example by using a pvalue cutoff. 
+
 ```{r}
 head(res_enrich_macrophage_topGO)
 ```
@@ -118,6 +123,7 @@ goseq_macrophage <- goseqTable(
 )
 head(goseq_macrophage)
 ```
+
 To save time when rendering here we use the provided objects in mosdef to demonstrate the output.
 
 ```{r}
@@ -128,7 +134,8 @@ head(res_enrich_macrophage_goseq)
 
 ## clusterProfiler
 Parameters like top_de, min_counts, verbose and de_type can also be used here.
-If you want to further customize the call of go_enrich inside the function, have a look at the documentation for go_enrich from clusterProfiler. Those parameters can be added to the cluprotable function call
+If you want to further customize the call of go_enrich inside the function, have a look at the documentation for go_enrich from clusterProfiler. Those parameters can be added to the cluprotable function call.
+
 ```{r, eval = FALSE}
 clupro_macrophage <- cluproTable(
   res_de = res_macrophage_IFNg_vs_naive,
@@ -139,6 +146,7 @@ clupro_macrophage <- cluproTable(
 )
 head(clupro_macrophage)
 ```
+
 Again to save time when rendering we use the provided objects to demonstrate the output
 
 ```{r}
@@ -191,6 +199,7 @@ volcPlot +
   ylab("-log10 PValue") +
   xlab("Log 2 FoldChange (Cutoff 1/-1)")
 ```
+
 For further possibilities please look at the ggplot2 documentation.
 
 In the volcanoPlot you can also highlight genes associated with a certain GOterm of interest.
@@ -217,6 +226,7 @@ Volc_GO
 *Gene Plot*
 
 An elegant way to plot the counts of a certain gene of interest as for example treated vs untreated.
+
 ```{r}
 gene_plot(dds_macrophage,
           gene = "ENSG00000125347",
@@ -240,6 +250,7 @@ maplot
 ```
 
 plot_ma further allows you to highlight certain genes of interest to you if provided the ensemble ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as whether it is up or down regulated. 
+
 ```{r}
 maplot_genes <- plot_ma(res_macrophage_IFNg_vs_naive,
                         FDR = 0.1,
@@ -260,6 +271,7 @@ maplot_genes
 RMDs are a great way of handing over reports to collaborators. These functions are supposed to improve report quality by upgrading the report turning normal tables into interactive tables linking to further websites.
 
 *GO terms*
+
 ```{r}
 res_enrich_macrophage_topGO$GO.ID <- create_link_GO(res_enrich_macrophage_topGO$GO.ID)
 
@@ -267,6 +279,7 @@ DT::datatable(res_enrich_macrophage_topGO, escape = FALSE) # the esxape =FALSE i
 ```
 
 To get information on a singular GOterm of interest you can use:
+
 ```{r}
 go_2_html("GO:0001525")
 ```
@@ -285,6 +298,7 @@ UniProt
 Human Protein Atlas
 
 You can use access all of these easily by using one function
+
 ```{r}
 # creating a smaller subset for visulisation purposes and to keep the main res_de
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
@@ -320,6 +334,7 @@ DT::datatable(res_subset,
 ```
 
 All of the functions included inside the buttonifier function are also available as singular functions in case you are only interested in one of them (Reminder: All except ensemble need gene symbols as input):
+
 ```{r}
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
 
@@ -343,6 +358,7 @@ geneinfo_2_html("SPARCL1",
                 col_to_use = "symbol" # similar to before: the default is "SYMBOL" but we have a different name so we have to specify it here
 )
 ```
+
 It can however also be used without a res_de for a general overview
 
 ```{r}
