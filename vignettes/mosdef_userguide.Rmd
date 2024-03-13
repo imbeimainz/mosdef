@@ -5,17 +5,17 @@ output:
     toc: true
     toc_float: true
 vignette: >
-  %\VignetteIndexEntry{mosdef_userguide}
+%\VignetteIndexEntry{mosdef_userguide}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
-
-```{r, include = FALSE}
+  ---
+  
+  ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.height = 6,
-  fig.width = 8
+collapse = TRUE,
+comment = "#>",
+fig.height = 6,
+fig.width = 8
 )
 ```
 
@@ -44,9 +44,10 @@ res_macrophage_IFNg_vs_naive <- results(dds_macrophage)
 # Functions that generate enrichment results
 mosdef allows you to create your enrichment results right from your dds and res_de objects using 3 possible algorithms:
 
-topGO
-goseq
-clusterProfiler
+* topGO
+* goseq
+* clusterProfiler
+
 For more information on the differences between these algorithms we refer to their individual vignettes and publications.
 
 All of these algorithms require an annotation to function properly so make sure you have installed and use the correct one for your experiment. The default is org.Mm.eg.db (Mus musculus). The macrophage data however stems from human so we need org.Hs.eg.db
@@ -58,10 +59,10 @@ library("org.Hs.eg.db")
 We also want to add a symbol column for later use:
 ```{r}
 res_macrophage_IFNg_vs_naive$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
-  keys = row.names(res_macrophage_IFNg_vs_naive),
-  column = "SYMBOL",
-  keytype = "ENSEMBL",
-  multiVals = "first"
+                                                             keys = row.names(res_macrophage_IFNg_vs_naive),
+                                                             column = "SYMBOL",
+                                                             keytype = "ENSEMBL",
+                                                             multiVals = "first"
 )
 ```
 
@@ -218,8 +219,8 @@ Volc_GO
 An elegant way to plot the counts of a certain gene of interest as for example treated vs untreated.
 ```{r}
 gene_plot(dds_macrophage,
-  gene = "ENSG00000125347",
-  intgroup = "condition"
+          gene = "ENSG00000125347",
+          intgroup = "condition"
 )
 ```
 
@@ -231,8 +232,8 @@ plot_ma also allows you to set x and y labels right away but has defaults. Howev
 
 ```{r}
 maplot <- plot_ma(res_macrophage_IFNg_vs_naive,
-  FDR = 0.05, # which padj to set to count genes as DE (default 0.05)
-  hlines = 1 # whether or not (and where) to draw the horizontal line (optional)
+                  FDR = 0.05, # which padj to set to count genes as DE (default 0.05)
+                  hlines = 1 # whether or not (and where) to draw the horizontal line (optional)
 )
 
 maplot
@@ -241,14 +242,14 @@ maplot
 plot_ma further allows you to highlight certain genes of interest to you if provided the ensemble ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as whether it is up or down regulated. 
 ```{r}
 maplot_genes <- plot_ma(res_macrophage_IFNg_vs_naive,
-  FDR = 0.1,
-  intgenes = c(
-    "SPARCL1",
-    "CACNB2",
-    "MCHR1",
-    "COL1A1"
-  ), # suggested genes of interest
-  hlines = 1
+                        FDR = 0.1,
+                        intgenes = c(
+                          "SPARCL1",
+                          "CACNB2",
+                          "MCHR1",
+                          "COL1A1"
+                        ), # suggested genes of interest
+                        hlines = 1
 )
 maplot_genes
 ```
@@ -289,28 +290,32 @@ You can use access all of these easily by using one function
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
 
 buttonifier(res_subset,
-  col_to_use = "symbol", # col where the gene names are stored, default is "SYMBOL", in this example however the col is named "symbol"
-  new_cols = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED")
-  # all of the supported websites y0u can pick however many you want
+            col_to_use = "symbol", # col where the gene names are stored, default is "SYMBOL", in this example however the col is named "symbol"
+            new_cols = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED"),
+            # all of the supported websites y0u can pick however many you want
+            
+            ens_col = "id", # where to find the ensemble IDs
+            ens_species = "Homo_sapiens" # The species you are working on
 )
 ```
 
-Important to know is that the buttonifier function returns a DT:datatable not a df. This is to ensure that the escape = FALSE parameter of datatable is set and not forgotten as the links/buttons will not work otherwise.
-Advanced users that want further customization options to their datatable can ensure a dataframe is returned (then the escape = FALSE must be set by hand):
+Important to know is that the `buttonifier()` function returns a DT::datatable not a data.frame. 
+This is to ensure that the escape = FALSE parameter of datatable is set and not forgotten as the links/buttons will not work otherwise.
+Advanced users that want further customization options to their datatable can ensure a data.frame is returned (then the escape = FALSE must be set by hand):
 
 ```{r}
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
 
 res_subset <- buttonifier(res_subset,
-  col_to_use = "symbol",
-  new_cols = c("GC", "NCBI", "HPA"),
-  output_format = "DF"
+                          col_to_use = "symbol",
+                          new_cols = c("GC", "NCBI", "HPA"),
+                          output_format = "DF"
 )
 
 DT::datatable(res_subset,
-  escape = FALSE,
-  rownames = FALSE
-  # other parameters...
+              escape = FALSE,
+              rownames = FALSE
+              # other parameters...
 )
 ```
 
@@ -334,8 +339,8 @@ For information on singular genes you can use:
 
 ```{r}
 geneinfo_2_html("SPARCL1",
-  res_de = res_macrophage_IFNg_vs_naive,
-  col_to_use = "symbol" # similar to before: the default is "SYMBOL" but we have a different name so we have to specify it here
+                res_de = res_macrophage_IFNg_vs_naive,
+                col_to_use = "symbol" # similar to before: the default is "SYMBOL" but we have a different name so we have to specify it here
 )
 ```
 It can however also be used without a res_de for a general overview
