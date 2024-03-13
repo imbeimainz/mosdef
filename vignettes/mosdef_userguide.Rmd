@@ -5,12 +5,12 @@ output:
     toc: true
     toc_float: true
 vignette: >
-%\VignetteIndexEntry{mosdef_userguide}
+  %\VignetteIndexEntry{mosdef_userguide}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  ---
+---
   
-  ```{r, include = FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
 collapse = TRUE,
 comment = "#>",
@@ -275,7 +275,7 @@ go_2_html("GO:0001525")
 
 There are various websites that can give more information on genes. All of these (except ensemble) require gene symbols as the input.
 Currently we have functions to create links to:
-Ensemble
+Ensemble ("https://www.ensembl.org/index.html")
 GeneCards
 Pubmed
 NCBI
