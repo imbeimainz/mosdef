@@ -110,9 +110,8 @@ Other possibilities are only up-/down-regulated ("up"/"down") genes.
   
 * `min_counts`: Minimum number of counts a gene has to have to be considered for the background.
 The default is 0 and we advise this parameter is only used by expert users that understand the impact of removing genes from the background.  TODO #Not sure how to phrase this part?
-=======
-* `geneID`: Which format the genes are provided. If you provide a `DESeqDataset` and `DESeqResults`,
-  then `mosdef` does it for you and uses symbols. If you provide vectors please specify.
+
+* `geneID`: Which format the genes are provided. If you provide a `DESeqDataset` and `DESeqResults`, then `mosdef` does it for you and uses symbols. If you provide vectors please specify.
   
 * `de_type`: "hich genes to analyse.The default is all ("up_and_down")
   Other possibilities are only up-/down-regulated ("up"/"down") genes.
@@ -125,7 +124,7 @@ The default is 0 and we advise this parameter is only used by expert users that 
 * `min_counts`: Minimum number of counts a gene has to have to be considered for the background.
   The default is 0 and we advise this parameter is only used by expert users that understand the
   impact of removing genes from the background.  TODO #Not sure how to phrase this part?
->>>>>>> e47bff6b238d3dc0e594024013c1172badfd3083
+
   
 * `top_de`: The number of genes to be considered in the enrich analysis.
   The default is all genes, this can be reduced to reduce redundancy.
@@ -145,7 +144,7 @@ head(res_enrich_macrophage_topGO)
 ## goseq
 
 Parameters like top_de, min_counts, verbose and de_type can also be used here.
-Important: the feature length retrieval is based on the `goseq` function,and requires that the corresponding TxDb packages are installed and available so make sure one is installed on your PC for human we recommend: `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
+Important: the feature length retrieval is based on the `goseq()` function,and requires that the corresponding TxDb packages are installed and available so make sure one is installed on your PC for human we recommend: `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
 
 
 ```{r, eval = FALSE}
@@ -167,8 +166,8 @@ head(res_enrich_macrophage_goseq)
 
 
 ## clusterProfiler
-Parameters like top_de, min_counts, verbose and de_type can also be used here.
-If you want to further customize the call of go_enrich inside the function, have a look at the documentation for go_enrich from clusterProfiler. Those parameters can be added to the cluprotable function call.
+Parameters like `top_de`, `min_counts`, `verbose` and `de_type` can also be used here.
+If you want to further customize the call of `go_enrich()` inside the function, have a look at the documentation for `go_enrich()` from `r BiocStyle::Biocpkg("clusterProfiler")` Those parameters can be added to the cluprotable function call.
 
 ```{r, eval = FALSE}
 clupro_macrophage <- cluproTable(
@@ -181,6 +180,9 @@ clupro_macrophage <- cluproTable(
 head(clupro_macrophage)
 ```
 
+keyType: This is important for the `enrichGO()` function that is run later on.
+  If using `DESeqDataset` and `DESeqResults` this has to be "SYMBOL" which is also the default. If you use vectors please specify here what type of IDs you provide.
+
 Again to save time when rendering we use the provided objects to demonstrate the output
 
 ```{r}
@@ -188,7 +190,7 @@ data(res_enrich_macrophage_cluPro, package = "mosdef")
 head(res_enrich_macrophage_cluPro)
 ```
 
-All of these functions also work if you only have/provide a vector of differentially expressed genes and a vector of background genes. Most of the above mentioned parameters work here as well (top_de, verbose), however parameters like min_counts and de_type will not work since they need further information which can only be found in the dds/res_de. Namely the counts from the dds and the Log2FoldChange from the res_de.
+All of these functions also work if you only have/provide a vector of differentially expressed genes and a vector of background genes. Most of the above mentioned parameters work here as well (`top_de`, `verbose`), however parameters like `min_counts` and `de_type` will not work since they need further information which can only be found in the `DESeqDataset` and `DESeqResults`. Namely the counts from the `DESeqDataset` and the Log2FoldChange from the `DESeqResults`
 
 ```{r}
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive)[1:500, ] # reduce size to increase computational speed
