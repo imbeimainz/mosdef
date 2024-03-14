@@ -25,7 +25,7 @@ create_link_GO <- function(val) {
 #'
 #' @examples
 #' create_link_genecards("Oct4")
-#' 
+#'
 #' data(res_de_macrophage, package = "mosdef")
 #' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_genecards(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_genecards <- function(val) {
