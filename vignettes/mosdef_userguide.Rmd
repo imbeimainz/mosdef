@@ -45,9 +45,9 @@ res_macrophage_IFNg_vs_naive <- results(dds_macrophage)
 
 `mosdef` allows you to create your enrichment results right from your `DESeqDataset` and `DESeqResults` objects using 3 possible algorithms:
 
-* topGO `r BiocStyle::Biocpkg("topGO")`
-* goseq `r BiocStyle::Biocpkg("goseq")`
-* clusterProfiler `r BiocStyle::Biocpkg("clusterProfiler")`
+* `r BiocStyle::Biocpkg("topGO")`
+* `r BiocStyle::Biocpkg("goseq")`
+* `r BiocStyle::Biocpkg("clusterProfiler")`
 
 For more information on the differences between these algorithms we refer to their individual vignettes and publications.
 
@@ -79,35 +79,44 @@ library(topGO)
 res_enrich_macrophage_topGO <- topGOtable(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
-  ontology = "BP", # which gene ontology to analyse, default is "BP"
-  mapping = "org.Hs.eg.db", # the annotation
-  geneID = "symbol", # Which format the genes are provided.
-  # If you provide a res_de and a dds mosdef does it for you and uses symbols.
-  # If you provide vectors please specify
-  de_type = "up_and_down", # which genes to analyse.
-  # Default is all ("up_and_down")
-  # Other possibilities are only up-/down-regulated ("up"/"down") genes
-  add_gene_to_terms = TRUE, # Logical, whether to add a column with all genes annotated to each GO term
-  topGO_method2 = "elim", # Character, specifying which of the methods implemented by topGO
-  # Default is elim
-  # For more info look at the documentation of topGO
-  min_counts = 20, # minimum number of counts a gene has to have to be considered for the background.
-  # Default is 0 and we advise this parameter is only used by expert users
-  top_de = 700, # number of genes to be considered in the enrich analysis
-  # Default is all, can be reduced to reduce redundancy.
-  # In this case Takes the top 700 highest DE genes based of padj score.
-  # If this number is bigger than the total amount of de genes the parameter defaults to all genes.
-  verbose = TRUE # whether or not to summarise the analysis in a message
+  ontology = "BP",
+  mapping = "org.Hs.eg.db", 
+  geneID = "symbol", 
+  de_type = "up_and_down", 
+  add_gene_to_terms = TRUE, 
+  topGO_method2 = "elim",
+  min_counts = 20,
+  top_de = 700, 
+  verbose = TRUE 
 )
 ```
 
 Parameters:
  
-* ontology: Which gene ontology to analyse, default is "BP"
-* mapping: The annotation/species
-* geneID: Which format the genes are provided. If you provide a `DESeqDataset` and `DESeqResults`
-  mosdef does it for you and uses symbols. If you provide vectors please specify.
+* `ontology`: Which gene ontology to analyse, default is "BP"
 
+* `mapping`: The annotation/species
+
+* `geneID`: Which format the genes are provided. If you provide a `DESeqDataset` and `DESeqResults`, then `mosdef` does it for you and uses symbols.
+If you provide vectors please specify.
+  
+* `de_type`: "hich genes to analyse.The default is all ("up_and_down")
+Other possibilities are only up-/down-regulated ("up"/"down") genes.
+  
+* `add_gene_to_terms`: Logical, whether to add a column with all genes annotated to each GO term.
+
+* `topGO_method2`: Character, specifying which of the methods implemented by `topGO` is to be used. The default is elim. For more info look at the documentation of `r BiocStyle::Biocpkg("topGO")`.
+  
+* `min_counts`: Minimum number of counts a gene has to have to be considered for the background.
+The default is 0 and we advise this parameter is only used by expert users that understand the impact of removing genes from the background.  TODO #Not sure how to phrase this part?
+  
+* `top_de`: The number of genes to be considered in the enrich analysis.
+  The default is all genes, this can be reduced to reduce redundancy.
+  In this case, we take the top 700 highest DE genes based of padj score.
+  If this number is bigger than the total amount of de genes the parameter defaults back to all genes.
+  
+* `verbose`: Whether or not to summarise the analysis in a message.
+  
 
 
 ```{r}
@@ -117,10 +126,9 @@ head(res_enrich_macrophage_topGO)
 
 
 ## goseq
-parameters like top_de, min_counts, verbose and de_type can also be used here
-Important: the feature length retrieval is based on the `goseq` function,
-and requires that the corresponding TxDb packages are installed and available
-so make sure one is installed on your PC for human we recommend: `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
+
+Parameters like top_de, min_counts, verbose and de_type can also be used here.
+Important: the feature length retrieval is based on the `goseq` function,and requires that the corresponding TxDb packages are installed and available so make sure one is installed on your PC for human we recommend: `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
 
 
 ```{r, eval = FALSE}
