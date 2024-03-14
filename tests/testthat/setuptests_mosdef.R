@@ -4,7 +4,7 @@ library("AnnotationDbi")
 library("org.Hs.eg.db")
 library("macrophage")
 library("scales")
-#library("TxDb.Hsapiens.UCSC.hg38.knownGene")
+# library("TxDb.Hsapiens.UCSC.hg38.knownGene")
 
 # dds --------------------------------------------------------------------------
 data(gse)
@@ -15,9 +15,9 @@ rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 anno_df <- data.frame(
   gene_id = rownames(dds_macrophage),
   gene_name = mapIds(org.Hs.eg.db,
-                     keys = rownames(dds_macrophage),
-                     column = "SYMBOL",
-                     keytype = "ENSEMBL"
+    keys = rownames(dds_macrophage),
+    column = "SYMBOL",
+    keytype = "ENSEMBL"
   ),
   stringsAsFactors = FALSE,
   row.names = rownames(dds_macrophage)
@@ -37,10 +37,10 @@ dds_macrophage <- DESeq(dds_macrophage)
 data(res_de_macrophage, package = "mosdef")
 
 res_macrophage_IFNg_vs_naive$SYMBOL <- AnnotationDbi::mapIds(org.Hs.eg.db,
-                                           keys = row.names(res_macrophage_IFNg_vs_naive),
-                                           column = "SYMBOL",
-                                           keytype = "ENSEMBL",
-                                           multiVals = "first"
+  keys = row.names(res_macrophage_IFNg_vs_naive),
+  column = "SYMBOL",
+  keytype = "ENSEMBL",
+  multiVals = "first"
 )
 res_macrophage_IFNg_vs_naive$symbol <- res_macrophage_IFNg_vs_naive$SYMBOL
 macrophage_df <- deseqresult2df(res_macrophage_IFNg_vs_naive)
@@ -53,19 +53,16 @@ annotationobject <- deseqresult2df(res_macrophage_IFNg_vs_naive)
 annotationobject <- annotationobject["SYMBOL"]
 
 
-# airway 
+# airway
 library(airway)
-#Get  the base data
+# Get  the base data
 data(airway)
 
 # Get a dds object and a res object
 dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
-dds_airway  <- DESeq(dds_airway )
+dds_airway <- DESeq(dds_airway)
 
-res_macrophage_IFNg_vs_naive_nosymbols <- results(dds_airway )
+res_macrophage_IFNg_vs_naive_nosymbols <- results(dds_airway)
 
 # res_enrich
 data(res_enrich_macrophage_topGO, package = "mosdef")
-
-
-

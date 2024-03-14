@@ -20,4 +20,6 @@ Link to Ensemble database
 \examples{
 create_link_ENS("ENSMUSG00000024406")
 
+data(res_de_macrophage, package = "mosdef")
+rownames(res_macrophage_IFNg_vs_naive) <- create_link_ENS(rownames(res_macrophage_IFNg_vs_naive))
 }

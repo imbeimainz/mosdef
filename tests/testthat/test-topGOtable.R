@@ -6,7 +6,7 @@ test_that("enrich_result is created and top_de works", {
     top_de = 400
   )
   expect_s3_class(res_enrich_macrophage_topGO_topde, "data.frame")
-  
+
   res_enrich_macrophage_topGO_topde_vectors <- topGOtable(
     de_genes = myde,
     bg_genes = myassayed,

@@ -4,6 +4,9 @@
 \name{res_enrich_macrophage_cluPro}
 \alias{res_enrich_macrophage_cluPro}
 \title{A sample enrichment object}
+\format{
+Binary R.Data
+}
 \description{
 A sample enrichment object, generated in the \code{mosdef} and \code{clusterProfiler} framework
 }

@@ -2,7 +2,7 @@
 #'
 #' A wrapper for extracting functional GO terms enriched in a list of (DE) genes,
 #' based on the algorithm and the implementation in the clusterProfiler package
-#' 
+#'
 #' Note: the feature length retrieval is based on the \code{\link{enrichGO}} function
 #'
 #' @param res_de A DESeqResults object created using \code{DESeq2}
@@ -35,13 +35,13 @@
 #' library(macrophage)
 #' library(DESeq2)
 #' data(gse)
-#' dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
+#' dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 #' rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
-#' keep <- rowSums(counts(dds_macrophage) >= 10) >= 6 
+#' keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
 #' dds_macrophage <- dds_macrophage[keep, ]
 #' dds_macrophage <- DESeq(dds_macrophage)
 #' data(res_de_macrophage, package = "mosdef")
-#' 
+#'
 #' library("AnnotationDbi")
 #' library("org.Hs.eg.db")
 #' library(clusterProfiler)
@@ -71,7 +71,7 @@ cluproTable <- function(res_de = NULL,
 
   ## Checks:
 
-  # Check if de-type is correct
+  # Check if de_type is correct
   # if(!(de_type %in% c("up_and_down","up", "down")))
 
   match.arg(de_type, choices = c("up_and_down", "up", "down"), several.ok = FALSE)

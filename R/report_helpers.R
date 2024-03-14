@@ -26,6 +26,8 @@ create_link_GO <- function(val) {
 #' @examples
 #' create_link_genecards("Oct4")
 #'
+#' data(res_de_macrophage, package = "mosdef")
+#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_genecards(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_genecards <- function(val) {
   sprintf(
     '<a href = "https://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
@@ -46,6 +48,8 @@ create_link_genecards <- function(val) {
 #' @examples
 #' create_link_pubmed("Oct4")
 #'
+#' data(res_de_macrophage, package = "mosdef")
+#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_pubmed(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_pubmed <- function(val) {
   paste0(
     '<a href="https://pubmed.ncbi.nlm.nih.gov/?term=', val, '" target="_blank" class="btn btn-primary">',
@@ -64,6 +68,8 @@ create_link_pubmed <- function(val) {
 #' @examples
 #' create_link_ENS("ENSMUSG00000024406")
 #'
+#' data(res_de_macrophage, package = "mosdef")
+#' rownames(res_macrophage_IFNg_vs_naive) <- create_link_ENS(rownames(res_macrophage_IFNg_vs_naive))
 create_link_ENS <- function(val, species = "Mus_musculus") {
   paste0('<a href="http://www.ensembl.org/', species, "/Gene/Summary?g=", val, '" target="_blank" class="btn btn-primary">', val, "</a>")
 }
@@ -78,6 +84,8 @@ create_link_ENS <- function(val, species = "Mus_musculus") {
 #' @examples
 #' create_link_NCBI("Oct4")
 #'
+#' data(res_de_macrophage, package = "mosdef")
+#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_NCBI(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_NCBI <- function(val) {
   paste0(
     '<a href="http://www.ncbi.nlm.nih.gov/gene/?term=', val, '[sym]" target="_blank" class="btn btn-primary">',
@@ -94,6 +102,8 @@ create_link_NCBI <- function(val) {
 #' @examples
 #' create_link_GTEX("Oct4")
 #'
+#' data(res_de_macrophage, package = "mosdef")
+#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_GTEX(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_GTEX <- function(val) {
   sprintf(
     '<a href = "https://www.gtexportal.org/home/gene/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-dna"></i>%s</a>',
@@ -116,6 +126,8 @@ create_link_GTEX <- function(val) {
 #' @examples
 #' create_link_UniProt("Oct4")
 #'
+#' data(res_de_macrophage, package = "mosdef")
+#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_UniProt(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_UniProt <- function(val) {
   sprintf(
     '<a href = "https://www.uniprot.org/uniprot/?query=%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-spinner"></i>%s</a>',
@@ -135,6 +147,8 @@ create_link_UniProt <- function(val) {
 #' @examples
 #' create_link_dbPTM("Oct4")
 #'
+#' data(res_de_macrophage, package = "mosdef")
+#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_dbPTM(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_dbPTM <- function(val) {
   base_link_old <- "http://dbptm.mbc.nctu.edu.tw/"
   base_link_new <- "https://awi.cuhk.edu.cn/dbPTM/"
@@ -159,6 +173,8 @@ create_link_dbPTM <- function(val) {
 #' @examples
 #' create_link_HPA("Oct4")
 #'
+#' data(res_de_macrophage, package = "mosdef")
+#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_HPA(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_HPA <- function(val) {
   sprintf(
     '<a href = "https://www.proteinatlas.org/search/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-cubes"></i>%s</a>',

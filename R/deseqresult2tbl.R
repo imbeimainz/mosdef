@@ -29,4 +29,3 @@ deseqresult2tbl <- function(res_de) {
 
   dplyr::arrange(res_de, .data$padj)
 }
-

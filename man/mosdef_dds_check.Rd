@@ -18,6 +18,13 @@ An invisible \code{NULL} after performing the checks
 A function checking if your dds contains everything you need
 }
 \examples{
-# TODO: load data
-# mosdef_dds_check(dds)
+library(macrophage)
+library(DESeq2)
+data(gse)
+dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
+rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
+keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
+dds_macrophage <- dds_macrophage[keep, ]
+dds_macrophage <- DESeq(dds_macrophage)
+mosdef_dds_check(dds_macrophage)
 }

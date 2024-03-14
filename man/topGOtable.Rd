@@ -83,7 +83,7 @@ documentation of the \code{topGO} package itself
 library(macrophage)
 library(DESeq2)
 data(gse)
-dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
+dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
 dds_macrophage <- dds_macrophage[keep, ]
@@ -100,6 +100,5 @@ topgoDE_macrophage <- topGOtable(
   mapping = "org.Hs.eg.db",
   geneID = "symbol",
 )
-
 
 }

@@ -10,6 +10,9 @@
 #' @param output_format a parameter deciding which output format to return, either a DT:datatable (recommended)
 #' or a simple dataframe (DF).In the latter case it is important that if the data is visualized with the
 #'  \code{datatable} function the parameter escape must be set to FALSE
+#' @param ens_col ame of the columns were the ensembl IDs are stored. 
+#' @param ens_species The species you are working with to link to the correct gene on ensembl
+#'  
 #'
 #' @return A dataframe or a \code{DT} datatable object with columns adding HTML objects that link to websites with further information on the genes in question.
 #' @export
@@ -25,29 +28,53 @@
 #' res_de <- res_macrophage_IFNg_vs_naive
 #' res_df <- deseqresult2df(res_de)
 #' # Subsetting for quicker run
-#' res_df <- res_df[1:100,]
+#' res_df <- res_df[1:100, ]
 #' buttonifier(res_df)
-buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL", output_format = "DT") {
+#'
+#' buttonifier(res_df,
+#'   new_cols = c("NCBI", "HPA"),
+#'   ens_col = "id",
+#'   ens_species = "Homo_sapiens"
+#' )
+buttonifier <- function(df, new_cols = c("GC", "UNIPROT"),
+                        col_to_use = "SYMBOL",
+                        output_format = "DT",
+                        ens_col = NULL,
+                        ens_species = NULL) {
   if (!(col_to_use %in% colnames(df))) {
     stop(
       "The provided dataframe does not contain the column ", col_to_use, ". Please make ",
-      "sure that ther is a colum with gene symbols in your df and that its name is provided",
+      "sure that there is a colum with gene symbols in your df and that its name is provided",
       " to the 'col_to_use' parameter. Please watch spelling as well as capital letters."
     )
   }
 
 
-  .actionbutton_biocstyle <- "color: #ffffff; background-color: #0092AC"
+
+  if (!is.null(c(ens_col, ens_species))) {
+    df[[ens_col]] <- create_link_ENS(df[[ens_col]], species = ens_species)
+  } else if (!is.null(ens_col) & is.null(ens_species)) {
+    warning(
+      "Creating ensemble links requires an ID and the species you are analysing ",
+      "You only provided an ID. "
+    )
+  } else if (is.null(ens_col) & !is.null(ens_species)) {
+    warning(
+      "Creating ensemble links requires an ID and the species you are analysing ",
+      "You only provided a species."
+    )
+  }
+
   val <- df[[col_to_use]]
 
   match.arg(new_cols, choices = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED"), several.ok = TRUE)
-  for (i in 1:length(new_cols)) {
+  for (i in seq_len(length(new_cols))) {
     if ((new_cols[i] %in% c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED")) == FALSE) {
-      warning(paste0(
+      warning(
         "Please make sure you used the values suggested in the documentation. \n",
         "One or more of the following values entered into new_cols is not supported: \n",
         new_cols[new_cols %in% c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED") == FALSE]
-      ))
+      )
     }
   }
 
@@ -76,7 +103,7 @@ buttonifier <- function(df, new_cols = c("GC", "UNIPROT"), col_to_use = "SYMBOL"
   if ("HPA" %in% new_cols) {
     df$SYMBOL_HPA <- create_link_HPA(df[[col_to_use]])
   }
-  
+
   if ("PUBMED" %in% new_cols) {
     df$SYMBOL_PUBM <- create_link_pubmed(df[[col_to_use]])
   }

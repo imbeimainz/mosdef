@@ -8,7 +8,9 @@ buttonifier(
   df,
   new_cols = c("GC", "UNIPROT"),
   col_to_use = "SYMBOL",
-  output_format = "DT"
+  output_format = "DT",
+  ens_col = NULL,
+  ens_species = NULL
 )
 }
 \arguments{
@@ -21,6 +23,10 @@ buttonifier(
 \item{output_format}{a parameter deciding which output format to return, either a DT:datatable (recommended)
 or a simple dataframe (DF).In the latter case it is important that if the data is visualized with the
 \code{datatable} function the parameter escape must be set to FALSE}
+
+\item{ens_col}{ame of the columns were the ensembl IDs are stored.}
+
+\item{ens_species}{The species you are working with to link to the correct gene on ensembl}
 }
 \value{
 A dataframe or a \code{DT} datatable object with columns adding HTML objects that link to websites with further information on the genes in question.
@@ -35,6 +41,12 @@ data(res_de_macrophage, package = "mosdef")
 res_de <- res_macrophage_IFNg_vs_naive
 res_df <- deseqresult2df(res_de)
 # Subsetting for quicker run
-res_df <- res_df[1:100,]
+res_df <- res_df[1:100, ]
 buttonifier(res_df)
+
+buttonifier(res_df,
+  new_cols = c("NCBI", "HPA"),
+  ens_col = "id",
+  ens_species = "Homo_sapiens"
+)
 }

@@ -4,6 +4,9 @@
 \name{res_enrich_macrophage_topGO}
 \alias{res_enrich_macrophage_topGO}
 \title{A sample enrichment object}
+\format{
+Binary R.Data
+}
 \description{
 A sample enrichment object, generated in the \code{mosdef} and \code{topGO} framework
 }

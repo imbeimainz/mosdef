@@ -1,15 +1,31 @@
 ---
-title: "mosdef_userguide"
+title: >
+  The `mosdef` User's Guide
+author:
+- name: Leon Dammer
+  affiliation: 
+  - Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz
+  email: dammerle@uni-mainz.de
+- name: Federico Marini
+  affiliation: 
+  - Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz
+  - Center for Thrombosis and Hemostasis (CTH), Mainz
+  email: marinif@uni-mainz.de
+date: "`r BiocStyle::doc_date()`"
+package: "`r BiocStyle::pkg_ver('mosdef')`"
 output: 
   BiocStyle::html_document:
-    toc: true
     toc_float: true
 vignette: >
-  %\VignetteIndexEntry{mosdef_userguide}
+  %\VignetteIndexEntry{The mosdef User's Guide}
+  %\VignetteEncoding{UTF-8}  
+  %\VignettePackage{mosdef}
+  %\VignetteKeywords{GeneExpression, RNASeq, FunctionalAnnotation, Sequencing, Visualization}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+editor_options: 
+  chunk_output_type: console
 ---
-
+  
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -19,20 +35,54 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library("mosdef")
+# Introduction {#introduction}
+
+This vignette describes how to use the `r BiocStyle::Biocpkg("mosdef")` package for performing functional enrichment analysis and plotting your differential expression results. As well as providing functions that will improve your RMD reports.
+
+This package provides a unified API for enrichment analysis using different algorithms. In a way that greatly simplifies calling these functions and ensuring these calls remain the same no matter how often you repeat them or what data you use. It also aids in plotting your data and contains functions that can improve report table components. Thus streamlining the generation of comprehensive analysis reports.
+
+
+In order to use `r BiocStyle::Biocpkg("mosdef")` in your workflow, the following inputs are required: 
+
+- `dds`, a `DESeqDataSet` containing the expression matrix;
+- `res_de`, a `DESeqResults`, i.e. a `DataFrame` storing the results of the differential expression analysis;
+- `mapping` a annotation of your species provided by `r BiocStyle::Biocpkg("AnnotationDbi")`. This is not needed for all functions but for a lot of them. Examples: For human: `org.Hs.eg.db` for mouse: `org.Mm.eg.db`
+
+
+
+In the remainder of this vignette, we will illustrate the main features of `r BiocStyle::Biocpkg("mosdef")` on a publicly available dataset from Alasoo, et al. "Shared genetic effects on chromatin and gene expression indicate a role for enhancer priming in immune response", published in Nature Genetics, January 2018 [@Alasoo2018]
+[doi:10.1038/s41588-018-0046-7](https://doi.org/10.1038/s41588-018-0046-7).
+
+The data is made available via the `r BiocStyle::Biocpkg("macrophage")` Bioconductor package, which contains the files output from the Salmon quantification (version 0.12.0, with Gencode v29 reference), as well as the values summarized at the gene level, which we will use to exemplify.
+
+In the `macrophage` experimental setting, the samples are available from 6 different donors, in 4 different conditions (naive, treated with Interferon gamma, with SL1344, or with a combination of Interferon gamma and SL1344).
+We will restrict our attention on the comparison between Interferon gamma treated samples vs naive samples.
+
+# Getting started {#gettingstarted}
+
+
+```{r setup, eval = FALSE}
+if (!require("BiocManager")) {
+  install.packages("BiocManager")
+}
+BiocManager::install("mosdef")
 ```
 
+Once installed, the package can be loaded and attached to your current workspace as follows:
+
+```{r loadlib, eval = TRUE}
+library("mosdef")
+```
 # Load the data
 
-Load your dataset. We will use the well known macrophage data as an example.
+Load your dataset. We will use the well known `macrophage` data as an example.
 
 ```{r, warning=FALSE}
 library("macrophage")
 library("DESeq2")
 library("org.Hs.eg.db")
 data(gse)
-dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
+dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
 dds_macrophage <- dds_macrophage[keep, ]
@@ -42,20 +92,24 @@ res_macrophage_IFNg_vs_naive <- results(dds_macrophage)
 ```
 
 # Functions that generate enrichment results
-mosdef allows you to create your enrichment results right from your dds and res_de objects using 3 possible algorithms:
 
-topGO
-goseq
-clusterProfiler
+`mosdef` allows you to create your enrichment results right from your `DESeqDataset` and `DESeqResults` objects using 3 possible algorithms:
+
+* `r BiocStyle::Biocpkg("topGO")`
+* `r BiocStyle::Biocpkg("goseq")`
+* `r BiocStyle::Biocpkg("clusterProfiler")`
+
 For more information on the differences between these algorithms we refer to their individual vignettes and publications.
 
-All of these algorithms require an annotation to function properly so make sure you have installed and use the correct one for your experiment. The default is org.Mm.eg.db (Mus musculus). The macrophage data however stems from human so we need org.Hs.eg.db
+All of these algorithms require an annotation to function properly so make sure you have installed and use the correct one for your experiment. The default `is org.Mm.eg.db` (Mus musculus). The `macrophage` data however stems from human so we need `org.Hs.eg.db`
 
 ```{r}
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 ```
+
 We also want to add a symbol column for later use:
+
 ```{r}
 res_macrophage_IFNg_vs_naive$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
   keys = row.names(res_macrophage_IFNg_vs_naive),
@@ -68,34 +122,57 @@ res_macrophage_IFNg_vs_naive$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
 
 ## topGO
 
+This will give an analysis for all possible GO terms (when using the BP ontology that is 6547 terms) not all of these results are significant and this list can (should) be further subset/filtered. For example by using a pvalue cutoff. 
+
 ```{r}
 library(topGO)
 res_enrich_macrophage_topGO <- topGOtable(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
-  ontology = "BP", # which gene ontology to analyse, default is "BP"
-  mapping = "org.Hs.eg.db", # the annotation
-  geneID = "symbol", # Which format the genes are provided.
-  # If you provide a res_de and a dds mosdef does it for you and uses symbols.
-  # If you provide vectors please specify
-  de_type = "up_and_down", # which genes to analyse.
-  # Default is all ("up_and_down")
-  # Other possibilities are only up-/down-regulated ("up"/"down") genes
-  add_gene_to_terms = TRUE, # Logical, whether to add a column with all genes annotated to each GO term
-  topGO_method2 = "elim", # Character, specifying which of the methods implemented by topGO
-  # Default is elim
-  # For more info look at the documentation of topGO
-  min_counts = 20, # minimum number of counts a gene has to have to be considered for the background.
-  # Default is 0 and we advise this parameter is only used by expert users
-  top_de = 700, # number of genes to be considered in the enrich analysis
-  # Default is all, can be reduced to reduce redundancy.
-  # In this case Takes the top 700 highest DE genes based of padj score.
-  # If this number is bigger than the total amount of de genes the parameter defaults to all genes.
-  verbose = TRUE # whether or not to summarise the analysis in a message
+  ontology = "BP",
+  mapping = "org.Hs.eg.db",
+  geneID = "symbol",
+  de_type = "up_and_down",
+  add_gene_to_terms = TRUE,
+  topGO_method2 = "elim",
+  min_counts = 20,
+  top_de = 700,
+  verbose = TRUE
 )
-
 ```
-This will give an analysis for all possible GO terms (when using the BP ontology that is 6547 terms) not all of these results are significant and this list can (should) be further subset/filtered. For example by using a pvalue cutoff. 
+
+Parameters:
+
+* `res_de`: Your `DESeqResults`
+
+* `dds`: Your `DESeqDataset` 
+
+* `ontology`: Which gene ontology to analyse, default is "BP"
+
+* `mapping`: The annotation/species
+
+* `geneID`: Which format the genes are provided. If you provide a `DESeqDataset` and `DESeqResults`, then `mosdef` does it for you and uses symbols.
+If you provide vectors please specify.
+  
+* `de_type`: Which genes to analyse.The default is all ("up_and_down")
+Other possibilities are only up-/down-regulated ("up"/"down") genes.
+  
+* `add_gene_to_terms`: Logical, whether to add a column with all genes annotated to each GO term.
+
+* `topGO_method2`: Character, specifying which of the methods implemented by `topGO` is to be used. The default is elim. For more info look at the documentation of `r BiocStyle::Biocpkg("topGO")`.
+  
+* `min_counts`: Minimum number of counts a gene has to have to be considered for the background.
+The default is 0 and we advise this parameter is only used by expert users that understand the impact of removing genes from the background.  #TODO Not sure how to phrase this part?
+
+* `top_de`: The number of genes to be considered in the enrich analysis.
+  The default is all genes, this can be reduced to reduce redundancy.
+  In this case, we take the top 700 highest DE genes based of padj score.
+  If this number is bigger than the total amount of de genes the parameter defaults back to all genes.
+  
+* `verbose`: Whether or not to summarise the analysis in a message.
+  
+
+
 ```{r}
 head(res_enrich_macrophage_topGO)
 ```
@@ -103,10 +180,9 @@ head(res_enrich_macrophage_topGO)
 
 
 ## goseq
-parameters like top_de, min_counts, verbose and de_type can also be used here
-Important: the feature length retrieval is based on the `goseq` function,
-and requires that the corresponding TxDb packages are installed and available
-so make sure one is installed on your PC for human we recommend: `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
+
+Parameters like top_de, min_counts, verbose and de_type can also be used here (For more detail on the parameters see above).
+Important: the feature length retrieval is based on the `goseq()` function,and requires that the corresponding TxDb packages are installed and available so make sure one is installed on your PC for human we recommend: `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
 
 
 ```{r, eval = FALSE}
@@ -118,6 +194,7 @@ goseq_macrophage <- goseqTable(
 )
 head(goseq_macrophage)
 ```
+
 To save time when rendering here we use the provided objects in mosdef to demonstrate the output.
 
 ```{r}
@@ -127,18 +204,22 @@ head(res_enrich_macrophage_goseq)
 
 
 ## clusterProfiler
-Parameters like top_de, min_counts, verbose and de_type can also be used here.
-If you want to further customize the call of go_enrich inside the function, have a look at the documentation for go_enrich from clusterProfiler. Those parameters can be added to the cluprotable function call
+Parameters like `top_de`, `min_counts`, `verbose` and `de_type` can also be used here (For more detail on the parameters see above).
+If you want to further customize the call of `go_enrich()` inside the function, have a look at the documentation for `go_enrich()` from `r BiocStyle::Biocpkg("clusterProfiler")` Those parameters can be added to the `cluproTable()` function call.
+
 ```{r, eval = FALSE}
 clupro_macrophage <- cluproTable(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   mapping = "org.Hs.eg.db",
-  keyType = "SYMBOL" # Important for the enrichGO function that is run later on.
-  # If using dds and res_de has to be "SYMBOL" which is also the default
+  keyType = "SYMBOL"
 )
 head(clupro_macrophage)
 ```
+
+keyType: This is important for the `enrichGO()` function that is run later on.
+  If using `DESeqDataset` and `DESeqResults` this has to be "SYMBOL" which is also the default. If you use vectors please specify here what type of IDs you provide.
+
 Again to save time when rendering we use the provided objects to demonstrate the output
 
 ```{r}
@@ -146,13 +227,13 @@ data(res_enrich_macrophage_cluPro, package = "mosdef")
 head(res_enrich_macrophage_cluPro)
 ```
 
-All of these functions also work if you only have/provide a vector of differentially expressed genes and a vector of background genes. Most of the above mentioned parameters work here as well (top_de, verbose), however parameters like min_counts and de_type will not work since they need further information which can only be found in the dds/res_de. Namely the counts from the dds and the Log2FoldChange from the res_de.
+All of these functions also work if you only have/provide a vector of differentially expressed genes and a vector of background genes. Most of the above mentioned parameters work here as well (`top_de`, `verbose`), however parameters like `min_counts` and `de_type` will not work since they need further information which can only be found in the `DESeqDataset` and `DESeqResults`. Namely the counts from the `DESeqDataset` and the Log2FoldChange from the `DESeqResults`
 
 ```{r}
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive)[1:500, ] # reduce size to increase computational speed
 myde <- res_subset$id
 myassayed <- rownames(res_macrophage_IFNg_vs_naive)
-# Here Keys are ensemble not symbols
+# Here Keys are ensembl not symbols
 res_enrich_macrophage_topGO_vec <- topGOtable(
   de_genes = myde,
   bg_genes = myassayed,
@@ -168,18 +249,25 @@ head(res_enrich_macrophage_topGO_vec)
 ## VolcanoPlot
 
 One of the most well known and used plots to display highly differentially expressed genes. Easy to read while providing a lot of data.
-A basic gg plot object including the most important parts when creating a volcano plot. Can be later expanded upon like any regular gg object by the user.
+A basic `ggplot` object including the most important parts when creating a volcano plot. Can be later expanded upon like any regular gg object by the user.
 
 ```{r}
 volcPlot <- de_volcano(
   res_de = res_macrophage_IFNg_vs_naive,
-  mapping = "org.Hs.eg.db", # important to generate symbols for labelling
-  labeled_genes = 25, # number of the top DE genes to be labeled. Default 30
-  L2FC_cutoff = 1 # Where to draw the lines in the plot and which genes to mark 
-  # as significant default is one (meaning L2FC +/-1)
+  mapping = "org.Hs.eg.db",
+  labeled_genes = 25,
+  L2FC_cutoff = 1
 )
 volcPlot
 ```
+
+* `res_de`: Your `DESeqResults`
+
+* `mapping`: The annotation/species: Important to generate symbols for labeling
+
+* `labeled_genes`: The number of the top DE genes to be labeled. Default is 30
+
+* `L2FC_cutoff`: Where to draw the lines in the plot and which genes to mark as significant. The default is one (meaning L2FC +/-1): So genes with a FoldChange higher than 1 or lower -1 and a padj value below 0.05.  
 
 As mentioned above the user can now expand upon this with all the tools in the ggplot2 toolbox. For example:
 
@@ -191,39 +279,66 @@ volcPlot +
   ylab("-log10 PValue") +
   xlab("Log 2 FoldChange (Cutoff 1/-1)")
 ```
+
 For further possibilities please look at the ggplot2 documentation.
 
 In the volcanoPlot you can also highlight genes associated with a certain GOterm of interest.
 
 ```{r}
 Volc_GO <- go_volcano(
-  res_macrophage_IFNg_vs_naive,
+  res_de = res_macrophage_IFNg_vs_naive,
   res_enrich = res_enrich_macrophage_topGO,
-  term_index = 1, # the index(row) where your term of interest is located in your enrichment result
+  term_index = 1,
   L2FC_cutoff = 1,
   mapping = "org.Hs.eg.db",
-  overlaps = 50, # the number of overlaps ggrepell is supposed to use for labelling (increases label number)
-  col_to_use = "symbol", # columnname of the column in your res_de containing the gene symbols
-  enrich_col = "genes", # columnname of the column in your res_enrich containing the gene symbols
-  # For an example see topgotable data provided in mosdef: data(res_enrich_macrophage_topGO, package = "mosdef")
-  down_col = "black", # colour for your downregulated genes (genes with a L2FC below your cutoff here -1 and padj < 0.05)
-  up_col = "black", # colour for your upregulated genes (genes with a L2FC above your cutoff here 1 and padj < 0.05)
+  overlaps = 50,
+  col_to_use = "symbol",
+  enrich_col = "genes",
+  down_col = "black",
+  up_col = "black",
   highlight_col = "tomato"
-) # colour for your genes of interest associated with the given term
+)
 
 Volc_GO
 ```
 
+* `res_de`: Your `DESeqResults`
+
+* `res_enrich`: Your enrichment results
+
+* `term_index`: The index(row) where your term of interest is located in your enrichment result
+
+* `L2FC_cutoff`: Where to draw the lines in the plot and which genes to mark as significant. The default is one (meaning L2FC +/-1): So genes with a FoldChange higher than 1 or lower -1 and a padj value below 0.05. 
+
+* `mapping`: The annotation/species: Important to generate symbols for labeling
+
+* `overlaps`: The number of overlaps `ggrepell` is supposed to allow for labeling (increases  number of labeled genes)
+
+* `col_to_use`: Name of the column in your res_de containing the gene symbols
+
+* `enrich_col`: Name of the column in your res_enrich containing the gene symbols. For an example see topgotable data provided in mosdef: `data(res_enrich_macrophage_topGO, package = "mosdef")`.
+
+* `down_col`: Colour for your downregulated genes (genes with a L2FC below your cutoff).
+
+* `up_col`: Colour for your upregulated genes (genes with a L2FC above your cutoff).
+
+* `highlight_col`: Colour for your genes associated with the given term of interest.
+
 *Gene Plot*
 
 An elegant way to plot the counts of a certain gene of interest as for example treated vs untreated.
+
 ```{r}
-gene_plot(dds_macrophage,
+gene_plot(
+  dds = dds_macrophage,
   gene = "ENSG00000125347",
   intgroup = "condition"
 )
 ```
 
+* `dds`: Your `DESeqDataset` 
+* `gene`: The gene of interest
+* `intgroup`: The conditions to compare (based of your differential expression analysis) #TODO Not sure how to put this
 
 *MA plot*
 Plotting the counts of a gene vs it's expression (Log2 FoldChange). Granting an overview of the amount of differentially expressed genes vs the amount of genes overall. As well as an overview of the amount of up vs. downregulated genes.
@@ -231,23 +346,37 @@ Plotting the counts of a gene vs it's expression (Log2 FoldChange). Granting an 
 plot_ma also allows you to set x and y labels right away but has defaults. However, similar to de_volcano these can also be set later on. For all possible parameters please look at the documentation
 
 ```{r}
-maplot <- plot_ma(res_macrophage_IFNg_vs_naive,
-  FDR = 0.05, # which padj to set to count genes as DE (default 0.05)
-  hlines = 1 # whether or not (and where) to draw the horizontal line (optional)
-)
+# We are creating a subset to reduce vignette runtime, ignore the next to lines if you want to analyse your entire dataset
+gene_subset <- rownames(res_macrophage_IFNg_vs_naive)[1:500]
+res_macrophage_IFNg_vs_naive_subset <- res_macrophage_IFNg_vs_naive[gene_subset, ]
 
+
+maplot <- plot_ma(
+  res_de = res_macrophage_IFNg_vs_naive_subset,
+  FDR = 0.05,
+  hlines = 1
+)
+# For further parameters please check the function # TODO can we say that here? Or would an example including all parameters be better?
 maplot
 ```
 
-plot_ma further allows you to highlight certain genes of interest to you if provided the ensemble ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as whether it is up or down regulated. 
+* `res_de`: Your `DESeqResults` 
+
+* `FDR`: Which padj cutoff value to set for genes to be counted as DE (default < 0.05)
+
+* `hlines`: whether or not (and where) to draw the horizontal line (optional)
+
+plot_ma further allows you to highlight certain genes of interest to you if provided the ensembl ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as whether it is up or down regulated. 
+
 ```{r}
-maplot_genes <- plot_ma(res_macrophage_IFNg_vs_naive,
+maplot_genes <- plot_ma(
+  res_de = res_macrophage_IFNg_vs_naive_subset,
   FDR = 0.1,
   intgenes = c(
-     "SPARCL1",
-     "CACNB2",
-     "MCHR1",
-    "COL1A1"
+    "SLC7A2",
+    "CFLAR",
+    "PDK4",
+    "IFNGR1"
   ), # suggested genes of interest
   hlines = 1
 )
@@ -260,44 +389,64 @@ maplot_genes
 RMDs are a great way of handing over reports to collaborators. These functions are supposed to improve report quality by upgrading the report turning normal tables into interactive tables linking to further websites.
 
 *GO terms*
+
 ```{r}
 res_enrich_macrophage_topGO$GO.ID <- create_link_GO(res_enrich_macrophage_topGO$GO.ID)
 
-DT::datatable(res_enrich_macrophage_topGO, escape = FALSE) # the esxape =FALSE is important to ensure the link is turned into a button
+DT::datatable(res_enrich_macrophage_topGO, escape = FALSE)
 ```
 
+The `escape =FALSE` is important here to ensure the link is turned into a button.
+
 To get information on a singular GOterm of interest you can use:
+
 ```{r}
 go_2_html("GO:0001525")
 ```
 
 *Genes*
 
-There are various websites that can give more information on genes. All of these (except ensemble) require gene symbols as the input.
+There are various websites that can give more information on genes. All of these (except ensembl) require gene symbols as the input.
 Currently we have functions to create links to:
-Ensemble
-GeneCards
-Pubmed
-NCBI
-dbPTM
-GTEX
-UniProt
-Human Protein Atlas
 
-You can use access all of these easily by using one function
+* ensembl (https://www.ensembl.org/index.html)
+* GeneCards (https://www.genecards.org/): For information/overview on the gene
+* Pubmed (https://pubmed.ncbi.nlm.nih.gov/): For gene/GOterm related publications
+* NCBI (https://www.ncbi.nlm.nih.gov/): For overview and chromosomal information on the gene
+* dbPTM (https://awi.cuhk.edu.cn/dbPTM/): For posttranslational modifications
+* GTEX (https://www.gtexportal.org/home/): For data on expression of the gene in different tissues
+* UniProt ("https://www.uniprot.org/"): For information on the protein related to the gene
+* Human Protein Atlas ("https://www.proteinatlas.org/"): For information on the protein related to the gene for humans specifically
+
+You can  access all of these easily by using one function
+
 ```{r}
 # creating a smaller subset for visulisation purposes and to keep the main res_de
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
 
-buttonifier(res_subset,
-  col_to_use = "symbol", # col where the gene names are stored, default is "SYMBOL", in this example however the col is named "symbol"
-  new_cols = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED")
-  # all of the supported websites y0u can pick however many you want
+buttonifier(
+  df = res_subset,
+  col_to_use = "symbol",
+  new_cols = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED"),
+  ens_col = "id",
+  ens_species = "Homo_sapiens"
 )
 ```
 
-Important to know is that the buttonifier function returns a DT:datatable not a df. This is to ensure that the escape = FALSE parameter of datatable is set and not forgotten as the links/buttons will not work otherwise.
-Advanced users that want further customization options to their datatable can ensure a dataframe is returned (then the escape = FALSE must be set by hand):
+* `df`: A data.frame object containing your data. To get one from your `DESeqResults` data use the function: `deseqresult2df()`
+
+* `col_to_use`: Column where the gene names are stored, default is "SYMBOL", in this example however the column is named "symbol"
+
+* `new_cols`: All of the supported websites. You can pick however many you want.
+
+* `ens_col`: Where to find the ensembl IDs in case you want to turn those into buttons too. If not this defaults to NULL and that part is skipped.
+
+* `ens_species`: The species you are working on. Only needed if you want to turn the ensembl IDs into buttons.
+
+
+Important to know is that the `buttonifier()` function returns a `DT::datatable` not a `data.frame.` 
+This is to ensure that the `escape = FALSE` parameter of `datatable` is set and not forgotten as the links/buttons will not work otherwise.
+Advanced users that want further customization options to their `datatable` can ensure a `data.frame` is returned (then the `escape = FALSE` must be set by hand):
 
 ```{r}
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
@@ -315,7 +464,8 @@ DT::datatable(res_subset,
 )
 ```
 
-All of the functions included inside the buttonifier function are also available as singular functions in case you are only interested in one of them (Reminder: All except ensemble need gene symbols as input):
+All of the functions included inside the `buttonifier()` function are also available as singular functions in case you are only interested in one of them (Reminder: All except ensembl need gene symbols as input):
+
 ```{r}
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
 
@@ -336,9 +486,10 @@ For information on singular genes you can use:
 ```{r}
 geneinfo_2_html("SPARCL1",
   res_de = res_macrophage_IFNg_vs_naive,
-  col_to_use = "symbol" # similar to before: the default is "SYMBOL" but we have a different name so we have to specify it here
+  col_to_use = "symbol"
 )
 ```
+
 It can however also be used without a res_de for a general overview
 
 ```{r}

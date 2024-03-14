@@ -45,7 +45,7 @@
 #' library(macrophage)
 #' library(DESeq2)
 #' data(gse)
-#' dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
+#' dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 #' rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 #' keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
 #' dds_macrophage <- dds_macrophage[keep, ]
@@ -62,7 +62,6 @@
 #'   mapping = "org.Hs.eg.db",
 #'   geneID = "symbol",
 #' )
-#' 
 #'
 #' @export
 topGOtable <- function(res_de = NULL, # Differentially expressed genes
@@ -260,21 +259,21 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
   # instantiating the topGOdata object
   suppressMessages({
     GOdata <- new("topGOdata",
-                  ontology = ontology,
-                  allGenes = de_genes_input,
-                  nodeSize = 10,
-                  annot = annot,
-                  mapping = mapping,
-                  ID = geneID
+      ontology = ontology,
+      allGenes = de_genes_input,
+      nodeSize = 10,
+      annot = annot,
+      mapping = mapping,
+      ID = geneID
     )
   })
   # performing the test(s)
   suppressMessages({
     result_method2 <- runTest(GOdata, algorithm = topGO_method2, statistic = "fisher")
   })
-    suppressMessages({
-      resultClassic <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
-    })
+  suppressMessages({
+    resultClassic <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
+  })
   sTab <- GenTable(GOdata,
     p.value_method2 = result_method2,
     p.value_classic = resultClassic,
@@ -299,15 +298,15 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
   sTab <- sTab[seq_len(topTablerows), ]
 
   if (full_names_in_rows) {
-    sTab$Term <- sapply(sTab$GO.ID, function(go) {
+    sTab$Term <- vapply(sTab$GO.ID, function(go) {
       Term(GOTERM[[go]])
-    })
+    }, FUN.VALUE = character(1))
   }
 
   if (add_gene_to_terms) {
     # adapted from an elegant one liner found here: https://support.bioconductor.org/p/65856/
     SignificantGenes <- sigGenes(GOdata)
-    sTab$genes <- sapply(sTab$GO.ID, function(x) {
+    sTab$genes <- lapply(sTab$GO.ID, function(x) {
       genes <- genesInTerm(GOdata, x)
       tmp <- genes[[1]][genes[[1]] %in% SignificantGenes]
     })
@@ -315,13 +314,13 @@ topGOtable <- function(res_de = NULL, # Differentially expressed genes
     sTab$genes <- unlist(lapply(sTab$genes, function(arg) paste(arg, collapse = ",")))
   }
   # message for filters or a summary here
-  message(paste0(
+  message(
     nrow(sTab),
     " GO terms were analyzed. Not all of them are significantly enriched.\n",
     "We suggest further subsetting the output list by for example: \n",
     "using a pvalue cutoff in the column: \n",
     "'p.value_elim'."
-  ))
+  )
 
   # write all entries of the table
   # if (write_output) write.table(sTab, file = output_file, sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)

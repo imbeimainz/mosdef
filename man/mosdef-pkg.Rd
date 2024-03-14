@@ -22,7 +22,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Leon Dammer \email{dammerle@uni-mainz.de} (\href{https://orcid.org/0009-0008-4132-7639}{ORCID})
+  \item Leon Dammer \email{lc.dammer@gmail.com} (\href{https://orcid.org/0009-0008-4132-7639}{ORCID})
 }
 
 }

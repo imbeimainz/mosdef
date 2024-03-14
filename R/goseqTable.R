@@ -40,7 +40,7 @@
 #' library(macrophage)
 #' library(DESeq2)
 #' data(gse)
-#' dds_macrophage <- DESeqDataSet(gse, design = ~line + condition)
+#' dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 #' rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 #' keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
 #' dds_macrophage <- dds_macrophage[keep, ]
@@ -55,7 +55,6 @@
 #'   add_gene_to_terms = TRUE
 #' )
 #' head(mygo)
-#' 
 #'
 goseqTable <- function(res_de = NULL,
                        dds = NULL,
@@ -241,8 +240,7 @@ goseqTable <- function(res_de = NULL,
 
     cat2gene <- reversemap(gene2cat)
     # one list per GO term
-    goseq_out$genes <- sapply(goseq_out$category, function(x) cat2gene[[x]])
-
+    goseq_out$genes <- lapply(goseq_out$category, function(x) cat2gene[[x]])
 
     all_ens_ids <- unique(
       unique(unlist(goseq_out$genes))
@@ -263,7 +261,7 @@ goseqTable <- function(res_de = NULL,
     )
 
     # and also TODO: do this only if genes are not already symbols
-    goseq_out$genesymbols <- sapply(goseq_out$genes, function(x) {
+    goseq_out$genesymbols <- lapply(goseq_out$genes, function(x) {
       sort(lut_genes[x, "gene_name"])
     })
 

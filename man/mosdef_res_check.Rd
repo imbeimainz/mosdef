@@ -18,6 +18,6 @@ An invisible \code{NULL} after performing the checks
 A function checking if your res_de contains everything you need
 }
 \examples{
-# TODO: load data
-# mosdef_res_check(res_de)
+data(res_de_macrophage, package = "mosdef")
+mosdef_res_check(res_macrophage_IFNg_vs_naive)
 }
