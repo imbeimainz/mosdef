@@ -45,13 +45,13 @@ res_macrophage_IFNg_vs_naive <- results(dds_macrophage)
 
 `mosdef` allows you to create your enrichment results right from your `DESeqDataset` and `DESeqResults` objects using 3 possible algorithms:
 
-* topGO
-* goseq
-* clusterProfiler
+* topGO `r BiocStyle::Biocpkg("topGO")`
+* goseq `r BiocStyle::Biocpkg("goseq")`
+* clusterProfiler `r BiocStyle::Biocpkg("clusterProfiler")`
 
 For more information on the differences between these algorithms we refer to their individual vignettes and publications.
 
-All of these algorithms require an annotation to function properly so make sure you have installed and use the correct one for your experiment. The default is org.Mm.eg.db (Mus musculus). The macrophage data however stems from human so we need org.Hs.eg.db
+All of these algorithms require an annotation to function properly so make sure you have installed and use the correct one for your experiment. The default `is org.Mm.eg.db` (Mus musculus). The `macrophage` data however stems from human so we need `org.Hs.eg.db`
 
 ```{r}
 library("AnnotationDbi")
@@ -71,6 +71,8 @@ res_macrophage_IFNg_vs_naive$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
 
 
 ## topGO
+
+This will give an analysis for all possible GO terms (when using the BP ontology that is 6547 terms) not all of these results are significant and this list can (should) be further subset/filtered. For example by using a pvalue cutoff. 
 
 ```{r}
 library(topGO)
@@ -99,7 +101,14 @@ res_enrich_macrophage_topGO <- topGOtable(
 )
 ```
 
-This will give an analysis for all possible GO terms (when using the BP ontology that is 6547 terms) not all of these results are significant and this list can (should) be further subset/filtered. For example by using a pvalue cutoff. 
+Parameters:
+ 
+* ontology: Which gene ontology to analyse, default is "BP"
+* mapping: The annotation/species
+* geneID: Which format the genes are provided. If you provide a `DESeqDataset` and `DESeqResults`
+  mosdef does it for you and uses symbols. If you provide vectors please specify.
+
+
 
 ```{r}
 head(res_enrich_macrophage_topGO)
@@ -241,7 +250,10 @@ Plotting the counts of a gene vs it's expression (Log2 FoldChange). Granting an 
 plot_ma also allows you to set x and y labels right away but has defaults. However, similar to de_volcano these can also be set later on. For all possible parameters please look at the documentation
 
 ```{r}
-maplot <- plot_ma(res_macrophage_IFNg_vs_naive,
+#We are creating a subset to reduce vignette runtime, ignore the next to lines if you want to analyse your entire dataset
+gene_subset <- rownames(res_macrophage_IFNg_vs_naive)[1:500]
+res_macrophage_IFNg_vs_naive_subset <- res_macrophage_IFNg_vs_naive[gene_subset,]
+maplot <- plot_ma(res_macrophage_IFNg_vs_naive_subset,
                   FDR = 0.05, # which padj to set to count genes as DE (default 0.05)
                   hlines = 1 # whether or not (and where) to draw the horizontal line (optional)
 )
@@ -252,13 +264,13 @@ maplot
 plot_ma further allows you to highlight certain genes of interest to you if provided the ensemble ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as whether it is up or down regulated. 
 
 ```{r}
-maplot_genes <- plot_ma(res_macrophage_IFNg_vs_naive,
+maplot_genes <- plot_ma(res_macrophage_IFNg_vs_naive_subset,
                         FDR = 0.1,
                         intgenes = c(
-                          "SPARCL1",
-                          "CACNB2",
-                          "MCHR1",
-                          "COL1A1"
+                          "SLC7A2",
+                          "CFLAR",
+                          "PDK4",
+                          "IFNGR1"
                         ), # suggested genes of interest
                         hlines = 1
 )
