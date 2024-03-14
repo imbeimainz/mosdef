@@ -61,7 +61,7 @@ We will restrict our attention on the comparison between Interferon gamma treate
 # Getting started {#gettingstarted}
 
 
-```{r setup}
+```{r setup, eval = FALSE}
 if (!require("BiocManager")) {
   install.packages("BiocManager")
 }

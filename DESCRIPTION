@@ -48,8 +48,7 @@ Suggests:
     testthat (>= 3.0.0),
     TxDb.Hsapiens.UCSC.hg38.knownGene,
     BiocStyle,
-    scales,
-    BiocManager
+    scales
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

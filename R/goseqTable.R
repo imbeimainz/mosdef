@@ -242,7 +242,6 @@ goseqTable <- function(res_de = NULL,
     # one list per GO term
     goseq_out$genes <- lapply(goseq_out$category, function(x) cat2gene[[x]])
 
-
     all_ens_ids <- unique(
       unique(unlist(goseq_out$genes))
     )
