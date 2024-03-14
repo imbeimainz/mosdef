@@ -19,10 +19,46 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Introduction {#introduction}
+
+This vignette describes how to use the `r BiocStyle::Biocpkg("mosdef")` package for performing functional enrichment analysis and plotting your differential expression results. As well as providing functions that will improve your RMD reports.
+
+
+This package provides a unified API for enrichment analysis using different algorithms. In a way that greatly simplifies calling these functions and ensuring these calls remain the same no matter how often you repeat them or what data you use. It also aids in plotting your data and contains functions that can improve report table components. Thus streamlining the generation of comprehensive analysis reports.
+
+
+In order to use `r BiocStyle::Biocpkg("mosdef")` in your workflow, the following inputs are required: 
+
+- `dds`, a `DESeqDataSet` containing the expression matrix;
+- `res_de`, a `DESeqResults`, i.e. a `DataFrame` storing the results of the differential expression analysis;
+- `mapping` a annotation of your species provided by `r BiocStyle::Biocpkg("AnnotationDbi")`. This is not needed for all functions but for a lot of them. Examples: For human: `org.Hs.eg.db` for mouse: `org.Mm.eg.db`
+
+
+
+In the remainder of this vignette, we will illustrate the main features of `r BiocStyle::Biocpkg("mosdef")` on a publicly available dataset from Alasoo, et al. "Shared genetic effects on chromatin and gene expression indicate a role for enhancer priming in immune response", published in Nature Genetics, January 2018 [@Alasoo2018]
+[doi:10.1038/s41588-018-0046-7](https://doi.org/10.1038/s41588-018-0046-7).
+
+The data is made available via the `r BiocStyle::Biocpkg("macrophage")` Bioconductor package, which contains the files output from the Salmon quantification (version 0.12.0, with Gencode v29 reference), as well as the values summarized at the gene level, which we will use to exemplify.
+
+In the `macrophage` experimental setting, the samples are available from 6 different donors, in 4 different conditions (naive, treated with Interferon gamma, with SL1344, or with a combination of Interferon gamma and SL1344).
+We will restrict our attention on the comparison between Interferon gamma treated samples vs naive samples.
+
+# Getting started {#gettingstarted}
+
+
 ```{r setup}
-library("mosdef")
+if (!require("BiocManager")) {
+  install.packages("BiocManager")
+}
+BiocManager::install("mosdef")
+
 ```
 
+Once installed, the package can be loaded and attached to your current workspace as follows:
+
+```{r loadlib, eval = TRUE}
+library("mosdef")
+```
 # Load the data
 
 Load your dataset. We will use the well known `macrophage` data as an example.
