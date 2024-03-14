@@ -1,13 +1,29 @@
 ---
-title: "mosdef_userguide"
+title: >
+  The `mosdef` User's Guide
+author:
+- name: Leon Dammer
+  affiliation: 
+  - Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz
+  email: dammerle@uni-mainz.de
+- name: Federico Marini
+  affiliation: 
+  - Institute of Medical Biostatistics, Epidemiology and Informatics (IMBEI), Mainz
+  - Center for Thrombosis and Hemostasis (CTH), Mainz
+  email: marinif@uni-mainz.de
+date: "`r BiocStyle::doc_date()`"
+package: "`r BiocStyle::pkg_ver('mosdef')`"
 output: 
   BiocStyle::html_document:
-    toc: true
     toc_float: true
 vignette: >
-  %\VignetteIndexEntry{mosdef_userguide}
+  %\VignetteIndexEntry{The mosdef User's Guide}
+  %\VignetteEncoding{UTF-8}  
+  %\VignettePackage{mosdef}
+  %\VignetteKeywords{GeneExpression, RNASeq, FunctionalAnnotation, Sequencing, Visualization}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+editor_options: 
+  chunk_output_type: console
 ---
   
 ```{r, include = FALSE}
@@ -22,7 +38,6 @@ knitr::opts_chunk$set(
 # Introduction {#introduction}
 
 This vignette describes how to use the `r BiocStyle::Biocpkg("mosdef")` package for performing functional enrichment analysis and plotting your differential expression results. As well as providing functions that will improve your RMD reports.
-
 
 This package provides a unified API for enrichment analysis using different algorithms. In a way that greatly simplifies calling these functions and ensuring these calls remain the same no matter how often you repeat them or what data you use. It also aids in plotting your data and contains functions that can improve report table components. Thus streamlining the generation of comprehensive analysis reports.
 
