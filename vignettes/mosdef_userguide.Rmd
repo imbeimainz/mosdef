@@ -66,7 +66,6 @@ if (!require("BiocManager")) {
   install.packages("BiocManager")
 }
 BiocManager::install("mosdef")
-
 ```
 
 Once installed, the package can be loaded and attached to your current workspace as follows:
@@ -113,10 +112,10 @@ We also want to add a symbol column for later use:
 
 ```{r}
 res_macrophage_IFNg_vs_naive$symbol <- AnnotationDbi::mapIds(org.Hs.eg.db,
-                                                             keys = row.names(res_macrophage_IFNg_vs_naive),
-                                                             column = "SYMBOL",
-                                                             keytype = "ENSEMBL",
-                                                             multiVals = "first"
+  keys = row.names(res_macrophage_IFNg_vs_naive),
+  column = "SYMBOL",
+  keytype = "ENSEMBL",
+  multiVals = "first"
 )
 ```
 
@@ -131,14 +130,14 @@ res_enrich_macrophage_topGO <- topGOtable(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   ontology = "BP",
-  mapping = "org.Hs.eg.db", 
-  geneID = "symbol", 
-  de_type = "up_and_down", 
-  add_gene_to_terms = TRUE, 
+  mapping = "org.Hs.eg.db",
+  geneID = "symbol",
+  de_type = "up_and_down",
+  add_gene_to_terms = TRUE,
   topGO_method2 = "elim",
   min_counts = 20,
-  top_de = 700, 
-  verbose = TRUE 
+  top_de = 700,
+  verbose = TRUE
 )
 ```
 
@@ -213,7 +212,7 @@ clupro_macrophage <- cluproTable(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   mapping = "org.Hs.eg.db",
-  keyType = "SYMBOL" 
+  keyType = "SYMBOL"
 )
 head(clupro_macrophage)
 ```
@@ -255,9 +254,9 @@ A basic `ggplot` object including the most important parts when creating a volca
 ```{r}
 volcPlot <- de_volcano(
   res_de = res_macrophage_IFNg_vs_naive,
-  mapping = "org.Hs.eg.db", 
+  mapping = "org.Hs.eg.db",
   labeled_genes = 25,
-  L2FC_cutoff = 1 
+  L2FC_cutoff = 1
 )
 volcPlot
 ```
@@ -292,13 +291,13 @@ Volc_GO <- go_volcano(
   term_index = 1,
   L2FC_cutoff = 1,
   mapping = "org.Hs.eg.db",
-  overlaps = 50, 
+  overlaps = 50,
   col_to_use = "symbol",
   enrich_col = "genes",
-  down_col = "black", 
+  down_col = "black",
   up_col = "black",
   highlight_col = "tomato"
-) 
+)
 
 Volc_GO
 ```
@@ -330,9 +329,10 @@ Volc_GO
 An elegant way to plot the counts of a certain gene of interest as for example treated vs untreated.
 
 ```{r}
-gene_plot(dds = dds_macrophage,
-          gene = "ENSG00000125347",
-          intgroup = "condition"
+gene_plot(
+  dds = dds_macrophage,
+  gene = "ENSG00000125347",
+  intgroup = "condition"
 )
 ```
 
@@ -346,14 +346,15 @@ Plotting the counts of a gene vs it's expression (Log2 FoldChange). Granting an 
 plot_ma also allows you to set x and y labels right away but has defaults. However, similar to de_volcano these can also be set later on. For all possible parameters please look at the documentation
 
 ```{r}
-#We are creating a subset to reduce vignette runtime, ignore the next to lines if you want to analyse your entire dataset
+# We are creating a subset to reduce vignette runtime, ignore the next to lines if you want to analyse your entire dataset
 gene_subset <- rownames(res_macrophage_IFNg_vs_naive)[1:500]
-res_macrophage_IFNg_vs_naive_subset <- res_macrophage_IFNg_vs_naive[gene_subset,]
+res_macrophage_IFNg_vs_naive_subset <- res_macrophage_IFNg_vs_naive[gene_subset, ]
 
 
-maplot <- plot_ma(res_de = res_macrophage_IFNg_vs_naive_subset,
-                  FDR = 0.05, 
-                  hlines = 1 
+maplot <- plot_ma(
+  res_de = res_macrophage_IFNg_vs_naive_subset,
+  FDR = 0.05,
+  hlines = 1
 )
 # For further parameters please check the function # TODO can we say that here? Or would an example including all parameters be better?
 maplot
@@ -368,15 +369,16 @@ maplot
 plot_ma further allows you to highlight certain genes of interest to you if provided the ensembl ID. Showing both how relevant a gene of interest is (how many reads mapped to it) as well as whether it is up or down regulated. 
 
 ```{r}
-maplot_genes <- plot_ma(res_de = res_macrophage_IFNg_vs_naive_subset,
-                        FDR = 0.1,
-                        intgenes = c(
-                          "SLC7A2",
-                          "CFLAR",
-                          "PDK4",
-                          "IFNGR1"
-                        ), # suggested genes of interest
-                        hlines = 1
+maplot_genes <- plot_ma(
+  res_de = res_macrophage_IFNg_vs_naive_subset,
+  FDR = 0.1,
+  intgenes = c(
+    "SLC7A2",
+    "CFLAR",
+    "PDK4",
+    "IFNGR1"
+  ), # suggested genes of interest
+  hlines = 1
 )
 maplot_genes
 ```
@@ -391,7 +393,7 @@ RMDs are a great way of handing over reports to collaborators. These functions a
 ```{r}
 res_enrich_macrophage_topGO$GO.ID <- create_link_GO(res_enrich_macrophage_topGO$GO.ID)
 
-DT::datatable(res_enrich_macrophage_topGO, escape = FALSE) 
+DT::datatable(res_enrich_macrophage_topGO, escape = FALSE)
 ```
 
 The `escape =FALSE` is important here to ensure the link is turned into a button.
@@ -422,11 +424,12 @@ You can  access all of these easily by using one function
 # creating a smaller subset for visulisation purposes and to keep the main res_de
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
 
-buttonifier(df = res_subset,
-            col_to_use = "symbol", 
-            new_cols = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED"),
-            ens_col = "id", 
-            ens_species = "Homo_sapiens" 
+buttonifier(
+  df = res_subset,
+  col_to_use = "symbol",
+  new_cols = c("GC", "NCBI", "GTEX", "UNIPROT", "dbPTM", "HPA", "PUBMED"),
+  ens_col = "id",
+  ens_species = "Homo_sapiens"
 )
 ```
 
@@ -449,15 +452,15 @@ Advanced users that want further customization options to their `datatable` can 
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
 
 res_subset <- buttonifier(res_subset,
-                          col_to_use = "symbol",
-                          new_cols = c("GC", "NCBI", "HPA"),
-                          output_format = "DF"
+  col_to_use = "symbol",
+  new_cols = c("GC", "NCBI", "HPA"),
+  output_format = "DF"
 )
 
 DT::datatable(res_subset,
-              escape = FALSE,
-              rownames = FALSE
-              # other parameters...
+  escape = FALSE,
+  rownames = FALSE
+  # other parameters...
 )
 ```
 
@@ -482,8 +485,8 @@ For information on singular genes you can use:
 
 ```{r}
 geneinfo_2_html("SPARCL1",
-                res_de = res_macrophage_IFNg_vs_naive,
-                col_to_use = "symbol"
+  res_de = res_macrophage_IFNg_vs_naive,
+  col_to_use = "symbol"
 )
 ```
 
