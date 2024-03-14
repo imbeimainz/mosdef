@@ -42,7 +42,7 @@ If you don't have one it is created automatically}
 
 \item{highlight_col}{The colour for the genes associated with your GOterm default is "tomato"}
 
-\item{overlaps}{number of overlaps ggrepel is supposed to allow when labelling
+\item{overlaps}{number of overlaps ggrepel is supposed to allow when labeling
 (for more info check ggrepel documentation)}
 }
 \value{
