@@ -155,7 +155,7 @@ Parameters:
 * `geneID`: Which format the genes are provided. If you provide a `DESeqDataset` and `DESeqResults`, then `mosdef` does it for you and uses symbols.
 If you provide vectors please specify.
   
-* `de_type`: "hich genes to analyse.The default is all ("up_and_down")
+* `de_type`: Which genes to analyse.The default is all ("up_and_down")
 Other possibilities are only up-/down-regulated ("up"/"down") genes.
   
 * `add_gene_to_terms`: Logical, whether to add a column with all genes annotated to each GO term.
@@ -338,7 +338,7 @@ gene_plot(dds = dds_macrophage,
 
 * `dds`: Your `DESeqDataset` 
 * `gene`: The gene of interest
-* `intgroup`: The conditions to compare (based of your differnetial expression analysis) #TODO Not sure how to put this
+* `intgroup`: The conditions to compare (based of your differential expression analysis) #TODO Not sure how to put this
 
 *MA plot*
 Plotting the counts of a gene vs it's expression (Log2 FoldChange). Granting an overview of the amount of differentially expressed genes vs the amount of genes overall. As well as an overview of the amount of up vs. downregulated genes.
@@ -410,7 +410,7 @@ Currently we have functions to create links to:
 * ensembl (https://www.ensembl.org/index.html)
 * GeneCards (https://www.genecards.org/): For information/overview on the gene
 * Pubmed (https://pubmed.ncbi.nlm.nih.gov/): For gene/GOterm related publications
-* NCBI (https://www.ncbi.nlm.nih.gov/): For overview and chromosmal information on the gene
+* NCBI (https://www.ncbi.nlm.nih.gov/): For overview and chromosomal information on the gene
 * dbPTM (https://awi.cuhk.edu.cn/dbPTM/): For posttranslational modifications
 * GTEX (https://www.gtexportal.org/home/): For data on expression of the gene in different tissues
 * UniProt ("https://www.uniprot.org/"): For information on the protein related to the gene

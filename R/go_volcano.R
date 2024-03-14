@@ -13,7 +13,7 @@
 #' @param down_col The colour for your downregulated genes, default is "gray"
 #' @param up_col The colour for your upregulated genes, default is "gray"
 #' @param highlight_col The colour for the genes associated with your GOterm default is "tomato"
-#' @param overlaps number of overlaps ggrepel is supposed to allow when labelling
+#' @param overlaps number of overlaps ggrepel is supposed to allow when labeling
 #'  (for more info check ggrepel documentation)
 #'
 #' @return A  \code{ggplot2} volcano plot object that can be extended upon by the user

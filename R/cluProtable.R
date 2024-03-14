@@ -71,7 +71,7 @@ cluproTable <- function(res_de = NULL,
 
   ## Checks:
 
-  # Check if de-type is correct
+  # Check if de_type is correct
   # if(!(de_type %in% c("up_and_down","up", "down")))
 
   match.arg(de_type, choices = c("up_and_down", "up", "down"), several.ok = FALSE)
