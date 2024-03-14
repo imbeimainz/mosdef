@@ -97,6 +97,7 @@ Parameters:
 
 * `mapping`: The annotation/species
 
+<<<<<<< HEAD
 * `geneID`: Which format the genes are provided. If you provide a `DESeqDataset` and `DESeqResults`, then `mosdef` does it for you and uses symbols.
 If you provide vectors please specify.
   
@@ -109,6 +110,22 @@ Other possibilities are only up-/down-regulated ("up"/"down") genes.
   
 * `min_counts`: Minimum number of counts a gene has to have to be considered for the background.
 The default is 0 and we advise this parameter is only used by expert users that understand the impact of removing genes from the background.  TODO #Not sure how to phrase this part?
+=======
+* `geneID`: Which format the genes are provided. If you provide a `DESeqDataset` and `DESeqResults`,
+  then `mosdef` does it for you and uses symbols. If you provide vectors please specify.
+  
+* `de_type`: "hich genes to analyse.The default is all ("up_and_down")
+  Other possibilities are only up-/down-regulated ("up"/"down") genes.
+  
+* `add_gene_to_terms`: Logical, whether to add a column with all genes annotated to each GO term.
+
+* `topGO_method2`: Character, specifying which of the methods implemented by `topGO` is to be used
+  The default is elim. For more info look at the documentation of `r BiocStyle::Biocpkg("topGO")`.
+  
+* `min_counts`: Minimum number of counts a gene has to have to be considered for the background.
+  The default is 0 and we advise this parameter is only used by expert users that understand the
+  impact of removing genes from the background.  TODO #Not sure how to phrase this part?
+>>>>>>> e47bff6b238d3dc0e594024013c1172badfd3083
   
 * `top_de`: The number of genes to be considered in the enrich analysis.
   The default is all genes, this can be reduced to reduce redundancy.
