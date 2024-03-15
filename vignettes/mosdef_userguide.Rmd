@@ -181,7 +181,7 @@ head(res_enrich_macrophage_topGO)
 
 ## goseq
 
-Parameters like top_de, min_counts, verbose and de_type can also be used here (For more detail on the parameters see above).
+Parameters like top_de, min_counts, verbose and de_type can also be used here (For more detail on these parameters see above).
 Important: the feature length retrieval is based on the `goseq()` function,and requires that the corresponding TxDb packages are installed and available so make sure one is installed on your PC for human we recommend: `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
 
 
@@ -204,7 +204,7 @@ head(res_enrich_macrophage_goseq)
 
 
 ## clusterProfiler
-Parameters like `top_de`, `min_counts`, `verbose` and `de_type` can also be used here (For more detail on the parameters see above).
+Parameters like `top_de`, `min_counts`, `verbose` and `de_type` can also be used here (For more detail on these parameters see above).
 If you want to further customize the call of `go_enrich()` inside the function, have a look at the documentation for `go_enrich()` from `r BiocStyle::Biocpkg("clusterProfiler")` Those parameters can be added to the `cluproTable()` function call.
 
 ```{r, eval = FALSE}
@@ -282,7 +282,7 @@ volcPlot +
 
 For further possibilities please look at the ggplot2 documentation.
 
-In the volcanoPlot you can also highlight genes associated with a certain GOterm of interest.
+Instead of differentially expressed genes, in the volcanoPlot you can also highlight genes associated with a certain GOterm of interest.
 
 ```{r}
 Volc_GO <- go_volcano(
@@ -356,7 +356,7 @@ maplot <- plot_ma(
   FDR = 0.05,
   hlines = 1
 )
-# For further parameters please check the function # TODO can we say that here? Or would an example including all parameters be better?
+# For further parameters please check the function documentation # TODO can we say that here? Or would an example including all parameters be better?
 maplot
 ```
 
