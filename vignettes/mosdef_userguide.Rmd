@@ -421,7 +421,7 @@ Currently we have functions to create links to:
 You can  access all of these easily by using one function
 
 ```{r}
-# creating a smaller subset for visulisation purposes and to keep the main res_de
+# creating a smaller subset for visualization purposes and to keep the main res_de
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
 
 buttonifier(
