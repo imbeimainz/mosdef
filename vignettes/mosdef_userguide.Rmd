@@ -486,7 +486,7 @@ DT::datatable(res_subset, escape = FALSE)
 For information on singular genes you can use:
 
 ```{r}
-geneinfo_2_html("SPARCL1",
+geneinfo_2_html("IRF1",
   res_de = res_macrophage_IFNg_vs_naive,
   col_to_use = "symbol"
 )
