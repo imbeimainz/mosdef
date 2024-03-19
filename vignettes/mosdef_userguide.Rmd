@@ -308,7 +308,7 @@ head(res_enrich_macrophage_topGO_vec)
 
 ## Individual genes - `gene_plot()`
 
-An elegant way to plot the expression values (by default the normalozed counts) of a certain gene of interest, split up by a covariate of interest - for example, the `condition`, IFNg vs naive.
+An elegant way to plot the expression values (by default the normalized counts) of a certain gene of interest, split up by a covariate of interest - for example, the `condition`, IFNg vs naive.
 
 ```{r}
 gene_plot(
@@ -420,7 +420,7 @@ This grants an overview of the differentially expressed genes across the differe
 However, similar to `de_volcano()`, these can also be set later on by directly modifying the returned `ggplot` object.
 
 ```{r}
-# We are creating a subset to reduce vignette runtime, ignore the next to lines if you want to analyse your entire dataset
+# We are creating a subset to reduce vignette runtime, ignore the next two lines if you want to analyse your entire dataset
 gene_subset <- rownames(res_macrophage_IFNg_vs_naive)[]
 res_macrophage_IFNg_vs_naive_subset <- res_macrophage_IFNg_vs_naive[gene_subset, ]
 
