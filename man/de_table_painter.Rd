@@ -71,7 +71,7 @@ de_table_painter(res_macrophage_IFNg_vs_naive,
 
 
 ## It is also possible to pass the "buttonified" table,
-res_df_small <- deseqresult2df(res_de)[1:100, ]
+res_df_small <- deseqresult2df(res_macrophage_IFNg_vs_naive)[1:100, ]
 
 buttonified_df <- buttonifier(res_df_small,
                               new_cols = c("NCBI", "HPA"),
