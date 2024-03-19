@@ -441,7 +441,7 @@ If desired, `plot_ma()` further allows you to highlight certain genes of interes
 
 ```{r}
 maplot_genes <- plot_ma(
-  res_de = res_macrophage_IFNg_vs_naive_subset,
+  res_de = res_macrophage_IFNg_vs_naive,
   FDR = 0.1,
   intgenes = c(
     "SLC7A2",
@@ -526,6 +526,23 @@ DT::datatable(res_subset,
   # other parameters...
 )
 ```
+
+As an additional prettifying element, the information on the log2 fold change can be also encoded with small transparent colored bars, representing the underlying effect sizes.
+This can be done with the `de_table_painter()` function, displayed in the following chunk:
+
+```{r}
+de_table_painter(res_subset,
+                 rounding_digits = 3,
+                 signif_digits = 5)
+
+## This also works directly on the DESeqResults objects:
+de_table_painter(res_macrophage_IFNg_vs_naive[1:100, ],
+                 rounding_digits = 3,
+                 signif_digits = 5)
+
+
+```
+
 
 All of the functions included inside the `buttonifier()` function are also available as singular functions in case you are only interested in a subset of them.
 As a reminder: all functions, except the one related to the ENSEMBL database, can use/need gene symbols as input, so that the call to build up the table from its individual columns could be specified as in the following chunk:
