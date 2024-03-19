@@ -420,12 +420,8 @@ This grants an overview of the differentially expressed genes across the differe
 However, similar to `de_volcano()`, these can also be set later on by directly modifying the returned `ggplot` object.
 
 ```{r}
-# We are creating a subset to reduce vignette runtime, ignore the next two lines if you want to analyse your entire dataset
-gene_subset <- rownames(res_macrophage_IFNg_vs_naive)[]
-res_macrophage_IFNg_vs_naive_subset <- res_macrophage_IFNg_vs_naive[gene_subset, ]
-
 maplot <- plot_ma(
-  res_de = res_macrophage_IFNg_vs_naive_subset,
+  res_de = res_macrophage_IFNg_vs_naive,
   FDR = 0.05,
   hlines = 1
 )
