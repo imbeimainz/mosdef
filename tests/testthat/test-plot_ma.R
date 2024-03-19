@@ -81,7 +81,7 @@ test_that("annotation obj can be used ", code = {
 # })
 
 test_that("plot is created if there is no symbol column in the res_de ", code = {
-  p_intgenes_nolabel <- plot_ma(res_macrophage_IFNg_vs_naive_nosymbols,
+  p_intgenes_nolabel <- plot_ma(res_airway_nosymbols,
     intgenes = c(
       "ENSG00000103196", # CRISPLD2
       "ENSG00000120129", # DUSP1

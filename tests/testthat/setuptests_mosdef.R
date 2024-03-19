@@ -62,7 +62,7 @@ data(airway)
 dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
 dds_airway <- DESeq(dds_airway)
 
-res_macrophage_IFNg_vs_naive_nosymbols <- results(dds_airway)
+res_airway_nosymbols <- results(dds_airway)
 
 # res_enrich
 data(res_enrich_macrophage_topGO, package = "mosdef")
