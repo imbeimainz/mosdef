@@ -54,7 +54,7 @@
 #' library("org.Hs.eg.db")
 #'
 #' # dds object
-#' data(gse)
+#' data(gse, package = "macrophage")
 #' dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 #' rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 #' keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
@@ -243,7 +243,7 @@ gene_plot <- function(dds,
 #' library("AnnotationDbi")
 #'
 #' # dds object
-#' data(gse)
+#' data(gse, package = "macrophage")
 #' dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 #' rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 #' keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
