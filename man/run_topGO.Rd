@@ -80,19 +80,21 @@ following: \code{elim}, \code{weight}, \code{weight01}, \code{lea},
 documentation of the \code{topGO} package itself
 }
 \examples{
-library(macrophage)
-library(DESeq2)
-data(gse)
+library("macrophage")
+library("DESeq2")
+data(gse, package = "macrophage")
+
 dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
 dds_macrophage <- dds_macrophage[keep, ]
 dds_macrophage <- DESeq(dds_macrophage)
+
 data(res_de_macrophage, package = "mosdef")
+
 library("AnnotationDbi")
 library("org.Hs.eg.db")
-
-library(topGO)
+library("topGO")
 topgoDE_macrophage <- topGOtable(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
@@ -100,7 +102,6 @@ topgoDE_macrophage <- topGOtable(
   mapping = "org.Hs.eg.db",
   geneID = "symbol",
 )
-
 }
 \seealso{
 Other Enrichment functions: 

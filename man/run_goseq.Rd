@@ -70,14 +70,16 @@ Note: the feature length retrieval is based on the \code{\link{goseq}} function,
 and requires that the corresponding TxDb packages are installed and available
 }
 \examples{
-library(macrophage)
-library(DESeq2)
-data(gse)
+library("macrophage")
+library("DESeq2")
+data(gse, package = "macrophage")
+
 dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
 dds_macrophage <- dds_macrophage[keep, ]
 dds_macrophage <- DESeq(dds_macrophage)
+
 data(res_de_macrophage, package = "mosdef")
 res_de <- res_macrophage_IFNg_vs_naive
 mygo <- goseqTable(
@@ -87,8 +89,8 @@ mygo <- goseqTable(
   testCats = "GO:BP",
   add_gene_to_terms = TRUE
 )
-head(mygo)
 
+head(mygo)
 }
 \seealso{
 Other Enrichment functions: 

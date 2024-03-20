@@ -75,6 +75,7 @@ in the row names
 }
 \examples{
 data(res_de_macrophage, package = "mosdef")
+
 plot_ma(res_macrophage_IFNg_vs_naive, FDR = 0.05, hlines = 1)
 
 plot_ma(res_macrophage_IFNg_vs_naive,

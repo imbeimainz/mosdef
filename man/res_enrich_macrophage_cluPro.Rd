@@ -13,7 +13,7 @@ A sample enrichment object, generated in the \code{mosdef} and \code{clusterProf
 \details{
 This enrichment object is on the data from the \code{macrophage} package
 
-Details on how this object has been created are included in the \code{create_mosdef_data}
+Details on how this object has been created are included in the \code{create_mosdef_data.R}
 script, included in the \code{scripts} folder of the \code{mosdef} package.
 }
 \references{

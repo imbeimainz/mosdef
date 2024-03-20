@@ -2,9 +2,7 @@
 % Please edit documentation in R/plot_de_summaries.R
 \name{de_volcano}
 \alias{de_volcano}
-\title{Generates a volcano plot using ggplot2
-This function generates a base volcanoplot for differentially expressed genes that can then be expanded
-upon using further ggplot functions.}
+\title{Generates a volcano plot using ggplot2}
 \usage{
 de_volcano(
   res_de,
@@ -16,32 +14,36 @@ de_volcano(
 \arguments{
 \item{res_de}{A DESeqResults object created using \code{DESeq2}}
 
-\item{L2FC_cutoff}{A numeric value that sets the cutoff for the xintercept argument of ggplot}
+\item{L2FC_cutoff}{A numeric value that sets the cutoff for the xintercept
+argument of ggplot}
 
-\item{labeled_genes}{A numeric value describing the amount of genes to be labeled. This uses the Top(x) highest
-differentially expressed genes}
+\item{labeled_genes}{A numeric value describing the amount of genes to be labeled.
+This uses the Top(x) highest differentially expressed genes}
 
-\item{mapping}{Which \code{org.XX.eg.db} to use for annotation - select according to the species}
+\item{mapping}{Which \code{org.XX.eg.db} to use for annotation - select
+according to the species}
 }
 \value{
 A  \code{ggplot2} volcano plot object that can be extended upon by the user
 }
 \description{
-Generates a volcano plot using ggplot2
-This function generates a base volcanoplot for differentially expressed genes that can then be expanded
-upon using further ggplot functions.
+This function generates a base volcanoplot for differentially expressed genes
+that can then be expanded upon using further ggplot functions.
 }
 \examples{
-library(ggplot2)
-library(RColorBrewer) # for a colourful plot
-library(ggrepel) # for nice annotations
-library(DESeq2)
+library("ggplot2")
+library("RColorBrewer")
+library("ggrepel")
+library("DESeq2")
 library("org.Hs.eg.db")
+
 data(res_de_macrophage, package = "mosdef")
+
 p <- de_volcano(res_macrophage_IFNg_vs_naive,
   L2FC_cutoff = 1,
   labeled_genes = 20,
   mapping = "org.Hs.eg.db"
 )
+
 p
 }

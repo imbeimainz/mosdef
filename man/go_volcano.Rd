@@ -3,8 +3,9 @@
 \name{go_volcano}
 \alias{go_volcano}
 \title{Generates a volcano plot using ggplot2
-This function generates a base volcanoplot highlighting genes associated with a certain GOterm
-that can then be expanded upon using further ggplot functions.}
+This function generates a base volcano plot highlighting genes associated
+with a certain GOterm that can then be expanded upon using further ggplot
+functions.}
 \usage{
 go_volcano(
   res_de,
@@ -50,21 +51,22 @@ A  \code{ggplot2} volcano plot object that can be extended upon by the user
 }
 \description{
 Generates a volcano plot using ggplot2
-This function generates a base volcanoplot highlighting genes associated with a certain GOterm
-that can then be expanded upon using further ggplot functions.
+This function generates a base volcano plot highlighting genes associated
+with a certain GOterm that can then be expanded upon using further ggplot
+functions.
 }
 \examples{
-library(ggplot2)
-library(RColorBrewer) # for a colourful plot
-library(ggrepel) # for nice annotations
-library(DESeq2)
+library("ggplot2")
+library("RColorBrewer")
+library("ggrepel")
+library("DESeq2")
 library("topGO")
-library(AnnotationDbi)
+library("AnnotationDbi")
 library("org.Hs.eg.db")
-
 
 data(res_de_macrophage, package = "mosdef")
 data(res_enrich_macrophage_topGO, package = "mosdef")
+
 p <- go_volcano(
   res_macrophage_IFNg_vs_naive,
   res_enrich = res_enrich_macrophage_topGO,
@@ -73,5 +75,6 @@ p <- go_volcano(
   mapping = "org.Hs.eg.db",
   overlaps = 20
 )
+
 p
 }

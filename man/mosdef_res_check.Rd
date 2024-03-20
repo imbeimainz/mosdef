@@ -19,5 +19,6 @@ A function checking if your res_de contains everything you need
 }
 \examples{
 data(res_de_macrophage, package = "mosdef")
+
 mosdef_res_check(res_macrophage_IFNg_vs_naive)
 }
