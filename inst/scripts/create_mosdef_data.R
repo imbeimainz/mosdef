@@ -46,7 +46,7 @@ res_enrich_macrophage_goseq <- run_goseq(
 save(res_enrich_macrophage_goseq, file = "data/res_enrich_macrophage_goseq.RData", compress = "xz")
 
 # res_enrich object clusterProfiler --------------------------------------------
-library(clusterProfiler)
+library("clusterProfiler")
 res_enrich_macrophage_cluPro <- run_cluPro(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
