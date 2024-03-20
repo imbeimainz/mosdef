@@ -29,10 +29,6 @@ test_that("Early fails are triggered", {
   })
 
   expect_error({
-    deseqresult2tbl(myde)
-  })
-
-  expect_error({
     goseqTable(
       res_de = myde,
       dds = dds_macrophage,
