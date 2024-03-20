@@ -146,7 +146,7 @@ library("AnnotationDbi")
 library("org.Hs.eg.db")
 ```
 
-We also want to add a symbol column for later use - also, in order to add a human readable name for our features of interest:
+We also want to add a symbol column for later use - and, in order to add a human readable name for our features of interest:
 
 ```{r addsymbols}
 res_macrophage_IFNg_vs_naive$symbol <- 
@@ -172,7 +172,7 @@ mosdef_res_check(res_macrophage_IFNg_vs_naive)
 `r BiocStyle::Biocpkg("topGO")` is a widely used option to obtain a set of spot-on Gene Ontology terms, removing some of the more generic ones and therefore also reducing the redundancy which is inherent in the GO database [@Ashburner2000].
 
 The `run_topGO` function will return a table with the analysis for all possible GO terms (when using the BP ontology that is 6547 terms).
-Not all of these results are significant, and this list can (should) be further subset/filtered, for example by using a p-value cutoff. 
+Not all of these results are significant, and this list can (should) be further subset/filtered. For example by using a p-value cutoff. 
 
 ```{r runtopgo}
 library("topGO")
@@ -222,7 +222,7 @@ The method implemented in the `r BiocStyle::Biocpkg("goseq")` package is able to
 
 Parameters like `top_de`, `min_counts`, `verbose` and `de_type` can also be used here (for more detail on these parameters see above), as they are a part of the shared API with `run_topGO` and `run_cluPro`.
 
-Importantly, the feature length retrieval is based on the `goseq()` function, and this requires that the corresponding TxDb packages are installed and available so make sure one is installed on your machine. For human samples, the recommended one is `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
+Importantly, the feature length retrieval is based on the `goseq()` function, and this requires that the corresponding TxDb packages are installed and available. So make sure one is installed on your machine. For human samples, the recommended one is `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
 
 
 ```{r rungoseq, eval = FALSE}
@@ -317,7 +317,7 @@ This automatic behavior can be suppressed by specifying a different value for th
 ## All genes at once - Volcano plots
 
 Volcano plots are one of the most well known and used plots to display differentially expressed genes. 
-A basic `ggplot` object including the most important parts when creating a volcano plot. 
+These functions return a basic `ggplot` object including the most important parts when creating a volcano plot. 
 This can be later expanded upon like any regular `ggplot` object by the user.
 
 ```{r volcanoplot}
@@ -334,9 +334,9 @@ Again, an overview on the key parameters:
 
 * `res_de`: Your `DESeqResults`
 
-* `mapping`: The annotation/species: Important to generate symbols for labeling
+* `mapping`: The annotation/species: Important to generate symbols for labeling.
 
-* `labeled_genes`: The number of the top DE genes to be labeled. Default is 30
+* `labeled_genes`: The number of the top DE genes to be labeled. Default is 30.
 
 * `L2FC_cutoff`: Where to draw the lines in the plot and which genes to mark as significant. The default is one (meaning L2FC +/-1): So genes with a FoldChange higher than 1 or lower -1 and a padj value below 0.05.  
 
@@ -354,7 +354,7 @@ volcPlot +
 For further possibilities please look at the ggplot2 documentation.
 
 In addition to only focusing on differentially expressed genes, in the volcanoPlot you can also highlight genes associated with a certain GO term of interest.
-This can be done with the `go_volcano()` function, 
+This can be done with the `go_volcano()` function:
 
 ```{r volcanogo}
 Volc_GO <- go_volcano(
@@ -374,13 +374,15 @@ Volc_GO <- go_volcano(
 Volc_GO
 ```
 
+The key parameters:
+
 * `res_de`: Your `DESeqResults`
 * `res_enrich`: Your enrichment results
-* `term_index`: The index(row) where your term of interest is located in your enrichment result
+* `term_index`: The index(row) where your term of interest is located in your enrichment result.
 * `L2FC_cutoff`: Where to draw the lines in the plot and which genes to mark as significant. The default is one (meaning L2FC +/-1): So genes with a FoldChange higher than 1 or lower -1 and a padj value below 0.05. 
-* `mapping`: The annotation/species: Important to generate symbols for labeling
-* `overlaps`: The number of overlaps `ggrepell` is supposed to allow for labeling (increases  number of labeled genes)
-* `col_to_use`: Name of the column in your res_de containing the gene symbols
+* `mapping`: The annotation/species: Important to generate symbols for labeling.
+* `overlaps`: The number of overlaps `ggrepell` is supposed to allow for labeling (increases  number of labeled genes).
+* `col_to_use`: Name of the column in your res_de containing the gene symbols.
 * `enrich_col`: Name of the column in your res_enrich containing the gene symbols. For an example see `run_topGO` data provided in mosdef: `data(res_enrich_macrophage_topGO, package = "mosdef")`.
 * `down_col`: Colour for your downregulated genes (genes with a L2FC below your cutoff).
 * `up_col`: Colour for your upregulated genes (genes with a L2FC above your cutoff).
@@ -389,7 +391,7 @@ Volc_GO
 
 ## All genes at once - MA plots
 
-An alternative to the volcano plot, less focused on the individual significance values and more focused on the combination of mean expression and changes in expression levels, is the MA plot, which can be considered an extension of the Bland-Altman plot for genomics data.
+An alternative to the volcano plot, less focused on the individual significance values and more focused on the combination of mean expression and changes in expression levels, is the MA plot. It can be considered an extension of the Bland-Altman plot for genomics data.
 This grants an overview of the differentially expressed genes across the different levels of expression.
 
 `plot_ma()` also allows you to set x and y labels right away, but we provide some default values.
@@ -454,7 +456,7 @@ Currently, `r BiocStyle::Biocpkg("mosdef")` has functions to create automated li
 * UniProt ("https://www.uniprot.org/"): For information on the protein related to the gene
 * Human Protein Atlas ("https://www.proteinatlas.org/"): For information on the protein related to the gene for humans specifically
 
-You can access all of these easily by using one function
+You can access all of these easily by using one function that uses a `data.frame` as input:
 
 ```{r runbuttonifier}
 # creating a smaller subset for visualization purposes and to keep the main res_de
@@ -471,9 +473,9 @@ buttonifier(
 
 Again, an overview of the key parameters:
 
-* `df`: A data.frame object containing your data. To get one from your `DESeqResults` data use the function: `deseqresult2df()`
+* `df`: A data.frame object containing your data. To get one from your `DESeqResults` data use the function: `deseqresult2df()`.
 
-* `col_to_use`: Column where the gene names are stored, default is "SYMBOL", in this example however the column is named "symbol"
+* `col_to_use`: Column where the gene names are stored, default is "SYMBOL", in this example however the column is named "symbol".
 
 * `new_cols`: All of the supported websites. You can pick however many you want.
 
@@ -485,7 +487,7 @@ Again, an overview of the key parameters:
 Importantly, the `buttonifier()` function directly returns a `DT::datatable` by default (not a `data.frame`). 
 This is to ensure that the `escape = FALSE` parameter of `datatable` is set and not forgotten as the links/buttons will not work otherwise (or at least, will displayed very oddly as "simple text", not interpreted as the code to generate buttons).
 
-Advanced users that want further customization options to their `datatable` can ensure a `data.frame` is returned (then the `escape = FALSE` must be set by hand):
+Advanced users that want further customization options to their `datatable` can ensure a `data.frame` is returned using the `output_format` parameter (then the `escape = FALSE` must be set by hand):
 
 ```{r dtcustomized}
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive, FDR = 0.05)[1:500, ]
@@ -547,7 +549,7 @@ geneinfo_2_html("IRF1",
 )
 ```
 
-It can however also be used without a res_de for a general overview
+It can however also be used without a res_de for a general overview.
 
 ```{r geneinfocompact}
 geneinfo_2_html("ACTB")
