@@ -1,3 +1,7 @@
+# mosdef 0.4.0
+
+* Using `longtests` to reduce checking time, as per Bioc guidelines
+
 # mosdef 0.3.0
 
 * Reordered the functions thematically into a better file naming structure
