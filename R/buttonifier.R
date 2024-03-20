@@ -10,9 +10,9 @@
 #' @param output_format a parameter deciding which output format to return, either a DT:datatable (recommended)
 #' or a simple dataframe (DF).In the latter case it is important that if the data is visualized with the
 #'  \code{datatable} function the parameter escape must be set to FALSE
-#' @param ens_col ame of the columns were the ensembl IDs are stored. 
+#' @param ens_col ame of the columns were the ensembl IDs are stored.
 #' @param ens_species The species you are working with to link to the correct gene on ensembl
-#'  
+#'
 #'
 #' @return A dataframe or a \code{DT} datatable object with columns adding HTML objects that link to websites with further information on the genes in question.
 #' @export
@@ -27,7 +27,7 @@
 #' data(res_de_macrophage, package = "mosdef")
 #' res_de <- res_macrophage_IFNg_vs_naive
 #' res_df <- deseqresult2df(res_de)
-#' # Subsetting for quicker run
+#' ## Subsetting for quicker run
 #' res_df <- res_df[1:100, ]
 #' buttonifier(res_df)
 #'
@@ -36,7 +36,8 @@
 #'   ens_col = "id",
 #'   ens_species = "Homo_sapiens"
 #' )
-buttonifier <- function(df, new_cols = c("GC", "UNIPROT"),
+buttonifier <- function(df,
+                        new_cols = c("GC", "UNIPROT"),
                         col_to_use = "SYMBOL",
                         output_format = "DT",
                         ens_col = NULL,
@@ -77,7 +78,6 @@ buttonifier <- function(df, new_cols = c("GC", "UNIPROT"),
       )
     }
   }
-
 
   match.arg(output_format, choices = c("DT", "DF"))
 
