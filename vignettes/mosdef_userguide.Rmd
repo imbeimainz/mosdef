@@ -194,39 +194,26 @@ res_enrich_macrophage_topGO <- run_topGO(
 The key parameters for `run_topGO()` are defined as follows:
 
 * `res_de`: Your `DESeqResults` object
-
 * `dds`: Your `DESeqDataset` object
-
 * `ontology`: Which gene ontology to analyse, default is "BP"
-
 * `mapping`: The annotation/species
-
-* `geneID`: Which format the genes are provided. If you provide a `DESeqDataset` and `DESeqResults`, then `mosdef` does it for you and uses symbols.
-If you provide vectors please specify.
-  
-* `de_type`: Which genes to analyse.The default is all ("up_and_down")
+* `geneID`: Which format the genes are provided. If you provide a `DESeqDataset` and `DESeqResults`, then `mosdef` does it for you and uses symbols. If you provide vectors please specify a value.
+* `de_type`: Which genes to analyse. The default is all ("up_and_down")
 Other possibilities are only up-/down-regulated ("up"/"down") genes.
-  
 * `add_gene_to_terms`: Logical, whether to add a column with all genes annotated to each GO term.
-
 * `topGO_method2`: Character, specifying which of the methods implemented by `topGO` is to be used. The default is elim. For more info look at the documentation of `r BiocStyle::Biocpkg("topGO")`.
-  
 * `min_counts`: Minimum number of counts a gene has to have to be considered for the background.
 The default is 0 and we advise this parameter is only used by expert users that understand the impact of removing genes from the background.  #TODO Not sure how to phrase this part?
-
 * `top_de`: The number of genes to be considered in the enrich analysis.
   The default is all genes, this can be reduced to reduce redundancy.
   In this case, we take the top 700 highest DE genes based of padj score.
   If this number is bigger than the total amount of de genes the parameter defaults back to all genes.
-  
 * `verbose`: Whether or not to summarise the analysis in a message.
   
-
 
 ```{r resultstopgo}
 head(res_enrich_macrophage_topGO)
 ```
-
 
 
 ## `mosdef` and `goseq`
@@ -388,27 +375,16 @@ Volc_GO
 ```
 
 * `res_de`: Your `DESeqResults`
-
 * `res_enrich`: Your enrichment results
-
 * `term_index`: The index(row) where your term of interest is located in your enrichment result
-
 * `L2FC_cutoff`: Where to draw the lines in the plot and which genes to mark as significant. The default is one (meaning L2FC +/-1): So genes with a FoldChange higher than 1 or lower -1 and a padj value below 0.05. 
-
 * `mapping`: The annotation/species: Important to generate symbols for labeling
-
 * `overlaps`: The number of overlaps `ggrepell` is supposed to allow for labeling (increases  number of labeled genes)
-
 * `col_to_use`: Name of the column in your res_de containing the gene symbols
-
 * `enrich_col`: Name of the column in your res_enrich containing the gene symbols. For an example see `run_topGO` data provided in mosdef: `data(res_enrich_macrophage_topGO, package = "mosdef")`.
-
 * `down_col`: Colour for your downregulated genes (genes with a L2FC below your cutoff).
-
 * `up_col`: Colour for your upregulated genes (genes with a L2FC above your cutoff).
-
 * `highlight_col`: Colour for your genes associated with the given term of interest.
-
 
 
 ## All genes at once - MA plots
