@@ -103,7 +103,7 @@ Notably, we correctly specify the experimental design as `~ line + condition`, t
 
 ```{r loaddata, warning=FALSE}
 library("macrophage")
-library("DESeq2"), package = "macrophage"
+library("DESeq2")
 library("org.Hs.eg.db")
 data(gse, package = "macrophage")
 dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
