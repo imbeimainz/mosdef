@@ -291,7 +291,7 @@ Most of the above mentioned parameters work here as well (`top_de`, `verbose`), 
 res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive)[1:500, ] # reduce size to increase computational speed
 myde <- res_subset$id
 myassayed <- rownames(res_macrophage_IFNg_vs_naive)
-# Here Keys are ensembl not symbols
+## Here keys are Ensembl not symbols
 res_enrich_macrophage_topGO_vec <- run_topGO(
   de_genes = myde,
   bg_genes = myassayed,
@@ -501,9 +501,9 @@ Again, an overview of the key parameters:
 
 * `new_cols`: All of the supported websites. You can pick however many you want.
 
-* `ens_col`: Where to find the ensembl IDs in case you want to turn those into buttons too. If not this defaults to NULL and that part is skipped.
+* `ens_col`: Where to find the Ensembl IDs in case you want to turn those into buttons too. If not this defaults to NULL and that part is skipped.
 
-* `ens_species`: The species you are working on. Only needed if you want to turn the ensembl IDs into buttons.
+* `ens_species`: The species you are working on. Only needed if you want to turn the Ensembl IDs into buttons.
 
 
 Importantly, the `buttonifier()` function directly returns a `DT::datatable` by default (not a `data.frame`). 

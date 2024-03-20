@@ -2,11 +2,11 @@
 % Please edit documentation in R/buttonifier.R
 \name{buttonifier}
 \alias{buttonifier}
-\title{Create a button for gene symbols in an Rmd}
+\title{Create sets of buttons for gene symbols}
 \usage{
 buttonifier(
   df,
-  new_cols = c("GC", "UNIPROT"),
+  new_cols = c("PUBMED", "GC", "UNIPROT"),
   col_to_use = "SYMBOL",
   output_format = "DT",
   ens_col = NULL,
@@ -20,26 +20,32 @@ buttonifier(
 
 \item{col_to_use}{name of the columns were the gene symbols are stored. Default is SYMBOL}
 
-\item{output_format}{a parameter deciding which output format to return, either a DT:datatable (recommended)
-or a simple dataframe (DF).In the latter case it is important that if the data is visualized with the
+\item{output_format}{a parameter deciding which output format to return,
+either a DT:datatable (recommended) or a simple dataframe (DF).
+In the latter case it is important that if the data is visualized with the
 \code{datatable} function the parameter escape must be set to FALSE}
 
-\item{ens_col}{ame of the columns were the ensembl IDs are stored.}
+\item{ens_col}{Character string, name of the columns were the ENSEMBL IDs are stored.}
 
-\item{ens_species}{The species you are working with to link to the correct gene on ensembl}
+\item{ens_species}{The species you are working with to link to the correct gene on ENSEMBL}
 }
 \value{
-A dataframe or a \code{DT} datatable object with columns adding HTML objects that link to websites with further information on the genes in question.
+A dataframe or a \code{DT} datatable object with columns adding HTML
+objects that link to websites with further information on the genes in question.
 }
 \description{
-A function to turn Gene Symbols into buttons in an Rmd linking to various Portals for further info
-about these genes.
+A function to turn Gene Symbols into buttons in an Rmarkdown linking to various
+portals for further info about these genes.
+}
+\details{
 Current supported portals are: GeneCards, NCBI, GTEx, Uniprot, dbPTM, Human Protein Atlas
 }
 \examples{
 data(res_de_macrophage, package = "mosdef")
+
 res_de <- res_macrophage_IFNg_vs_naive
 res_df <- deseqresult2df(res_de)
+
 ## Subsetting for quicker run
 res_df <- res_df[1:100, ]
 buttonifier(res_df)
