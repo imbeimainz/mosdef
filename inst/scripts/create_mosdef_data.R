@@ -24,7 +24,7 @@ save(res_macrophage_IFNg_vs_naive, file = "data/res_de_macrophage.RData", compre
 
 # res_enrich object topGO ------------------------------------------------------
 library("topGO")
-res_enrich_macrophage_topGO <-topGOtable(
+res_enrich_macrophage_topGO <- run_topGO(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   ontology = "BP",
@@ -36,7 +36,7 @@ save(res_enrich_macrophage_topGO, file = "data/res_enrich_macrophage_topGO.RData
 
 # res_enrich object goseq ------------------------------------------------------
 library("goseq")
-res_enrich_macrophage_goseq <-goseqTable(
+res_enrich_macrophage_goseq <- run_goseq(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   mapping = "org.Hs.eg.db",
@@ -47,7 +47,7 @@ save(res_enrich_macrophage_goseq, file = "data/res_enrich_macrophage_goseq.RData
 
 # res_enrich object clusterProfiler --------------------------------------------
 library(clusterProfiler)
-res_enrich_macrophage_cluPro <- cluproTable(
+res_enrich_macrophage_cluPro <- run_cluPro(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   mapping = "org.Hs.eg.db"

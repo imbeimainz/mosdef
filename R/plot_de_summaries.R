@@ -262,13 +262,13 @@ de_volcano <- function(res_de,
 #' functions.
 #'
 #' @param res_de A DESeqResults object created using \code{DESeq2}
-#' @param res_enrich A enrichment result object created by for example using topGOtable
+#' @param res_enrich A enrichment result object created by for example using [run_topGO()]
 #' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
 #' @param term_index The location (row) of your GO term of interest in your enrichment result
 #' @param L2FC_cutoff A numeric value that sets the cutoff for the xintercept argument of ggplot
 #' @param col_to_use The column in your differential expression results containing your gene symbols.
 #'  If you don't have one it is created automatically
-#' @param enrich_col column name from your res_enrich where the genes associated with your GOterm are stored (for example see the topGOtable result in mosdef)
+#' @param enrich_col column name from your res_enrich where the genes associated with your GOterm are stored (for example see the [run_topGO()] result in mosdef)
 #' @param down_col The colour for your downregulated genes, default is "gray"
 #' @param up_col The colour for your upregulated genes, default is "gray"
 #' @param highlight_col The colour for the genes associated with your GOterm default is "tomato"

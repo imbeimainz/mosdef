@@ -61,7 +61,7 @@
 #' library("AnnotationDbi")
 #' library("org.Hs.eg.db")
 #' library("topGO")
-#' topgoDE_macrophage <- topGOtable(
+#' topgoDE_macrophage <- run_topGO(
 #'   res_de = res_macrophage_IFNg_vs_naive,
 #'   dds = dds_macrophage,
 #'   ontology = "BP",
@@ -362,7 +362,7 @@ run_topGO <- function(res_de = NULL, # Differentially expressed genes
 #'
 #' data(res_de_macrophage, package = "mosdef")
 #' res_de <- res_macrophage_IFNg_vs_naive
-#' mygo <- goseqTable(
+#' mygo <- run_goseq(
 #'   res_de = res_macrophage_IFNg_vs_naive,
 #'   dds = dds_macrophage,
 #'   mapping = "org.Hs.eg.db",
@@ -624,7 +624,7 @@ run_goseq <- function(res_de = NULL,
 #' library("AnnotationDbi")
 #' library("org.Hs.eg.db")
 #' library("clusterProfiler")
-#' CluProde_macrophage <- cluproTable(
+#' CluProde_macrophage <- run_cluPro(
 #'   res_de = res_macrophage_IFNg_vs_naive,
 #'   dds = dds_macrophage,
 #'   mapping = "org.Hs.eg.db"

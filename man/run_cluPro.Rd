@@ -69,7 +69,7 @@ data(res_de_macrophage, package = "mosdef")
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 library("clusterProfiler")
-CluProde_macrophage <- cluproTable(
+CluProde_macrophage <- run_cluPro(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   mapping = "org.Hs.eg.db"

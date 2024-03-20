@@ -1,5 +1,5 @@
 test_that("enrich results are created and top_de works properly", {
-  CluProde_macrophage_topde <- cluproTable(
+  CluProde_macrophage_topde <- run_cluPro(
     res_de = res_macrophage_IFNg_vs_naive,
     dds = dds_macrophage,
     mapping = "org.Hs.eg.db",
@@ -7,7 +7,7 @@ test_that("enrich results are created and top_de works properly", {
   )
   expect_s4_class(CluProde_macrophage_topde, "enrichResult")
 
-  CluProde_macrophage_topde_vectors <- cluproTable(
+  CluProde_macrophage_topde_vectors <- run_cluPro(
     de_genes = myde,
     bg_genes = myassayed,
     mapping = "org.Hs.eg.db",
@@ -19,7 +19,7 @@ test_that("enrich results are created and top_de works properly", {
 
 
 test_that("enrich_result is created only for up or down -regulated genes", {
-  CluProde_macrophage_up <- cluproTable(
+  CluProde_macrophage_up <- run_cluPro(
     res_de = res_macrophage_IFNg_vs_naive,
     dds = dds_macrophage,
     mapping = "org.Hs.eg.db",
@@ -27,7 +27,7 @@ test_that("enrich_result is created only for up or down -regulated genes", {
   )
   expect_s4_class(CluProde_macrophage_up, "enrichResult")
 
-  CluProde_macrophage_down <- cluproTable(
+  CluProde_macrophage_down <- run_cluPro(
     res_de = res_macrophage_IFNg_vs_naive,
     dds = dds_macrophage,
     mapping = "org.Hs.eg.db",

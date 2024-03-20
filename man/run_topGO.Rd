@@ -95,7 +95,7 @@ data(res_de_macrophage, package = "mosdef")
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 library("topGO")
-topgoDE_macrophage <- topGOtable(
+topgoDE_macrophage <- run_topGO(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   ontology = "BP",

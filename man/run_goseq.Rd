@@ -82,7 +82,7 @@ dds_macrophage <- DESeq(dds_macrophage)
 
 data(res_de_macrophage, package = "mosdef")
 res_de <- res_macrophage_IFNg_vs_naive
-mygo <- goseqTable(
+mygo <- run_goseq(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   mapping = "org.Hs.eg.db",

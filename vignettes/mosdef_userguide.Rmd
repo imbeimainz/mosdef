@@ -44,7 +44,7 @@ This includes functionality for
 
 * plotting your expression values and differential expression results, both individually and as summary overviews (`gene_plot`, `de_volcano`, `go_volcano`, `plot_ma`, `get_expr_values`)
 
-* running different methods for functional enrichment analysis, providing a unified API that simplifies the calls to the individual methods, ensuring the results are also provided in a standardized format (`cluproTable`, `topGOtable`, `goseqTable`)
+* running different methods for functional enrichment analysis, providing a unified API that simplifies the calls to the individual methods, ensuring the results are also provided in a standardized format (`run_cluPro`, `run_topGO`, `run_goseq`)
 
 * decorating and improving your analysis reports (assuming these are generated as Rmarkdown documents). 
   This can enhance the experience of browsing the results by automatical linking to external databases (ENSEMBL, GTEX, HPA, NCBI, ... via `create_link_` functions, wrapped into a `buttonifier` to seamlessly multiply the information in a simple tabular representation). 
@@ -171,12 +171,12 @@ mosdef_res_check(res_macrophage_IFNg_vs_naive)
 
 `r BiocStyle::Biocpkg("topGO")` is a widely used option to obtain a set of spot-on Gene Ontology terms, removing some of the more generic ones and therefore also reducing the redundancy which is inherent in the GO database [@Ashburner2000].
 
-The `topGOtable` function will return a table with the analysis for all possible GO terms (when using the BP ontology that is 6547 terms).
+The `run_topGO` function will return a table with the analysis for all possible GO terms (when using the BP ontology that is 6547 terms).
 Not all of these results are significant, and this list can (should) be further subset/filtered, for example by using a p-value cutoff. 
 
 ```{r runtopgo}
 library("topGO")
-res_enrich_macrophage_topGO <- topGOtable(
+res_enrich_macrophage_topGO <- run_topGO(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   ontology = "BP",
@@ -191,7 +191,7 @@ res_enrich_macrophage_topGO <- topGOtable(
 )
 ```
 
-The key parameters for `topGOtable()` are defined as follows:
+The key parameters for `run_topGO()` are defined as follows:
 
 * `res_de`: Your `DESeqResults` object
 
@@ -233,13 +233,13 @@ head(res_enrich_macrophage_topGO)
 
 The method implemented in the `r BiocStyle::Biocpkg("goseq")` package is able to handle the selection bias inherent in assays such as RNA-seq, whereas highly expressed genes have a higher probability of being detected as differentially expressed.
 
-Parameters like `top_de`, `min_counts`, `verbose` and `de_type` can also be used here (for more detail on these parameters see above), as they are a part of the shared API with `topGOtable` and `cluProTable`.
+Parameters like `top_de`, `min_counts`, `verbose` and `de_type` can also be used here (for more detail on these parameters see above), as they are a part of the shared API with `run_topGO` and `run_cluPro`.
 
 Importantly, the feature length retrieval is based on the `goseq()` function, and this requires that the corresponding TxDb packages are installed and available so make sure one is installed on your machine. For human samples, the recommended one is `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
 
 
 ```{r rungoseq, eval = FALSE}
-goseq_macrophage <- goseqTable(
+goseq_macrophage <- run_goseq(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   mapping = "org.Hs.eg.db",
@@ -259,10 +259,10 @@ head(res_enrich_macrophage_goseq)
 ## `mosdef` and `clusterProfiler`
 
 Parameters like `top_de`, `min_counts`, `verbose` and `de_type` can also be used here (For more detail on these parameters see above).
-If you want to further customize the call of `enrichGO()` inside the function, have a look at the documentation for `enrichGO()` from `r BiocStyle::Biocpkg("clusterProfiler")` Those parameters can be added to the `cluproTable()` function call within the ellipsis (`...`).
+If you want to further customize the call of `enrichGO()` inside the function, have a look at the documentation for `enrichGO()` from `r BiocStyle::Biocpkg("clusterProfiler")` Those parameters can be added to the `run_cluPro()` function call within the ellipsis (`...`).
 
 ```{r runclupro, eval = FALSE}
-clupro_macrophage <- cluproTable(
+clupro_macrophage <- run_cluPro(
   res_de = res_macrophage_IFNg_vs_naive,
   dds = dds_macrophage,
   mapping = "org.Hs.eg.db",
@@ -292,7 +292,7 @@ res_subset <- deseqresult2df(res_macrophage_IFNg_vs_naive)[1:500, ] # reduce siz
 myde <- res_subset$id
 myassayed <- rownames(res_macrophage_IFNg_vs_naive)
 # Here Keys are ensembl not symbols
-res_enrich_macrophage_topGO_vec <- topGOtable(
+res_enrich_macrophage_topGO_vec <- run_topGO(
   de_genes = myde,
   bg_genes = myassayed,
   mapping = "org.Hs.eg.db",
@@ -401,7 +401,7 @@ Volc_GO
 
 * `col_to_use`: Name of the column in your res_de containing the gene symbols
 
-* `enrich_col`: Name of the column in your res_enrich containing the gene symbols. For an example see topgotable data provided in mosdef: `data(res_enrich_macrophage_topGO, package = "mosdef")`.
+* `enrich_col`: Name of the column in your res_enrich containing the gene symbols. For an example see `run_topGO` data provided in mosdef: `data(res_enrich_macrophage_topGO, package = "mosdef")`.
 
 * `down_col`: Colour for your downregulated genes (genes with a L2FC below your cutoff).
 

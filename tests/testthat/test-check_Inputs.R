@@ -1,7 +1,7 @@
 test_that("Early fails are triggered", {
   # res_de is a DESeqResults
   expect_error({
-    cluproTable(
+    run_cluPro(
       res_de = myde,
       dds = dds_macrophage,
       mapping = "org.Hs.eg.db"
@@ -29,7 +29,7 @@ test_that("Early fails are triggered", {
   })
 
   expect_error({
-    goseqTable(
+    run_goseq(
       res_de = myde,
       dds = dds_macrophage,
       mapping = "org.Hs.eg.db"
@@ -45,7 +45,7 @@ test_that("Early fails are triggered", {
   })
 
   expect_error({
-    topGOtable(
+    run_topGO(
       res_de = myde,
       dds = dds_macrophage,
       ontology = "BP",
@@ -56,7 +56,7 @@ test_that("Early fails are triggered", {
 })
 test_that("check if dds are dds and vecs are vecs", {
   expect_error({
-    cluproTable(
+    run_cluPro(
       res_de = res_macrophage_IFNg_vs_naive,
       dds = myassayed,
       mapping = "org.Hs.eg.db"
@@ -72,7 +72,7 @@ test_that("check if dds are dds and vecs are vecs", {
   })
 
   expect_error({
-    goseqTable(
+    run_goseq(
       res_de = res_macrophage_IFNg_vs_naive,
       dds = myassayed,
       mapping = "org.Hs.eg.db"
@@ -80,7 +80,7 @@ test_that("check if dds are dds and vecs are vecs", {
   })
 
   expect_error({
-    topGOtable(
+    run_topGO(
       res_de = res_macrophage_IFNg_vs_naive,
       dds = myassayed,
       ontology = "BP",
@@ -91,7 +91,7 @@ test_that("check if dds are dds and vecs are vecs", {
 
   # check if vectors are actually vectors
   expect_error({
-    cluproTable(
+    run_cluPro(
       de_genes = res_macrophage_IFNg_vs_naive,
       bg_genes = dds_macrophage,
       mapping = "org.Hs.eg.db"
@@ -100,7 +100,7 @@ test_that("check if dds are dds and vecs are vecs", {
 
 
   expect_error({
-    goseqTable(
+    run_goseq(
       de_genes = res_macrophage_IFNg_vs_naive,
       bg_genes = dds_macrophage,
       mapping = "org.Hs.eg.db"
@@ -109,7 +109,7 @@ test_that("check if dds are dds and vecs are vecs", {
 
 
   expect_error({
-    topGOtable(
+    run_topGO(
       de_genes = res_macrophage_IFNg_vs_naive,
       bg_genes = dds_macrophage,
       ontology = "BP",
@@ -123,7 +123,7 @@ test_that("Error is thrown with insufficient input", {
   # check insufficient input
 
   expect_error({
-    cluproTable(
+    run_cluPro(
       mapping = "org.Hs.eg.db"
     )
   })
@@ -131,13 +131,13 @@ test_that("Error is thrown with insufficient input", {
 
 
   expect_error({
-    goseqTable(
+    run_goseq(
       mapping = "org.Hs.eg.db"
     )
   })
 
   expect_error({
-    topGOtable(
+    run_topGO(
       ontology = "BP",
       mapping = "org.Hs.eg.db",
       geneID = "symbol"
@@ -147,7 +147,7 @@ test_that("Error is thrown with insufficient input", {
 
 test_that("Check if de_type is correct", {
   expect_error({
-    cluproTable(
+    run_cluPro(
       res_de = res_macrophage_IFNg_vs_naive,
       dds = dds_macrophage,
       mapping = "org.Hs.eg.db",
@@ -156,7 +156,7 @@ test_that("Check if de_type is correct", {
   })
 
   expect_error({
-    goseqTable(
+    run_goseq(
       res_de = res_macrophage_IFNg_vs_naive,
       dds = dds_macrophage,
       mapping = "org.Hs.eg.db",
@@ -165,7 +165,7 @@ test_that("Check if de_type is correct", {
   })
 
   expect_error({
-    topGOtable(
+    run_topGO(
       res_de = res_macrophage_IFNg_vs_naive,
       dds = dds_macrophage,
       ontology = "BP",
@@ -179,7 +179,7 @@ test_that("Check if de_type is correct", {
 test_that("res_de and dds are related", {
   expect_warning(
     {
-      cluproTable(
+      run_cluPro(
         res_de = res_macrophage_IFNg_vs_naive,
         dds = dds_airway,
         mapping = "org.Hs.eg.db"
@@ -192,7 +192,7 @@ test_that("res_de and dds are related", {
 test_that("res_de and dds are related", {
   expect_warning(
     {
-      goseqTable(
+      run_goseq(
         res_de = res_macrophage_IFNg_vs_naive,
         dds = dds_airway,
         mapping = "org.Hs.eg.db",
@@ -206,7 +206,7 @@ test_that("res_de and dds are related", {
 test_that("res_de and dds are related", {
   expect_warning(
     {
-      topGOtable(
+      run_topGO(
         res_de = res_macrophage_IFNg_vs_naive,
         dds = dds_airway,
         ontology = "BP",
@@ -220,7 +220,7 @@ test_that("res_de and dds are related", {
 
 test_that("DESeq was run on the dds", {
   expect_error({
-    cluproTable(
+    run_cluPro(
       res_de = res_macrophage_IFNg_vs_naive,
       dds = dds_macrophage_nodeseq,
       mapping = "org.Hs.eg.db"
@@ -228,7 +228,7 @@ test_that("DESeq was run on the dds", {
   })
 
   expect_error({
-    goseqTable(
+    run_goseq(
       res_de = res_macrophage_IFNg_vs_naive,
       dds = dds_macrophage_nodeseq,
       mapping = "org.Hs.eg.db",
@@ -237,7 +237,7 @@ test_that("DESeq was run on the dds", {
   })
 
   expect_error({
-    topGOtable(
+    run_topGO(
       res_de = res_macrophage_IFNg_vs_naive,
       dds = dds_macrophage_nodeseq,
       ontology = "BP",
@@ -252,14 +252,14 @@ test_that("Errors are thrown if only one of two needed inputs is provided", {
 
 
   expect_error({
-    cluproTable(
+    run_cluPro(
       dds = dds_macrophage,
       mapping = "org.Hs.eg.db"
     )
   })
 
   expect_error({
-    goseqTable(
+    run_goseq(
       dds = dds_macrophage,
       mapping = "org.Hs.eg.db",
       add_gene_to_terms = FALSE
@@ -267,7 +267,7 @@ test_that("Errors are thrown if only one of two needed inputs is provided", {
   })
 
   expect_error({
-    topGOtable(
+    run_topGO(
       dds = dds_macrophage,
       ontology = "BP",
       mapping = "org.Hs.eg.db",
@@ -278,14 +278,14 @@ test_that("Errors are thrown if only one of two needed inputs is provided", {
   # dds is missing
 
   expect_error({
-    cluproTable(
+    run_cluPro(
       res_de = res_macrophage_IFNg_vs_naive,
       mapping = "org.Hs.eg.db"
     )
   })
 
   expect_error({
-    goseqTable(
+    run_goseq(
       res_de = res_macrophage_IFNg_vs_naive,
       mapping = "org.Hs.eg.db",
       add_gene_to_terms = FALSE
@@ -293,7 +293,7 @@ test_that("Errors are thrown if only one of two needed inputs is provided", {
   })
 
   expect_error({
-    topGOtable(
+    run_topGO(
       res_de = res_macrophage_IFNg_vs_naive,
       ontology = "BP",
       mapping = "org.Hs.eg.db",
@@ -305,14 +305,14 @@ test_that("Errors are thrown if only one of two needed inputs is provided", {
 
 
   expect_error({
-    cluproTable(
+    run_cluPro(
       bg_genes = myassayed,
       mapping = "org.Hs.eg.db"
     )
   })
 
   expect_error({
-    goseqTable(
+    run_goseq(
       bg_genes = myassayed,
       mapping = "org.Hs.eg.db",
       add_gene_to_terms = FALSE
@@ -320,7 +320,7 @@ test_that("Errors are thrown if only one of two needed inputs is provided", {
   })
 
   expect_error({
-    topGOtable(
+    run_topGO(
       bg_genes = myassayed,
       ontology = "BP",
       mapping = "org.Hs.eg.db",
@@ -332,14 +332,14 @@ test_that("Errors are thrown if only one of two needed inputs is provided", {
 
 
   expect_error({
-    cluproTable(
+    run_cluPro(
       de_genes = myde,
       mapping = "org.Hs.eg.db"
     )
   })
 
   expect_error({
-    goseqTable(
+    run_goseq(
       de_genes = myde,
       mapping = "org.Hs.eg.db",
       add_gene_to_terms = FALSE
@@ -347,7 +347,7 @@ test_that("Errors are thrown if only one of two needed inputs is provided", {
   })
 
   expect_error({
-    topGOtable(
+    run_topGO(
       de_genes = myde,
       ontology = "BP",
       mapping = "org.Hs.eg.db",
@@ -358,7 +358,7 @@ test_that("Errors are thrown if only one of two needed inputs is provided", {
 
 test_that("de_type can not be used with vectors to avoid confusion", {
   expect_error({
-    cluproTable(
+    run_cluPro(
       de_genes = myde,
       bg_genes = myassayed,
       mapping = "org.Hs.eg.db",
@@ -367,7 +367,7 @@ test_that("de_type can not be used with vectors to avoid confusion", {
   })
 
   expect_error({
-    goseqTable(
+    run_goseq(
       de_genes = myde,
       bg_genes = myassayed,
       mapping = "org.Hs.eg.db",
@@ -377,7 +377,7 @@ test_that("de_type can not be used with vectors to avoid confusion", {
   })
 
   expect_error({
-    topGOtable(
+    run_topGO(
       de_genes = myde,
       bg_genes = myassayed,
       ontology = "BP",

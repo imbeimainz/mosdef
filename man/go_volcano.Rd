@@ -24,7 +24,7 @@ go_volcano(
 \arguments{
 \item{res_de}{A DESeqResults object created using \code{DESeq2}}
 
-\item{res_enrich}{A enrichment result object created by for example using topGOtable}
+\item{res_enrich}{A enrichment result object created by for example using \code{\link[=run_topGO]{run_topGO()}}}
 
 \item{mapping}{Which \code{org.XX.eg.db} to use for annotation - select according to the species}
 
@@ -35,7 +35,7 @@ go_volcano(
 \item{col_to_use}{The column in your differential expression results containing your gene symbols.
 If you don't have one it is created automatically}
 
-\item{enrich_col}{column name from your res_enrich where the genes associated with your GOterm are stored (for example see the topGOtable result in mosdef)}
+\item{enrich_col}{column name from your res_enrich where the genes associated with your GOterm are stored (for example see the \code{\link[=run_topGO]{run_topGO()}} result in mosdef)}
 
 \item{down_col}{The colour for your downregulated genes, default is "gray"}
 
