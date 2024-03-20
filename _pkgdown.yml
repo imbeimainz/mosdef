@@ -1,4 +1,10 @@
+authors:
+  Leon Dammer:
+    href: https://github.com/ldammer/
+  Federico Marini:
+    href: https://federicomarini.github.io
+
 url: ~
 template:
   bootstrap: 5
-
+  bootswatch: lux
