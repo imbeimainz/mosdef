@@ -1,3 +1,9 @@
+# mosdef 0.3.0
+
+* Reordered the functions thematically into a better file naming structure
+* Renaming of functions to better mirror their aim - e.g. `topGOtable()` -> 
+  `run_topGO()`, while also homogenizing the case
+
 # mosdef 0.2.0
 
 * Vignette contains worked out examples for the whole package
