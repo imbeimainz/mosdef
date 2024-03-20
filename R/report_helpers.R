@@ -78,7 +78,7 @@ create_link_pubmed <- function(val) {
 #'   rownames(res_macrophage_IFNg_vs_naive))
 create_link_ENS <- function(val, species = "Mus_musculus") {
   sprintf(
-    '<a href="href="http://www.ensembl.org/%s/Gene/Summary?g=%s" target="_blank" class="btn btn-primary" style = "%s">%s</a>',
+    '<a href="http://www.ensembl.org/%s/Gene/Summary?g=%s" target="_blank" class="btn btn-primary" style = "%s">%s</a>',
     species,
     val,
     .actionbutton_biocstyle,
