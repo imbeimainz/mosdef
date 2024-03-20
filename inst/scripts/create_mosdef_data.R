@@ -1,6 +1,6 @@
 library("mosdef")
 library("macrophage")
-data(gse)
+data(gse, package = "macrophage")
 
 # dds object -------------------------------------------------------------------
 library("DESeq2")
