@@ -1,3 +1,7 @@
+# mosdef 0.99.0
+
+* Ready for submission to Bioconductor!
+
 # mosdef 0.4.0
 
 * Using `longtests` to reduce checking time, as per Bioc guidelines
