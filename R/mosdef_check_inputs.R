@@ -8,6 +8,7 @@
 #'
 #' @examples
 #' data(res_de_macrophage, package = "mosdef")
+#'
 #' mosdef_res_check(res_macrophage_IFNg_vs_naive)
 mosdef_res_check <- function(res_de,
                              verbose = FALSE) {
@@ -64,14 +65,16 @@ mosdef_res_check <- function(res_de,
 #' @export
 #'
 #' @examples
-#' library(macrophage)
-#' library(DESeq2)
-#' data(gse)
+#' library("macrophage")
+#' library("DESeq2")
+#' data(gse, package = "macrophage")
+#'
 #' dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 #' rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 #' keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
 #' dds_macrophage <- dds_macrophage[keep, ]
 #' dds_macrophage <- DESeq(dds_macrophage)
+#'
 #' mosdef_dds_check(dds_macrophage)
 mosdef_dds_check <- function(dds,
                              verbose = FALSE) {
@@ -88,9 +91,5 @@ mosdef_dds_check <- function(dds,
     message("Could not find a 'counts' assay Please ensure you have these values
           and rename the column/assay: 'counts'")
   }
-
-
-
-
   return(invisible(NULL))
 }

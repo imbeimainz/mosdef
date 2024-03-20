@@ -43,20 +43,24 @@
 #'
 #' @family Enrichment functions
 #'
+#' @export
+#'
 #' @examples
-#' library(macrophage)
-#' library(DESeq2)
-#' data(gse)
+#' library("macrophage")
+#' library("DESeq2")
+#' data(gse, package = "macrophage")
+#'
 #' dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 #' rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 #' keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
 #' dds_macrophage <- dds_macrophage[keep, ]
 #' dds_macrophage <- DESeq(dds_macrophage)
+#'
 #' data(res_de_macrophage, package = "mosdef")
+#'
 #' library("AnnotationDbi")
 #' library("org.Hs.eg.db")
-#'
-#' library(topGO)
+#' library("topGO")
 #' topgoDE_macrophage <- topGOtable(
 #'   res_de = res_macrophage_IFNg_vs_naive,
 #'   dds = dds_macrophage,
@@ -64,8 +68,6 @@
 #'   mapping = "org.Hs.eg.db",
 #'   geneID = "symbol",
 #' )
-#'
-#' @export
 run_topGO <- function(res_de = NULL, # Differentially expressed genes
                       dds = NULL, # background genes
                       de_genes = NULL,
@@ -143,9 +145,6 @@ run_topGO <- function(res_de = NULL, # Differentially expressed genes
     )
   }
 
-
-
-
   annot_to_map_to <- get(mapping)
 
   if (!is.null(res_de) && !is.null(dds)) {
@@ -174,7 +173,6 @@ run_topGO <- function(res_de = NULL, # Differentially expressed genes
       stop("I couldn't find results in your dds. You should first run DESeq2::DESeq() on your dds.")
     }
 
-
     res_de$symbol <- AnnotationDbi::mapIds(annot_to_map_to,
                                            keys = row.names(res_de),
                                            column = "SYMBOL",
@@ -183,7 +181,6 @@ run_topGO <- function(res_de = NULL, # Differentially expressed genes
     )
 
     resOrdered <- as.data.frame(res_de[order(res_de$padj), ])
-
 
     if (de_type == "up_and_down") {
       de_df <- resOrdered[resOrdered$padj <= .05 & !is.na(resOrdered$padj), ]
@@ -235,28 +232,11 @@ run_topGO <- function(res_de = NULL, # Differentially expressed genes
         "-regulated genes"
       )
     }
-    #   de_genes <- mapIds(annot_to_map_to,
-    #                      keys = de_genes,
-    #                      column = "SYMBOL",
-    #                      keytype = "ENSEMBL",
-    #                      multiVals = "first")
-    #
-    #   bg_genes <- mapIds(annot_to_map_to,
-    #                      keys = bg_genes,
-    #                      column = "SYMBOL",
-    #                      keytype = "ENSEMBL",
-    #                      multiVals = "first")
-    #
-    #
   }
-
-
 
   # creating the vectors
   de_genes_input <- factor(as.integer(bg_genes %in% de_genes))
   names(de_genes_input) <- bg_genes
-
-
 
   # instantiating the topGOdata object
   suppressMessages({
@@ -324,17 +304,8 @@ run_topGO <- function(res_de = NULL, # Differentially expressed genes
     "'p.value_elim'."
   )
 
-  # write all entries of the table
-  # if (write_output) write.table(sTab, file = output_file, sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
-  # if (plot_graph) showSigOfNodes(GOdata, topGO::score(result_method2), firstSigNodes = plot_nodes, useInfo = "all")
-  #   if(outputToLatex) sTabSig <- xtable(apply(sTabSig[1:15,], 2, as.character)) # take a smaller subset
-
-  # and returns the significant ones # or all, like here
   return(sTab)
 }
-
-
-
 
 
 #' Extract functional terms enriched in the DE genes, based on goseq
@@ -369,6 +340,7 @@ run_topGO <- function(res_de = NULL, # Differentially expressed genes
 #' @param verbose Logical, whether to add messages telling the user which steps were taken
 #'
 #' @return A table containing the computed GO Terms and related enrichment scores
+#'
 #' @export
 #'
 #' @importFrom stats p.adjust
@@ -378,14 +350,16 @@ run_topGO <- function(res_de = NULL, # Differentially expressed genes
 #' @family Enrichment functions
 #'
 #' @examples
-#' library(macrophage)
-#' library(DESeq2)
-#' data(gse)
+#' library("macrophage")
+#' library("DESeq2")
+#' data(gse, package = "macrophage")
+#'
 #' dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 #' rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 #' keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
 #' dds_macrophage <- dds_macrophage[keep, ]
 #' dds_macrophage <- DESeq(dds_macrophage)
+#'
 #' data(res_de_macrophage, package = "mosdef")
 #' res_de <- res_macrophage_IFNg_vs_naive
 #' mygo <- goseqTable(
@@ -395,8 +369,8 @@ run_topGO <- function(res_de = NULL, # Differentially expressed genes
 #'   testCats = "GO:BP",
 #'   add_gene_to_terms = TRUE
 #' )
-#' head(mygo)
 #'
+#' head(mygo)
 run_goseq <- function(res_de = NULL,
                       dds = NULL,
                       de_genes = NULL, # Differentially expressed genes
@@ -422,12 +396,7 @@ run_goseq <- function(res_de = NULL,
                       ## do it by default only for bp?
                       ## tests at the beginning to see if the whole thing is feasible?
 ) {
-  # library(goseq)
-  # library(GO.db)
-  # library(DESeq2)
-
   ## Checks:
-
   match.arg(de_type, choices = c("up_and_down", "up", "down"), several.ok = FALSE)
 
   # Check if there is any input at all
@@ -492,9 +461,6 @@ run_goseq <- function(res_de = NULL,
       stop("I couldn't find results in your dds. You should first run DESeq2::DESeq() on your dds.")
     }
 
-
-
-
     if (de_type == "up_and_down") {
       res_de_subset <- deseqresult2df(res_de, FDR = 0.05)
     } else if (de_type == "up") {
@@ -505,12 +471,8 @@ run_goseq <- function(res_de = NULL,
       res_de_subset <- res_de_subset[res_de_subset$log2FoldChange <= 0, ]
     }
 
-
-
-
     # in example top 100 but this makes more sense no?
     de_genes <- res_de_subset$id
-
 
     if (!is.null(top_de)) {
       top_de <- min(top_de, length(de_genes))
@@ -548,7 +510,6 @@ run_goseq <- function(res_de = NULL,
     }
   }
 
-
   # creating the vectors
   gene.vector <- as.integer(bg_genes %in% de_genes)
   names(gene.vector) <- bg_genes
@@ -558,8 +519,6 @@ run_goseq <- function(res_de = NULL,
   pwf <- nullp(DEgenes = gene.vector, genome = genome, id = id, plot.fit = FALSE)
 
   goseq_out <- goseq(pwf, genome = genome, id = id, test.cats = testCats)
-
-
 
   goseq_out$p.adj <- p.adjust(goseq_out$over_represented_pvalue, method = "BH")
 
@@ -617,8 +576,6 @@ run_goseq <- function(res_de = NULL,
 
 
 
-
-
 #' Extract functional terms enriched in the DE genes, based on clusterProfiler
 #'
 #' A wrapper for extracting functional GO terms enriched in a list of (DE) genes,
@@ -653,9 +610,10 @@ run_goseq <- function(res_de = NULL,
 #' @family Enrichment functions
 #'
 #' @examples
-#' library(macrophage)
-#' library(DESeq2)
-#' data(gse)
+#' library("macrophage")
+#' library("DESeq2")
+#' data(gse, package = "macrophage")
+#'
 #' dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 #' rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 #' keep <- rowSums(counts(dds_macrophage) >= 10) >= 6
@@ -665,13 +623,12 @@ run_goseq <- function(res_de = NULL,
 #'
 #' library("AnnotationDbi")
 #' library("org.Hs.eg.db")
-#' library(clusterProfiler)
+#' library("clusterProfiler")
 #' CluProde_macrophage <- cluproTable(
 #'   res_de = res_macrophage_IFNg_vs_naive,
 #'   dds = dds_macrophage,
 #'   mapping = "org.Hs.eg.db"
 #' )
-#'
 run_cluPro <- function(res_de = NULL,
                        dds = NULL,
                        de_genes = NULL,
@@ -696,9 +653,6 @@ run_cluPro <- function(res_de = NULL,
   # if(!(de_type %in% c("up_and_down","up", "down")))
 
   match.arg(de_type, choices = c("up_and_down", "up", "down"), several.ok = FALSE)
-
-
-  # stop("The de_type argument must be one of: 'up_and_down', 'up', 'down'")
 
 
   # Check if there is any input at all
@@ -730,9 +684,7 @@ run_cluPro <- function(res_de = NULL,
     stop("Please also provide  a vector of background genes.")
   }
 
-
   # checking the additional topGO_method2
-
 
   if ((de_type == "up" | de_type == "down") && !is.null(de_genes)) {
     stop(
@@ -740,9 +692,6 @@ run_cluPro <- function(res_de = NULL,
       "please either provide these objects or if you want to work with gene vectors set de_type to: 'up_and_down'"
     )
   }
-
-
-
 
   annot_to_map_to <- get(mapping)
 
@@ -772,7 +721,6 @@ run_cluPro <- function(res_de = NULL,
       stop("I couldn't find results in your dds. You should first run DESeq2::DESeq() on your dds.")
     }
 
-
     res_de$symbol <- AnnotationDbi::mapIds(annot_to_map_to,
       keys = row.names(res_de),
       column = "SYMBOL",
@@ -786,7 +734,6 @@ run_cluPro <- function(res_de = NULL,
       multiVals = "first"
     )
     resOrdered <- as.data.frame(res_de[order(res_de$padj), ])
-
 
     if (de_type == "up_and_down") {
       de_df <- resOrdered[resOrdered$padj <= .05 & !is.na(resOrdered$padj), ]
@@ -842,19 +789,6 @@ run_cluPro <- function(res_de = NULL,
     }
   }
 
-
-
-  # bg_genes <- mapIds(annot_to_map_to,
-  #     keys = bg_ids,
-  #     column = "SYMBOL",
-  #     keytype = "ENSEMBL",
-  #     multiVals = "first"
-  #   )
-
-
-
-
-
   res_enrich <- enrichGO(
     gene = de_genes,
     universe = bg_genes,
@@ -862,7 +796,6 @@ run_cluPro <- function(res_de = NULL,
     keyType = keyType,
     ...
   )
-
 
   return(res_enrich)
 }

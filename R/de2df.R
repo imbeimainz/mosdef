@@ -15,7 +15,7 @@
 #' @examples
 #'
 #' # with simulated data...
-#' library(DESeq2)
+#' library("DESeq2")
 #' dds <- DESeq2::makeExampleDESeqDataSet(n = 100, m = 8, betaSD = 2)
 #' dds <- DESeq(dds)
 #' res <- results(dds)
@@ -58,15 +58,12 @@ deseqresult2DEgenes <- function(deseqresult,
 #' with adjusted p-value smaller than the value.
 #'
 #' @export
-#'
-#'
 #
 #' @importFrom methods is
 #'
-#'
 #' @examples
-#' library(DESeq2)
-#' library(macrophage)
+#' library("DESeq2")
+#' library("macrophage")
 #' data(res_de_macrophage, package = "mosdef")
 #' head(res_macrophage_IFNg_vs_naive)
 #' res_df <- deseqresult2df(res_macrophage_IFNg_vs_naive)

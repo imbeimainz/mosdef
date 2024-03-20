@@ -50,8 +50,6 @@ buttonifier <- function(df,
     )
   }
 
-
-
   if (!is.null(c(ens_col, ens_species))) {
     df[[ens_col]] <- create_link_ENS(df[[ens_col]], species = ens_species)
   } else if (!is.null(ens_col) & is.null(ens_species)) {

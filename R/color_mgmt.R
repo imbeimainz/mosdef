@@ -160,7 +160,6 @@ styleColorBar_divergent <- function(data,
 #'                  rounding_digits = 3,
 #'                  signif_digits = 5)
 #'
-#'
 #' ## It is also possible to pass the "buttonified" table,
 #' res_df_small <- deseqresult2df(res_macrophage_IFNg_vs_naive)[1:100, ]
 #'
@@ -213,7 +212,6 @@ de_table_painter <- function(res_de,
                           columns = c(pvalue_column, padj_column),
                           digits = signif_digits)
   }
-
 
   my_dt <- formatStyle(
     table = my_dt,
