@@ -390,11 +390,6 @@ run_goseq <- function(res_de = NULL,
                       # writeOutput=FALSE,
                       add_gene_to_terms = TRUE,
                       verbose = TRUE
-                      # outputFiles_goseq="",outputFiles_goseq_kegg=""
-                      ## TODO TODO: bring back in action the function
-                      ## add genes annotated to each term
-                      ## do it by default only for bp?
-                      ## tests at the beginning to see if the whole thing is feasible?
 ) {
   ## Checks:
   match.arg(de_type, choices = c("up_and_down", "up", "down"), several.ok = FALSE)

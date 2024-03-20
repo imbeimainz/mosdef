@@ -57,7 +57,7 @@ plot_ma <- function(res_de,
                     FDR = 0.05,
                     point_alpha = 0.2,
                     sig_color = "red",
-                    annotation_obj = NULL, # TODO: add a check, if not available skip this part
+                    annotation_obj = NULL,
                     draw_y0 = TRUE,
                     hlines = NULL,
                     title = NULL,

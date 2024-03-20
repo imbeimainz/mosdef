@@ -85,7 +85,7 @@ mosdef_dds_check <- function(dds,
             AnnotationDbis 'mapIDs'")
   }
   if ("counts" %in% names(assays(dds))) {
-    # TODO: we probably need to work on assays (and rowData, and a bit more)
+
     if (verbose) message("Found a 'counts' assay!")
   } else {
     message("Could not find a 'counts' assay Please ensure you have these values
