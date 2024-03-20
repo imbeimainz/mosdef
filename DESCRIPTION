@@ -1,6 +1,6 @@
 Package: mosdef
 Title: MOSt frequently used and useful Differential Expression Functions
-Version: 0.1.0
+Version: 0.3.0
 Authors@R: 
     c(
         person(
@@ -25,7 +25,6 @@ Imports:
     ggrepel,
     htmltools,
     methods,
-    rentrez,
     AnnotationDbi,
     topGO,
     GO.db,
@@ -35,6 +34,7 @@ Imports:
     RColorBrewer,
     rlang,
     DESeq2,
+    scales,
     SummarizedExperiment,
     S4Vectors,
     stats
@@ -47,8 +47,7 @@ Suggests:
     GeneTonic,
     testthat (>= 3.0.0),
     TxDb.Hsapiens.UCSC.hg38.knownGene,
-    BiocStyle,
-    scales
+    BiocStyle
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

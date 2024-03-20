@@ -1,5 +1,5 @@
-library(DESeq2)
-library(topGO)
+library("DESeq2")
+library("topGO")
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 library("macrophage")
@@ -7,7 +7,7 @@ library("scales")
 # library("TxDb.Hsapiens.UCSC.hg38.knownGene")
 
 # dds --------------------------------------------------------------------------
-data(gse)
+data(gse, package = "macrophage")
 dds_macrophage <- DESeqDataSet(gse, design = ~ line + condition)
 rownames(dds_macrophage) <- substr(rownames(dds_macrophage), 1, 15)
 
@@ -33,7 +33,6 @@ dds_unnormalized <- dds_macrophage
 
 dds_macrophage <- DESeq(dds_macrophage)
 # res_de
-
 data(res_de_macrophage, package = "mosdef")
 
 res_macrophage_IFNg_vs_naive$SYMBOL <- AnnotationDbi::mapIds(org.Hs.eg.db,
@@ -54,15 +53,15 @@ annotationobject <- annotationobject["SYMBOL"]
 
 
 # airway
-library(airway)
+library("airway")
 # Get  the base data
-data(airway)
+data(airway, package = "airway")
 
 # Get a dds object and a res object
 dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
 dds_airway <- DESeq(dds_airway)
 
-res_macrophage_IFNg_vs_naive_nosymbols <- results(dds_airway)
+res_airway_nosymbols <- results(dds_airway)
 
 # res_enrich
 data(res_enrich_macrophage_topGO, package = "mosdef")

@@ -1,6 +1,3 @@
-# something on the line of plotCounts, ggplotCounts, but with more pimpedity :D
-## maybe even plotly-fied already, or pimped in gg so that it is readily plugged into ggplotly
-
 #' Plot expression values for a gene
 #'
 #' Plot expression values (e.g. normalized counts) for a gene of interest, grouped
@@ -97,19 +94,10 @@ gene_plot <- function(dds,
     stop("The provided `dds` is not a DESeqDataSet object, please check your input parameters.")
   }
 
-
   plot_type <- match.arg(
     plot_type,
     c("auto", "jitteronly", "boxplot", "violin", "sina")
   )
-
-  # if (!is.null(gtl)) {
-  #   checkup_gtl(gtl)
-  #   dds <- gtl$dds
-  #   res_de <- gtl$res_de
-  #   res_enrich <- gtl$res_enrich
-  #   annotation_obj <- gtl$annotation_obj
-  # }
 
   if (!intgroup %in% colnames(colData(dds))) {
     stop(
@@ -222,7 +210,6 @@ gene_plot <- function(dds,
 
   return(p)
 }
-
 
 
 #' Get expression values

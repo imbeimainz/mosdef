@@ -27,7 +27,8 @@ create_link_GO <- function(val) {
 #' create_link_genecards("Oct4")
 #'
 #' data(res_de_macrophage, package = "mosdef")
-#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_genecards(res_macrophage_IFNg_vs_naive$SYMBOL)
+#' res_macrophage_IFNg_vs_naive$SYMBOL <-
+#'   create_link_genecards(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_genecards <- function(val) {
   sprintf(
     '<a href = "https://www.genecards.org/cgi-bin/carddisp.pl?gene=%s" target = "_blank" class = "btn btn-primary" style = "%s">%s</a>',
@@ -49,15 +50,19 @@ create_link_genecards <- function(val) {
 #' create_link_pubmed("Oct4")
 #'
 #' data(res_de_macrophage, package = "mosdef")
-#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_pubmed(res_macrophage_IFNg_vs_naive$SYMBOL)
+#' res_macrophage_IFNg_vs_naive$SYMBOL <-
+#'   create_link_pubmed(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_pubmed <- function(val) {
-  paste0(
-    '<a href="https://pubmed.ncbi.nlm.nih.gov/?term=', val, '" target="_blank" class="btn btn-primary">',
-    paste0(val, "@Pubmed"), "</a>"
+  sprintf(
+    '<a href="https://pubmed.ncbi.nlm.nih.gov/?term=%s" target="_blank" class="btn btn-primary" style = "%s">%s</a>',
+    val,
+    .actionbutton_biocstyle,
+    paste0(val, "@Pubmed")
   )
 }
 
-#' Link to Ensemble database
+
+#' Link to ENSEMBL database
 #'
 #' @param val Character, the gene symbol
 #' @param species The species to be analyzed e.g "Mus_musculus"
@@ -69,9 +74,16 @@ create_link_pubmed <- function(val) {
 #' create_link_ENS("ENSMUSG00000024406")
 #'
 #' data(res_de_macrophage, package = "mosdef")
-#' rownames(res_macrophage_IFNg_vs_naive) <- create_link_ENS(rownames(res_macrophage_IFNg_vs_naive))
+#' rownames(res_macrophage_IFNg_vs_naive) <- create_link_ENS(
+#'   rownames(res_macrophage_IFNg_vs_naive))
 create_link_ENS <- function(val, species = "Mus_musculus") {
-  paste0('<a href="http://www.ensembl.org/', species, "/Gene/Summary?g=", val, '" target="_blank" class="btn btn-primary">', val, "</a>")
+  sprintf(
+    '<a href="href="http://www.ensembl.org/%s/Gene/Summary?g=%s" target="_blank" class="btn btn-primary" style = "%s">%s</a>',
+    species,
+    val,
+    .actionbutton_biocstyle,
+    val
+  )
 }
 
 #' Link to NCBI database
@@ -85,11 +97,14 @@ create_link_ENS <- function(val, species = "Mus_musculus") {
 #' create_link_NCBI("Oct4")
 #'
 #' data(res_de_macrophage, package = "mosdef")
-#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_NCBI(res_macrophage_IFNg_vs_naive$SYMBOL)
+#' res_macrophage_IFNg_vs_naive$SYMBOL <-
+#'   create_link_NCBI(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_NCBI <- function(val) {
-  paste0(
-    '<a href="http://www.ncbi.nlm.nih.gov/gene/?term=', val, '[sym]" target="_blank" class="btn btn-primary">',
-    paste0(val, "@NCBI"), "</a>"
+  sprintf(
+    '<a href="http://www.ncbi.nlm.nih.gov/gene/?term=%s[sym]" target="_blank" class="btn btn-primary" style = "%s">%s</a>',
+    val,
+    .actionbutton_biocstyle,
+    paste0(val, "@NCBI")
   )
 }
 
@@ -103,20 +118,19 @@ create_link_NCBI <- function(val) {
 #' create_link_GTEX("Oct4")
 #'
 #' data(res_de_macrophage, package = "mosdef")
-#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_GTEX(res_macrophage_IFNg_vs_naive$SYMBOL)
+#' res_macrophage_IFNg_vs_naive$SYMBOL <-
+#'   create_link_GTEX(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_GTEX <- function(val) {
   sprintf(
     '<a href = "https://www.gtexportal.org/home/gene/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-dna"></i>%s</a>',
-    val, # link portion related to the gene
-    .actionbutton_biocstyle, # button style
-    paste0(val, "@GTEX") # content of the button label
+    val,
+    .actionbutton_biocstyle,
+    paste0(val, "@GTEX")
   )
 }
 
 
-
-
-#' Link to Uniprot database
+#' Link to UniProt database
 #'
 #' @param val Character, the gene symbol
 #'
@@ -127,14 +141,15 @@ create_link_GTEX <- function(val) {
 #' create_link_UniProt("Oct4")
 #'
 #' data(res_de_macrophage, package = "mosdef")
-#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_UniProt(res_macrophage_IFNg_vs_naive$SYMBOL)
+#' res_macrophage_IFNg_vs_naive$SYMBOL <-
+#'   create_link_UniProt(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_UniProt <- function(val) {
   sprintf(
     '<a href = "https://www.uniprot.org/uniprot/?query=%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-spinner"></i>%s</a>',
-    val, # link portion related to the gene
-    .actionbutton_biocstyle, # button style
+    val,
+    .actionbutton_biocstyle,
     paste0(val, "@UNIPROT")
-  ) # content of the button label
+  )
 }
 
 #' Link to dbPTM database
@@ -148,19 +163,19 @@ create_link_UniProt <- function(val) {
 #' create_link_dbPTM("Oct4")
 #'
 #' data(res_de_macrophage, package = "mosdef")
-#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_dbPTM(res_macrophage_IFNg_vs_naive$SYMBOL)
+#' res_macrophage_IFNg_vs_naive$SYMBOL <-
+#'   create_link_dbPTM(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_dbPTM <- function(val) {
   base_link_old <- "http://dbptm.mbc.nctu.edu.tw/"
   base_link_new <- "https://awi.cuhk.edu.cn/dbPTM/"
 
-
   sprintf(
     '<a href = "%s/info.php?id=%s_HUMAN" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-edit"></i>%s</a>',
     base_link_new, # main link to website
-    val, # link portion related to the gene
-    .actionbutton_biocstyle, # button style
+    val,
+    .actionbutton_biocstyle,
     paste0(val, "@dbPTM")
-  ) # content of the button label
+  )
 }
 
 #' Link to the Human Protein Atlas
@@ -174,23 +189,19 @@ create_link_dbPTM <- function(val) {
 #' create_link_HPA("Oct4")
 #'
 #' data(res_de_macrophage, package = "mosdef")
-#' res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_HPA(res_macrophage_IFNg_vs_naive$SYMBOL)
+#' res_macrophage_IFNg_vs_naive$SYMBOL <-
+#'   create_link_HPA(res_macrophage_IFNg_vs_naive$SYMBOL)
 create_link_HPA <- function(val) {
   sprintf(
     '<a href = "https://www.proteinatlas.org/search/%s" target = "_blank" class = "btn btn-primary" style = "%s"><i class="fa fa-cubes"></i>%s</a>',
-    val, # link portion related to the gene
-    .actionbutton_biocstyle, # button style
+    val,
+    .actionbutton_biocstyle,
     paste0(val, "@Human Protein Atlas")
-  ) # content of the button label
+  )
 }
 
 
-
-
-
-
-
-#' Information on a GeneOntology identifier
+#' Information on a Gene Ontology identifier
 #'
 #' Assembles information, in HTML format, regarding a Gene Ontology identifier
 #'
@@ -210,7 +221,6 @@ create_link_HPA <- function(val) {
 #' @importFrom AnnotationDbi Term Ontology Definition Secondary  GOID
 #' @importFrom htmltools tags HTML
 #' @importFrom GO.db GOTERM
-#'
 #'
 #' @examples
 #' go_2_html("GO:0002250")
@@ -276,7 +286,6 @@ go_2_html <- function(go_id,
 }
 
 
-
 #' Information on a gene
 #'
 #' Assembles information, in HTML format, regarding a gene symbol identifier
@@ -297,9 +306,7 @@ go_2_html <- function(go_id,
 #' web applications (or inserted in Rmd documents)
 #' @export
 #'
-#'
 #' @importFrom htmltools tags
-#'
 #'
 #' @examples
 #' geneinfo_2_html("ACTB")
@@ -353,4 +360,3 @@ geneinfo_2_html <- function(gene_id,
 # Some constant values ----------------------------------------------------
 
 .actionbutton_biocstyle <- "color: #ffffff; background-color: #0092AC"
-.helpbutton_biocstyle <- "color: #0092AC; background-color: #FFFFFF; border-color: #FFFFFF"

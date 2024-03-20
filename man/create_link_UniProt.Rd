@@ -2,7 +2,7 @@
 % Please edit documentation in R/report_helpers.R
 \name{create_link_UniProt}
 \alias{create_link_UniProt}
-\title{Link to Uniprot database}
+\title{Link to UniProt database}
 \usage{
 create_link_UniProt(val)
 }
@@ -13,11 +13,12 @@ create_link_UniProt(val)
 HTML for an action button
 }
 \description{
-Link to Uniprot database
+Link to UniProt database
 }
 \examples{
 create_link_UniProt("Oct4")
 
 data(res_de_macrophage, package = "mosdef")
-res_macrophage_IFNg_vs_naive$SYMBOL <- create_link_UniProt(res_macrophage_IFNg_vs_naive$SYMBOL)
+res_macrophage_IFNg_vs_naive$SYMBOL <-
+  create_link_UniProt(res_macrophage_IFNg_vs_naive$SYMBOL)
 }

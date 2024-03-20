@@ -2,7 +2,7 @@
 % Please edit documentation in R/report_helpers.R
 \name{create_link_ENS}
 \alias{create_link_ENS}
-\title{Link to Ensemble database}
+\title{Link to ENSEMBL database}
 \usage{
 create_link_ENS(val, species = "Mus_musculus")
 }
@@ -15,11 +15,12 @@ create_link_ENS(val, species = "Mus_musculus")
 HTML for an action button
 }
 \description{
-Link to Ensemble database
+Link to ENSEMBL database
 }
 \examples{
 create_link_ENS("ENSMUSG00000024406")
 
 data(res_de_macrophage, package = "mosdef")
-rownames(res_macrophage_IFNg_vs_naive) <- create_link_ENS(rownames(res_macrophage_IFNg_vs_naive))
+rownames(res_macrophage_IFNg_vs_naive) <- create_link_ENS(
+  rownames(res_macrophage_IFNg_vs_naive))
 }

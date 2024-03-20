@@ -2,7 +2,7 @@
 % Please edit documentation in R/report_helpers.R
 \name{go_2_html}
 \alias{go_2_html}
-\title{Information on a GeneOntology identifier}
+\title{Information on a Gene Ontology identifier}
 \usage{
 go_2_html(go_id, res_enrich = NULL)
 }

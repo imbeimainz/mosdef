@@ -1,37 +1,36 @@
 test_that("enrich results are created and top_de works properly", {
-  CluProde_macrophage_topde <- cluproTable(
+  goseqde_macrophage_topde <- run_goseq(
     res_de = res_macrophage_IFNg_vs_naive,
     dds = dds_macrophage,
     mapping = "org.Hs.eg.db",
     top_de = 400
   )
-  expect_s4_class(CluProde_macrophage_topde, "enrichResult")
+  expect_s3_class(goseqde_macrophage_topde, "data.frame")
 
-  CluProde_macrophage_topde_vectors <- cluproTable(
+  goseqde_macrophage_topde_vectors <- run_goseq(
     de_genes = myde,
     bg_genes = myassayed,
     mapping = "org.Hs.eg.db",
-    top_de = 400,
-    keyType = "ENSEMBL"
+    top_de = 400
   )
-  expect_s4_class(CluProde_macrophage_topde_vectors, "enrichResult")
+  expect_s3_class(goseqde_macrophage_topde_vectors, "data.frame")
 })
 
 
 test_that("enrich_result is created only for up or down -regulated genes", {
-  CluProde_macrophage_up <- cluproTable(
+  goseqde_macrophage_up <- run_goseq(
     res_de = res_macrophage_IFNg_vs_naive,
     dds = dds_macrophage,
     mapping = "org.Hs.eg.db",
     de_type = "up"
   )
-  expect_s4_class(CluProde_macrophage_up, "enrichResult")
+  expect_s3_class(goseqde_macrophage_up, "data.frame")
 
-  CluProde_macrophage_down <- cluproTable(
+  goseqde_macrophage_down <- run_goseq(
     res_de = res_macrophage_IFNg_vs_naive,
     dds = dds_macrophage,
     mapping = "org.Hs.eg.db",
     de_type = "down"
   )
-  expect_s4_class(CluProde_macrophage_down, "enrichResult")
+  expect_s3_class(goseqde_macrophage_down, "data.frame")
 })
