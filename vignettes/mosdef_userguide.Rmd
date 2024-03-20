@@ -222,7 +222,7 @@ The method implemented in the `r BiocStyle::Biocpkg("goseq")` package is able to
 
 Parameters like `top_de`, `min_counts`, `verbose` and `de_type` can also be used here (for more detail on these parameters see above), as they are a part of the shared API with `run_topGO` and `run_cluPro`.
 
-Importantly, the feature length retrieval is based on the `goseq()` function, and this requires that the corresponding TxDb packages are installed and available. So make sure one is installed on your machine. For human samples, the recommended one is `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`
+Importantly, the feature length retrieval is based on the `goseq()` function, and this requires that the corresponding TxDb packages are installed and available. So make sure one is installed on your machine. For human samples, the recommended one is `r BiocStyle::Biocannopkg("TxDb.Hsapiens.UCSC.hg38.knownGene")`.
 
 
 ```{r rungoseq, eval = FALSE}
