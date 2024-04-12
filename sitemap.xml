@@ -13,6 +13,9 @@
     <loc>/LICENSE.html</loc>
   </url>
   <url>
+    <loc>/TODO.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -31,7 +34,7 @@
     <loc>/reference/buttonifier.html</loc>
   </url>
   <url>
-    <loc>/reference/create_link_ENS.html</loc>
+    <loc>/reference/create_link_ENSEMBL.html</loc>
   </url>
   <url>
     <loc>/reference/create_link_GO.html</loc>
@@ -40,10 +43,16 @@
     <loc>/reference/create_link_GTEX.html</loc>
   </url>
   <url>
+    <loc>/reference/create_link_GeneCards.html</loc>
+  </url>
+  <url>
     <loc>/reference/create_link_HPA.html</loc>
   </url>
   <url>
     <loc>/reference/create_link_NCBI.html</loc>
+  </url>
+  <url>
+    <loc>/reference/create_link_PubMed.html</loc>
   </url>
   <url>
     <loc>/reference/create_link_UniProt.html</loc>
@@ -52,34 +61,28 @@
     <loc>/reference/create_link_dbPTM.html</loc>
   </url>
   <url>
-    <loc>/reference/create_link_genecards.html</loc>
-  </url>
-  <url>
-    <loc>/reference/create_link_pubmed.html</loc>
-  </url>
-  <url>
     <loc>/reference/de_table_painter.html</loc>
   </url>
   <url>
     <loc>/reference/de_volcano.html</loc>
   </url>
   <url>
-    <loc>/reference/deseqresult2DEgenes.html</loc>
+    <loc>/reference/deresult_to_df.html</loc>
   </url>
   <url>
-    <loc>/reference/deseqresult2df.html</loc>
+    <loc>/reference/dot-info_enrichrun.html</loc>
   </url>
   <url>
     <loc>/reference/gene_plot.html</loc>
   </url>
   <url>
-    <loc>/reference/geneinfo_2_html.html</loc>
+    <loc>/reference/geneinfo_to_html.html</loc>
   </url>
   <url>
     <loc>/reference/get_expr_values.html</loc>
   </url>
   <url>
-    <loc>/reference/go_2_html.html</loc>
+    <loc>/reference/go_to_html.html</loc>
   </url>
   <url>
     <loc>/reference/go_volcano.html</loc>
@@ -88,13 +91,13 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/map2color.html</loc>
+    <loc>/reference/map_to_color.html</loc>
   </url>
   <url>
     <loc>/reference/mosdef-pkg.html</loc>
   </url>
   <url>
-    <loc>/reference/mosdef_dds_check.html</loc>
+    <loc>/reference/mosdef_de_container_check.html</loc>
   </url>
   <url>
     <loc>/reference/mosdef_res_check.html</loc>
