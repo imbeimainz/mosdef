@@ -1,7 +1,7 @@
-pandoc: 3.1.11
-pkgdown: 2.0.8.9000
-pkgdown_sha: c725c922dc6512c094fb34cf5e745acaaf3820e8
+pandoc: 3.1.12.1
+pkgdown: 2.0.9
+pkgdown_sha: ~
 articles:
   mosdef_userguide: mosdef_userguide.html
-last_built: 2024-04-12T16:05Z
+last_built: 2024-04-25T14:22Z
 
