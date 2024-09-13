@@ -24,6 +24,7 @@
 <url><loc>/reference/dot-info_enrichrun.html</loc></url>
 <url><loc>/reference/gene_plot.html</loc></url>
 <url><loc>/reference/geneinfo_to_html.html</loc></url>
+<url><loc>/reference/get_annotation_orgdb.html</loc></url>
 <url><loc>/reference/get_expr_values.html</loc></url>
 <url><loc>/reference/go_to_html.html</loc></url>
 <url><loc>/reference/go_volcano.html</loc></url>
@@ -32,6 +33,7 @@
 <url><loc>/reference/mosdef-pkg.html</loc></url>
 <url><loc>/reference/mosdef_de_container_check.html</loc></url>
 <url><loc>/reference/mosdef_res_check.html</loc></url>
+<url><loc>/reference/pair_corr.html</loc></url>
 <url><loc>/reference/plot_ma.html</loc></url>
 <url><loc>/reference/res_enrich_macrophage_cluPro.html</loc></url>
 <url><loc>/reference/res_enrich_macrophage_goseq.html</loc></url>
