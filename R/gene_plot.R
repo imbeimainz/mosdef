@@ -35,6 +35,7 @@
 #' @param return_data Logical, whether the function should just return the
 #' data.frame of expression values and covariates for custom plotting. Defaults
 #' to FALSE.
+#' @param color_by TODO - if we keep this in for the final version?
 #'
 #' @return A `ggplot` object
 #' @export
@@ -42,7 +43,7 @@
 #' @importFrom stats median
 #' @importFrom ggplot2 ggplot aes geom_point geom_boxplot geom_violin
 #' geom_text position_jitter scale_color_discrete scale_x_discrete scale_y_log10
-#' scale_y_continuous stat_summary theme_bw labs
+#' scale_y_continuous stat_summary theme theme_bw labs element_text rel
 #' @importFrom ggrepel geom_text_repel
 #' @importFrom ggforce geom_sina
 #' @importFrom rlang .data
@@ -79,7 +80,6 @@
 #'   intgroup = "condition",
 #'   annotation_obj = anno_df
 #' )
-
 gene_plot <- function(de_container,
                                 gene,
                                 intgroup = NULL,
@@ -95,7 +95,7 @@ gene_plot <- function(de_container,
   if (!is(de_container, "DESeqDataSet") && !is(de_container, "EList") && !is(de_container, "DGEList")) {
     stop("The provided `de_container` must be a DESeqDataSet, EList, or DGEList object. Please check your input parameters.")
   }
-  
+
   if (is.null(intgroup)) {
     if (is(de_container, "DESeqDataSet")) {
       if (length(names(colData(de_container))) > 0) {
@@ -113,16 +113,16 @@ gene_plot <- function(de_container,
       }
     }
   }
-  
+
   if (is.null(color_by)) {
     color_by <- intgroup
   }
-  
+
   plot_type <- match.arg(
     plot_type,
     c("auto", "jitteronly", "boxplot", "violin", "sina")
   )
-  
+
   if (is(de_container, "DESeqDataSet")) {
     if (!(all(intgroup %in% colnames(colData(de_container))))) {
       stop(
