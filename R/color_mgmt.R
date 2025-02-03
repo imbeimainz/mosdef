@@ -189,19 +189,21 @@ de_table_painter <- function(res_de,
                              ) {
   ## Checks on the input parameters
 
-  res_de <- res_de[order(res_de$padj), ]
-  my_dt <- DT::datatable(
-    as.data.frame(res_de),
-    escape = FALSE,
-    options = list(
-      scrollX = TRUE,
-      scrollY = "400px",
-      pageLength = 25,
-      columnDefs = list(
-        list(className = "dt-center", targets = "_all")
+  if (is(de_container, "DESeqResults")) {
+    res_de <- res_de[order(res_de$padj), ]
+    my_dt <- DT::datatable(
+      as.data.frame(res_de),
+      escape = FALSE,
+      options = list(
+        scrollX = TRUE,
+        scrollY = "400px",
+        pageLength = 25,
+        columnDefs = list(
+          list(className = "dt-center", targets = "_all")
+        )
       )
     )
-  )
+  } ## TODO else if , else if, else...
 
   if (!is.null(rounding_digits)) {
     my_dt <- formatRound(
