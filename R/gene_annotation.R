@@ -38,6 +38,15 @@ get_annotation_orgdb <- function(de_container,
                                  orgdb_package,
                                  id_type,
                                  key_for_genenames = "SYMBOL") {
+
+  ## TODO: see if we need any checks
+  if (is(de_container, "DESeqDataSet")) {
+    ## TODO
+    # all we need is rownames
+  }
+
+
+
   if (is.null(orgdb_package))
     stop("Select an annotation package to generate the corresponding annotation")
 
