@@ -340,3 +340,95 @@ get_expr_values <- function(de_container,
 
   return(exp_df)
 }
+
+
+#' get_expr_values, from a DESeqDataSet object
+#'
+#' @importFrom DESeq2 counts estimateSizeFactors sizeFactors normalizationFactors
+#' @importFrom SummarizedExperiment colData assays
+#'
+#' @keywords internal
+.get_expr_values.DESeqDataSet <- function(de_container,
+                                          gene,
+                                          intgroup,
+                                          assay,
+                                          normalized) {
+  if (!(assay %in% names(assays(de_container)))) {
+    stop(
+      "Please specify a name of one of the existing assays: \n",
+      paste(names(assays(de_container)), collapse = ", ")
+    )
+  }
+
+  # checking the normalization factors are in
+  if (is.null(sizeFactors(de_container)) & is.null(normalizationFactors(de_container))) {
+    de_container <- estimateSizeFactors(de_container)
+  }
+
+  if (assay == "counts") {
+    exp_vec <- counts(de_container, normalized = normalized)[gene, ]
+  } else {
+    exp_vec <- assays(de_container)[[assay]][gene, ]
+  }
+
+  exp_df <- data.frame(
+    exp_value = exp_vec,
+    colData(de_container)[intgroup]
+  )
+
+  return(exp_df)
+}
+
+#' get_expr_values, from an Elist object
+#'
+#' @importFrom DESeq2 counts estimateSizeFactors sizeFactors normalizationFactors
+#' @importFrom SummarizedExperiment colData assays
+#'
+#' @keywords internal
+.get_expr_values.EList <- function(## define the parameters "cleverly"
+                                  ) {
+  # TODO
+  ## add the behavior here
+}
+
+#' get_expr_values, from a DGEList object
+#'
+#' @importFrom DESeq2 counts estimateSizeFactors sizeFactors normalizationFactors
+#' @importFrom SummarizedExperiment colData assays
+#'
+#' @keywords internal
+.get_expr_values.DGEList <- function(## define the parameters "cleverly"
+                                    ) {
+  # TODO
+  ## add the behavior here
+}
+
+
+## This is the ongoing implementation:
+
+### # Function to get expression values based on the container type
+###   get_expr_values <- function(de_container, gene, intgroup, assay, normalized) {
+###     if (is(de_container, "DESeqDataSet")) {
+###       if (assay == "counts") {
+###         values <- counts(de_container, normalized = normalized)
+###       } else {
+###         values <- assay(de_container, assay)
+###       }
+###       intgroup_values <- colData(de_container)[, intgroup, drop = FALSE]
+###       color_by_values <- colData(de_container)[, color_by, drop = FALSE]
+###     } else if (is(de_container, "EList")) {
+###       values <- de_container$E[gene, , drop = FALSE]
+###       intgroup_values <- de_container$samples[, intgroup, drop = FALSE]
+###       color_by_values <- de_container$samples[, color_by, drop = FALSE]
+###     } else if (is(de_container, "DGEList")) {
+###       values <- de_container$counts[gene, , drop = FALSE]
+###       if (normalized) {
+###         values <- cpm(de_container, normalized.lib.sizes = TRUE)[gene, , drop = FALSE]
+###       }
+###       intgroup_values <- de_container$samples[, intgroup, drop = FALSE]
+###       color_by_values <- de_container$samples[, color_by, drop = FALSE]
+###     }
+###     df <- data.frame(exp_value = as.numeric(values), intgroup_values, color_by_values)
+###     rownames(df) <- colnames(values)
+###     return(df)
+###   }
