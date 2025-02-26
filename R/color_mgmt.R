@@ -203,7 +203,25 @@ de_table_painter <- function(res_de,
         )
       )
     )
-  } ## TODO else if , else if, else...
+  } else if ((is(res_de, "DGELRT")) | (is(res_de, "DGEEXACT"))) {
+    # TODO: any conversion
+    # TODO: possibly also re-change the default values of the column names where to find things in
+    message("Working with edgeR objects, remove me later")
+  } else {
+    res_de <- res_de[order(res_de$padj), ]
+    my_dt <- DT::datatable(
+      as.data.frame(res_de),
+      escape = FALSE,
+      options = list(
+        scrollX = TRUE,
+        scrollY = "400px",
+        pageLength = 25,
+        columnDefs = list(
+          list(className = "dt-center", targets = "_all")
+        )
+      )
+    )
+  }
 
   if (!is.null(rounding_digits)) {
     my_dt <- formatRound(
