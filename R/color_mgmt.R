@@ -189,7 +189,7 @@ de_table_painter <- function(res_de,
                              ) {
   ## Checks on the input parameters
 
-  if (is(de_container, "DESeqResults")) {
+  if (is(res_de, "DESeqResults")) {
     res_de <- res_de[order(res_de$padj), ]
     my_dt <- DT::datatable(
       as.data.frame(res_de),
