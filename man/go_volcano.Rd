@@ -14,6 +14,7 @@ go_volcano(
   term_index,
   logfc_cutoff = 1,
   FDR = 0.05,
+  draw_FDR_line = FALSE,
   col_to_use = NULL,
   enrich_col = "genes",
   gene_col_separator = ",",
@@ -43,6 +44,9 @@ argument of ggplot}
 
 \item{FDR}{The pvalue threshold to us for counting genes as de
 and therefore also where to draw the line in the plot. Default is 0.05}
+
+\item{draw_FDR_line}{Logical, whether to draw a line at the p-value
+corresponding to the specified FDR. Defaults to FALSE.}
 
 \item{col_to_use}{The column in your differential expression results
 containing your gene symbols. If you don't have one it is created
