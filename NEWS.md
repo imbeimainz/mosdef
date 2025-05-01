@@ -1,3 +1,7 @@
+# mosdef 1.6.0
+
+* Slight edits to have better behaved `de_volcano()` and `go_volcano()` functions, with filters/looks depending on the adjusted p-values, and a better management of the color values to be used when plotting the different subsets
+
 # mosdef 1.4.0
 
 * `gene_plot()` defaults now to NULL in the `intgroup` parameter, which translates into using the first `colData` item
