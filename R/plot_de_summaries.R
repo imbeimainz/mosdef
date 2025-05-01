@@ -185,9 +185,11 @@ plot_ma <- function(res_de,
 #' @param mapping Which `org.XX.eg.db` package to use for annotation - select
 #' according to the species
 #' @param logfc_cutoff A numeric value that sets the cutoff for the xintercept
-#' argument of ggplot
+#' argument of ggplot. Defaults to 0.
 #' @param FDR The pvalue threshold to us for counting genes as de
 #' and therefore also where to draw the line in the plot. Default is 0.05
+#' @param draw_FDR_line Logical, whether to draw a line at the p-value
+#' corresponding to the specified FDR. Defaults to FALSE.
 #' @param labeled_genes A numeric value describing the amount of genes to be
 #' labeled. This uses the Top(x) highest differentially expressed genes
 #'
@@ -222,8 +224,9 @@ plot_ma <- function(res_de,
 #' p
 de_volcano <- function(res_de,
                        mapping = "org.Mm.eg.db",
-                       logfc_cutoff = 1,
+                       logfc_cutoff = 0,
                        FDR = 0.05,
+                       draw_FDR_line = FALSE,
                        labeled_genes = 30) {
   if (!is(res_de, "DESeqResults")) {
     stop("The provided `res_de` is not a DESeqResults object, please check your input parameters.")
@@ -246,9 +249,9 @@ de_volcano <- function(res_de,
 
   df$diffexpressed <- "NO"
   # if L2FC > logfc_cutoff and pvalue < FDR, set as "UP"
-  df$diffexpressed[df$log2FoldChange > logfc_cutoff & df$pvalue < FDR] <- "UP"
+  df$diffexpressed[df$log2FoldChange >= logfc_cutoff & df$padj <= FDR] <- "UP"
   # if L2FC < -logfc_cutoff and pvalue < FDR, set as "DOWN"
-  df$diffexpressed[df$log2FoldChange < -logfc_cutoff & df$pvalue < FDR] <- "DOWN"
+  df$diffexpressed[df$log2FoldChange <= -logfc_cutoff & df$padj <= FDR] <- "DOWN"
 
   # calculate top degenes based on pvalue (the number is specified in labeled_genes)
   df$delabel <- ifelse(
@@ -256,6 +259,9 @@ de_volcano <- function(res_de,
     df$symbol,
     NA
   )
+
+  # horizontal line "adapted" to the adjusted p-value scale
+  cutoff_hline <- max(df$pvalue[which(df$padj <= FDR)])
 
   p <- ggplot(data = df,
               aes(
@@ -266,18 +272,25 @@ de_volcano <- function(res_de,
               )) +
     geom_vline(xintercept = c(-logfc_cutoff, logfc_cutoff),
                col = "gray", linetype = "dashed") +
-    geom_hline(yintercept = -log10(FDR),
-               col = "gray", linetype = "dashed") +
     geom_point() +
     theme_classic() +
     scale_color_manual(
-      values = c("skyblue", "gray", "tomato"),
-      labels = c("Downregulated", "Not significant", "Upregulated")
+      # values = c("skyblue", "gray", "tomato"),
+      values = c(DOWN = "skyblue", NO = "gray", UP = "tomato"),
+      labels = c("Downregulated", "Not significant", "Upregulated"),
+      limits = c("DOWN", "NO", "UP")
     ) +
     coord_cartesian(ylim = c(0, max(-log10(df$pvalue))),
                     xlim = c(-x_limit, x_limit)) +
     scale_x_continuous(breaks = seq(-x_limit, x_limit, 2)) +
     geom_text_repel(max.overlaps = Inf)
+
+  if(draw_FDR_line) {
+    p <- p +
+      geom_hline(yintercept = -log10(cutoff_hline),
+                 col = "gray", linetype = "dashed")
+  }
+
 
   return(p)
 }
@@ -302,6 +315,8 @@ de_volcano <- function(res_de,
 #' argument of ggplot
 #' @param FDR The pvalue threshold to us for counting genes as de
 #' and therefore also where to draw the line in the plot. Default is 0.05
+#' @param draw_FDR_line Logical, whether to draw a line at the p-value
+#' corresponding to the specified FDR. Defaults to FALSE.
 #' @param col_to_use The column in your differential expression results
 #' containing your gene symbols. If you don't have one it is created
 #' automatically
@@ -356,6 +371,7 @@ go_volcano <- function(res_de,
                        term_index,
                        logfc_cutoff = 1,
                        FDR = 0.05,
+                       draw_FDR_line = FALSE,
                        col_to_use = NULL,
                        enrich_col = "genes",
                        gene_col_separator = ",",
@@ -388,8 +404,8 @@ go_volcano <- function(res_de,
   x_limit <- ceiling(max(abs(range(df$log2FoldChange, na.rm = TRUE))))
 
   df$diffexpressed <- "NO"
-  df$diffexpressed[df$log2FoldChange > logfc_cutoff & df$pvalue < FDR] <- "UP"
-  df$diffexpressed[df$log2FoldChange < -logfc_cutoff & df$pvalue < FDR] <- "DOWN"
+  df$diffexpressed[df$log2FoldChange > logfc_cutoff & df$padj < FDR] <- "UP"
+  df$diffexpressed[df$log2FoldChange < -logfc_cutoff & df$padj < FDR] <- "DOWN"
 
   genes_vec <- res_enrich[[enrich_col]][term_index]
   genes_vec <- strsplit(genes_vec, gene_col_separator)
@@ -403,13 +419,14 @@ go_volcano <- function(res_de,
     }
   }
 
+  # horizontal line "adapted" to the adjusted p-value scale
+  cutoff_hline <- max(df$pvalue[which(df$padj <= FDR)])
+
   p <- ggplot(data = df, aes(
     x = .data$log2FoldChange, y = -log10(.data$pvalue),
     colour = .data$diffexpressed, label = .data$de_label
   )) +
     geom_vline(xintercept = c(-logfc_cutoff, logfc_cutoff),
-               col = "gray", linetype = "dashed") +
-    geom_hline(yintercept = -log10(FDR),
                col = "gray", linetype = "dashed") +
     geom_point() +
     theme_classic() +
@@ -435,8 +452,15 @@ go_volcano <- function(res_de,
     ) +
     scale_color_manual(
       values = custom_color_scale,
-      labels = c("Downregulated", "GOterm", "Not significant", "Upregulated")
+      labels = c("GOterm", "Downregulated", "Not significant", "Upregulated"),
+      limits = c("Highlighted", "DOWN", "NO", "UP")
     )
+
+  if(draw_FDR_line) {
+    q <- q +
+      geom_hline(yintercept = -log10(cutoff_hline),
+                 col = "gray", linetype = "dashed")
+  }
 
   return(q)
 }
