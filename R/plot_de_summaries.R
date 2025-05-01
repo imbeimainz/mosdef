@@ -275,8 +275,10 @@ de_volcano <- function(res_de,
     geom_point() +
     theme_classic() +
     scale_color_manual(
-      values = c("skyblue", "gray", "tomato"),
-      labels = c("Downregulated", "Not significant", "Upregulated")
+      # values = c("skyblue", "gray", "tomato"),
+      values = c(DOWN = "skyblue", NO = "gray", UP = "tomato"),
+      labels = c("Downregulated", "Not significant", "Upregulated"),
+      limits = c("DOWN", "NO", "UP")
     ) +
     coord_cartesian(ylim = c(0, max(-log10(df$pvalue))),
                     xlim = c(-x_limit, x_limit)) +
