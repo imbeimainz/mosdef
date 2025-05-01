@@ -315,6 +315,8 @@ de_volcano <- function(res_de,
 #' argument of ggplot
 #' @param FDR The pvalue threshold to us for counting genes as de
 #' and therefore also where to draw the line in the plot. Default is 0.05
+#' @param draw_FDR_line Logical, whether to draw a line at the p-value
+#' corresponding to the specified FDR. Defaults to FALSE.
 #' @param col_to_use The column in your differential expression results
 #' containing your gene symbols. If you don't have one it is created
 #' automatically
@@ -369,6 +371,7 @@ go_volcano <- function(res_de,
                        term_index,
                        logfc_cutoff = 1,
                        FDR = 0.05,
+                       draw_FDR_line = FALSE,
                        col_to_use = NULL,
                        enrich_col = "genes",
                        gene_col_separator = ",",
@@ -401,8 +404,8 @@ go_volcano <- function(res_de,
   x_limit <- ceiling(max(abs(range(df$log2FoldChange, na.rm = TRUE))))
 
   df$diffexpressed <- "NO"
-  df$diffexpressed[df$log2FoldChange > logfc_cutoff & df$pvalue < FDR] <- "UP"
-  df$diffexpressed[df$log2FoldChange < -logfc_cutoff & df$pvalue < FDR] <- "DOWN"
+  df$diffexpressed[df$log2FoldChange > logfc_cutoff & df$padj < FDR] <- "UP"
+  df$diffexpressed[df$log2FoldChange < -logfc_cutoff & df$padj < FDR] <- "DOWN"
 
   genes_vec <- res_enrich[[enrich_col]][term_index]
   genes_vec <- strsplit(genes_vec, gene_col_separator)
@@ -416,13 +419,14 @@ go_volcano <- function(res_de,
     }
   }
 
+  # horizontal line "adapted" to the adjusted p-value scale
+  cutoff_hline <- max(df$pvalue[which(df$padj <= FDR)])
+
   p <- ggplot(data = df, aes(
     x = .data$log2FoldChange, y = -log10(.data$pvalue),
     colour = .data$diffexpressed, label = .data$de_label
   )) +
     geom_vline(xintercept = c(-logfc_cutoff, logfc_cutoff),
-               col = "gray", linetype = "dashed") +
-    geom_hline(yintercept = -log10(FDR),
                col = "gray", linetype = "dashed") +
     geom_point() +
     theme_classic() +
@@ -448,8 +452,15 @@ go_volcano <- function(res_de,
     ) +
     scale_color_manual(
       values = custom_color_scale,
-      labels = c("Downregulated", "GOterm", "Not significant", "Upregulated")
+      labels = c("GOterm", "Downregulated", "Not significant", "Upregulated"),
+      limits = c("Highlighted", "DOWN", "NO", "UP")
     )
+
+  if(draw_FDR_line) {
+    q <- q +
+      geom_hline(yintercept = -log10(cutoff_hline),
+                 col = "gray", linetype = "dashed")
+  }
 
   return(q)
 }
