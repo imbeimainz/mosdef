@@ -246,9 +246,9 @@ de_volcano <- function(res_de,
 
   df$diffexpressed <- "NO"
   # if L2FC > logfc_cutoff and pvalue < FDR, set as "UP"
-  df$diffexpressed[df$log2FoldChange > logfc_cutoff & df$pvalue < FDR] <- "UP"
+  df$diffexpressed[df$log2FoldChange >= logfc_cutoff & df$padj <= FDR] <- "UP"
   # if L2FC < -logfc_cutoff and pvalue < FDR, set as "DOWN"
-  df$diffexpressed[df$log2FoldChange < -logfc_cutoff & df$pvalue < FDR] <- "DOWN"
+  df$diffexpressed[df$log2FoldChange <= -logfc_cutoff & df$padj <= FDR] <- "DOWN"
 
   # calculate top degenes based on pvalue (the number is specified in labeled_genes)
   df$delabel <- ifelse(
