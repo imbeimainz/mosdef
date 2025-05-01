@@ -185,7 +185,7 @@ plot_ma <- function(res_de,
 #' @param mapping Which `org.XX.eg.db` package to use for annotation - select
 #' according to the species
 #' @param logfc_cutoff A numeric value that sets the cutoff for the xintercept
-#' argument of ggplot
+#' argument of ggplot. Defaults to 0.
 #' @param FDR The pvalue threshold to us for counting genes as de
 #' and therefore also where to draw the line in the plot. Default is 0.05
 #' @param draw_FDR_line Logical, whether to draw a line at the p-value
@@ -224,7 +224,7 @@ plot_ma <- function(res_de,
 #' p
 de_volcano <- function(res_de,
                        mapping = "org.Mm.eg.db",
-                       logfc_cutoff = 1,
+                       logfc_cutoff = 0,
                        FDR = 0.05,
                        draw_FDR_line = FALSE,
                        labeled_genes = 30) {
