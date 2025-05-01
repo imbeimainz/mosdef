@@ -188,6 +188,8 @@ plot_ma <- function(res_de,
 #' argument of ggplot
 #' @param FDR The pvalue threshold to us for counting genes as de
 #' and therefore also where to draw the line in the plot. Default is 0.05
+#' @param draw_FDR_line Logical, whether to draw a line at the p-value
+#' corresponding to the specified FDR. Defaults to FALSE.
 #' @param labeled_genes A numeric value describing the amount of genes to be
 #' labeled. This uses the Top(x) highest differentially expressed genes
 #'
@@ -224,6 +226,7 @@ de_volcano <- function(res_de,
                        mapping = "org.Mm.eg.db",
                        logfc_cutoff = 1,
                        FDR = 0.05,
+                       draw_FDR_line = FALSE,
                        labeled_genes = 30) {
   if (!is(res_de, "DESeqResults")) {
     stop("The provided `res_de` is not a DESeqResults object, please check your input parameters.")
@@ -257,6 +260,9 @@ de_volcano <- function(res_de,
     NA
   )
 
+  # horizontal line "adapted" to the adjusted p-value scale
+  cutoff_hline <- max(df$pvalue[which(df$padj <= FDR)])
+
   p <- ggplot(data = df,
               aes(
                 x = .data$log2FoldChange,
@@ -265,8 +271,6 @@ de_volcano <- function(res_de,
                 label = .data$delabel
               )) +
     geom_vline(xintercept = c(-logfc_cutoff, logfc_cutoff),
-               col = "gray", linetype = "dashed") +
-    geom_hline(yintercept = -log10(FDR),
                col = "gray", linetype = "dashed") +
     geom_point() +
     theme_classic() +
@@ -278,6 +282,13 @@ de_volcano <- function(res_de,
                     xlim = c(-x_limit, x_limit)) +
     scale_x_continuous(breaks = seq(-x_limit, x_limit, 2)) +
     geom_text_repel(max.overlaps = Inf)
+
+  if(draw_FDR_line) {
+    p <- p +
+      geom_hline(yintercept = -log10(cutoff_hline),
+                 col = "gray", linetype = "dashed")
+  }
+
 
   return(p)
 }
