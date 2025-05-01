@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">mosdef</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,7 @@ Marini</h4>
 Mainz<br><a class="author_email" href="mailto:#"></a><a href="mailto:marinif@uni-mainz.de" class="email">marinif@uni-mainz.de</a>
       </address>
                   
-            <h4 data-toc-skip class="date">7 March 2025</h4>
+            <h4 data-toc-skip class="date">1 May 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/imbeimainz/mosdef/blob/devel/vignettes/mosdef_userguide.Rmd" class="external-link"><code>vignettes/mosdef_userguide.Rmd</code></a></small>
       <div class="d-none name"><code>mosdef_userguide.Rmd</code></div>
@@ -96,7 +96,7 @@ Mainz<br><a class="author_email" href="mailto:#"></a><a href="mailto:marinif@uni
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>This vignette describes how to use the <em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em>
+<p>This vignette describes how to use the <em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em>
 package for performing tasks commonly associated to your Differential
 Expression workflows.</p>
 <p>This includes functionality for</p>
@@ -121,29 +121,29 @@ frequently used features such as genes and Gene Ontology terms can also
 be embedded with <code>geneinfo_to_html</code> and
 <code>go_to_html</code></p></li>
 </ul>
-<p>The <em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em>
+<p>The <em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em>
 package as a whole aims to collect the MOSt frequently used DE-related
 Functions, and is open to further contributions from the community.</p>
-<p>All in all, the objective for <em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em> is
+<p>All in all, the objective for <em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em> is
 to streamline the generation of comprehensive, information-rich analysis
 reports.</p>
 <p>Historically, many of these functions (at least conceptually) have
 been developed in some of our other Bioconductor packages, such as
-<em><a href="https://bioconductor.org/packages/3.21/pcaExplorer" class="external-link">pcaExplorer</a></em>,
-<em><a href="https://bioconductor.org/packages/3.21/ideal" class="external-link">ideal</a></em> and
-<em><a href="https://bioconductor.org/packages/3.21/GeneTonic" class="external-link">GeneTonic</a></em>.
-<em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em> is
+<em><a href="https://bioconductor.org/packages/3.22/pcaExplorer" class="external-link">pcaExplorer</a></em>,
+<em><a href="https://bioconductor.org/packages/3.22/ideal" class="external-link">ideal</a></em> and
+<em><a href="https://bioconductor.org/packages/3.22/GeneTonic" class="external-link">GeneTonic</a></em>.
+<em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em> is
 the attempt to achieve a better modularization for the most common tasks
 in the DE workflow.</p>
 <div class="section level3">
 <h3 id="required-input">Required input<a class="anchor" aria-label="anchor" href="#required-input"></a>
 </h3>
-<p>In order to use <em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em> in
+<p>In order to use <em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em> in
 your workflow, two main inputs are required:</p>
 <ul>
 <li>
 <code>de_container</code>, a dataset containing the expression
-matrix. For example, a <code>DESeqDataSet</code> object in the <em><a href="https://bioconductor.org/packages/3.21/DESeq2" class="external-link">DESeq2</a></em>
+matrix. For example, a <code>DESeqDataSet</code> object in the <em><a href="https://bioconductor.org/packages/3.22/DESeq2" class="external-link">DESeq2</a></em>
 workflow</li>
 <li>
 <code>res_de</code>, a dataset, such as a <code>DESeqResults</code>
@@ -151,26 +151,26 @@ storing the results of the differential expression analysis</li>
 </ul>
 <p>Additionally, the <code>mapping</code> parameters, shared by a number
 of functions, refers to the annotation of your species provided by
-<em><a href="https://bioconductor.org/packages/3.21/AnnotationDbi" class="external-link">AnnotationDbi</a></em>-like
+<em><a href="https://bioconductor.org/packages/3.22/AnnotationDbi" class="external-link">AnnotationDbi</a></em>-like
 packages, which are commonplace in the Bioconductor environment. For
-human, this would be <em><a href="https://bioconductor.org/packages/3.21/org.Hs.eg.db" class="external-link">org.Hs.eg.db</a></em>,
-and for mouse <em><a href="https://bioconductor.org/packages/3.21/org.Mm.eg.db" class="external-link">org.Mm.eg.db</a></em>.</p>
-<p>Currently, <em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em> is
-able to feed on the classes used throughout the <em><a href="https://bioconductor.org/packages/3.21/DESeq2" class="external-link">DESeq2</a></em>
+human, this would be <em><a href="https://bioconductor.org/packages/3.22/org.Hs.eg.db" class="external-link">org.Hs.eg.db</a></em>,
+and for mouse <em><a href="https://bioconductor.org/packages/3.22/org.Mm.eg.db" class="external-link">org.Mm.eg.db</a></em>.</p>
+<p>Currently, <em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em> is
+able to feed on the classes used throughout the <em><a href="https://bioconductor.org/packages/3.22/DESeq2" class="external-link">DESeq2</a></em>
 approach, but can easily be extended for the corresponding
-implementations in <em><a href="https://bioconductor.org/packages/3.21/edgeR" class="external-link">edgeR</a></em> and
-<em><a href="https://bioconductor.org/packages/3.21/limma" class="external-link">limma</a></em>.</p>
+implementations in <em><a href="https://bioconductor.org/packages/3.22/edgeR" class="external-link">edgeR</a></em> and
+<em><a href="https://bioconductor.org/packages/3.22/limma" class="external-link">limma</a></em>.</p>
 </div>
 <div class="section level3">
 <h3 id="demonstrating-mosdef-on-the-macrophage-data">Demonstrating <code>mosdef</code> on the
 <code>macrophage data</code><a class="anchor" aria-label="anchor" href="#demonstrating-mosdef-on-the-macrophage-data"></a>
 </h3>
 <p>In the remainder of this vignette, we will illustrate the main
-features of <em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em> on
+features of <em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em> on
 a publicly available dataset from Alasoo et al., “Shared genetic effects
 on chromatin and gene expression indicate a role for enhancer priming in
 immune response”, published in Nature Genetics, January 2018 <span class="citation">(Alasoo et al. 2018)</span> <a href="https://doi.org/10.1038/s41588-018-0046-7" class="external-link">doi:10.1038/s41588-018-0046-7</a>.</p>
-<p>The data is made available via the <em><a href="https://bioconductor.org/packages/3.21/macrophage" class="external-link">macrophage</a></em>
+<p>The data is made available via the <em><a href="https://bioconductor.org/packages/3.22/macrophage" class="external-link">macrophage</a></em>
 Bioconductor package, which contains the files output from the Salmon
 quantification (version 0.12.0, with Gencode v29 reference), as well as
 the values summarized at the gene level, which we will use to exemplify
@@ -186,7 +186,7 @@ naive samples.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>To install <em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em>,
+<p>To install <em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em>,
 you can run the following commands:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://bioconductor.github.io/BiocManager/" class="external-link">"BiocManager"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -201,7 +201,7 @@ alternatively run this command:</p>
 <div class="section level2">
 <h2 id="gettingstarted">Getting started<a class="anchor" aria-label="anchor" href="#gettingstarted"></a>
 </h2>
-<p>Once installed, the <em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em>
+<p>Once installed, the <em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em>
 package can be loaded and attached to your current workspace as
 follows:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -217,7 +217,7 @@ Notably, we correctly specify the experimental design as
 <code>condition</code>, while accounting for the cell
 <code>line</code>.</p>
 <p>If you are familiar with the DE workflow, you can skim over this
-section and read more on the functionality of <em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em> in
+section and read more on the functionality of <em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em> in
 Section @ref(mosdefenrich).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span>
@@ -253,25 +253,25 @@ conservative) method defined in the chunk below.</p>
 <span>                                        contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"condition"</span>, <span class="st">"IFNg"</span>, <span class="st">"naive"</span><span class="op">)</span>,</span>
 <span>                                        lfcThreshold <span class="op">=</span> <span class="fl">1</span>, </span>
 <span>                                        alpha <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<p>Please refer to the vignette of the <em><a href="https://bioconductor.org/packages/3.21/DESeq2" class="external-link">DESeq2</a></em> or
-<em><a href="https://bioconductor.org/packages/3.21/edgeR" class="external-link">edgeR</a></em>
+<p>Please refer to the vignette of the <em><a href="https://bioconductor.org/packages/3.22/DESeq2" class="external-link">DESeq2</a></em> or
+<em><a href="https://bioconductor.org/packages/3.22/edgeR" class="external-link">edgeR</a></em>
 packages for more complex experimental designs and/or additional options
 in each workflow.<br>
 The aim for this section was simply to generate exemplary objects to
-work with and provide to the <em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em>
+work with and provide to the <em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em>
 functions.</p>
 </div>
 <div class="section level2">
 <h2 id="mosdefenrich">Generating enrichment results with a unified API<a class="anchor" aria-label="anchor" href="#mosdefenrich"></a>
 </h2>
-<p><em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em>
+<p><em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em>
 allows you to create your enrichment results right from your
 <code>DESeqDataset</code> and <code>DESeqResults</code> objects using 3
 possible algorithms, widely used:</p>
 <ul>
-<li><em><a href="https://bioconductor.org/packages/3.21/topGO" class="external-link">topGO</a></em></li>
-<li><em><a href="https://bioconductor.org/packages/3.21/goseq" class="external-link">goseq</a></em></li>
-<li><em><a href="https://bioconductor.org/packages/3.21/clusterProfiler" class="external-link">clusterProfiler</a></em></li>
+<li><em><a href="https://bioconductor.org/packages/3.22/topGO" class="external-link">topGO</a></em></li>
+<li><em><a href="https://bioconductor.org/packages/3.22/goseq" class="external-link">goseq</a></em></li>
+<li><em><a href="https://bioconductor.org/packages/3.22/clusterProfiler" class="external-link">clusterProfiler</a></em></li>
 </ul>
 <p>For more information on the differences between these algorithms we
 refer to their individual vignettes and publications.</p>
@@ -298,7 +298,7 @@ add a human readable name for our features of interest:</p>
 <p>We indeed recommend to use identifiers as row names that are
 machine-readable and stable over time, such as ENSEMBL or GENCODE.<br>
 To ensure that we are using objects that would work out-of-the-box into
-<em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em>, we
+<em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em>, we
 provide some utilities to check that in advance - this can relax the
 need of specifying a number of parameters in the other functions.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -308,7 +308,7 @@ need of specifying a number of parameters in the other functions.</p>
 <h3 id="mosdef-and-topgo">
 <code>mosdef</code> and <code>topGO</code><a class="anchor" aria-label="anchor" href="#mosdef-and-topgo"></a>
 </h3>
-<p><em><a href="https://bioconductor.org/packages/3.21/topGO" class="external-link">topGO</a></em> is a
+<p><em><a href="https://bioconductor.org/packages/3.22/topGO" class="external-link">topGO</a></em> is a
 widely used option to obtain a set of spot-on Gene Ontology terms,
 removing some of the more generic ones and therefore also reducing the
 redundancy which is inherent in the GO database <span class="citation">(Ashburner et al. 2000)</span>.</p>
@@ -370,7 +370,7 @@ object</li>
 <li>
 <code>gene_id</code>: Which format the genes are provided. If you
 provide a <code>DESeqDataset</code> and <code>DESeqResults</code>, then
-<em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em>
+<em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em>
 does it for you and uses symbols. If you provide vectors please specify
 a value.</li>
 <li>
@@ -387,7 +387,7 @@ with all genes annotated to each GO term.</li>
 <li>
 <code>topGO_method2</code>: Character, specifying which of the
 methods implemented by <code>topGO</code> is to be used. The default is
-elim. For more info look at the documentation of <em><a href="https://bioconductor.org/packages/3.21/topGO" class="external-link">topGO</a></em>.</li>
+elim. For more info look at the documentation of <em><a href="https://bioconductor.org/packages/3.22/topGO" class="external-link">topGO</a></em>.</li>
 <li>
 <code>min_counts</code>: Minimum number of counts a gene has to have
 to be considered for the background. The default is 0 and we advise this
@@ -479,7 +479,7 @@ Section @ref(volcanoplots))</li>
 <h3 id="mosdef-and-goseq">
 <code>mosdef</code> and <code>goseq</code><a class="anchor" aria-label="anchor" href="#mosdef-and-goseq"></a>
 </h3>
-<p>The method implemented in the <em><a href="https://bioconductor.org/packages/3.21/goseq" class="external-link">goseq</a></em>
+<p>The method implemented in the <em><a href="https://bioconductor.org/packages/3.22/goseq" class="external-link">goseq</a></em>
 package is able to handle the selection bias inherent in assays such as
 RNA-seq, whereas highly expressed genes have a higher probability of
 being detected as differentially expressed.</p>
@@ -491,7 +491,7 @@ parameters see above), as they are a part of the shared API with
 <p>Importantly, the feature length retrieval is based on the
 <code>goseq()</code> function, and this requires that the corresponding
 TxDb packages are installed and available. So make sure one is installed
-on your machine. For human samples, the recommended one is <em><a href="https://bioconductor.org/packages/3.21/TxDb.Hsapiens.UCSC.hg38.knownGene" class="external-link">TxDb.Hsapiens.UCSC.hg38.knownGene</a></em>.</p>
+on your machine. For human samples, the recommended one is <em><a href="https://bioconductor.org/packages/3.22/TxDb.Hsapiens.UCSC.hg38.knownGene" class="external-link">TxDb.Hsapiens.UCSC.hg38.knownGene</a></em>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">goseq_macrophage</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_goseq.html">run_goseq</a></span><span class="op">(</span></span>
 <span>  de_container <span class="op">=</span> <span class="va">dds_macrophage</span>,</span>
@@ -595,7 +595,7 @@ that term (separated by a comma)</li>
 <code>de_type</code> can also be used here (For more detail on these
 parameters see above). If you want to further customize the call of
 <code><a href="https://rdrr.io/pkg/clusterProfiler/man/enrichGO.html" class="external-link">enrichGO()</a></code> inside the function, have a look at the
-documentation for <code><a href="https://rdrr.io/pkg/clusterProfiler/man/enrichGO.html" class="external-link">enrichGO()</a></code> from <em><a href="https://bioconductor.org/packages/3.21/clusterProfiler" class="external-link">clusterProfiler</a></em>
+documentation for <code><a href="https://rdrr.io/pkg/clusterProfiler/man/enrichGO.html" class="external-link">enrichGO()</a></code> from <em><a href="https://bioconductor.org/packages/3.22/clusterProfiler" class="external-link">clusterProfiler</a></em>
 Those parameters can be added to the <code><a href="../reference/run_cluPro.html">run_cluPro()</a></code> function
 call within the ellipsis (<code>...</code>). For example, as we are
 doing in the chunk that follows, we set Biological Process as the
@@ -659,7 +659,7 @@ metadata and the enrichment results with 9 columns.</p>
 <span><span class="co">#&gt; GO:0002460    60</span></span>
 <span><span class="co">#&gt; GO:0019882    36</span></span>
 <span><span class="co">#&gt; GO:0002396    16</span></span></code></pre></div>
-<p>The definitions of these columns are included in the extensive <em><a href="https://bioconductor.org/packages/3.21/clusterProfiler" class="external-link">clusterProfiler</a></em>
+<p>The definitions of these columns are included in the extensive <em><a href="https://bioconductor.org/packages/3.22/clusterProfiler" class="external-link">clusterProfiler</a></em>
 package documentation, please refer to that for more details.</p>
 </div>
 <div class="section level3">
@@ -735,7 +735,7 @@ Log2FoldChange from the <code>DESeqResults</code> object passed to
 <div class="section level2">
 <h2 id="plotting-expression-values-in-the-context-of-de">Plotting expression values in the context of DE<a class="anchor" aria-label="anchor" href="#plotting-expression-values-in-the-context-of-de"></a>
 </h2>
-<p><em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em>
+<p><em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em>
 provides some wrappers to commonly used visualizations of individual
 genes, as well as summary visualizations for all features at once.</p>
 <div class="section level3">
@@ -952,7 +952,7 @@ certain genes of interest to you, if providing them via the
 <p>Analysis reports, often generated via Rmarkdown, are a great way of
 handing over data, results, and output to collaborators, colleagues,
 PIs, …</p>
-<p><em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em>
+<p><em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em>
 provides a set of functions aiming to enhance the report quality,
 e.g. by turning normal tables into interactive tables, linking to a
 number of additional external databases - thus simplifying the search
@@ -966,10 +966,10 @@ a medical scientist, often contains a fair amount of searches into
 external databases, in order to obtain additional information on the
 shortlisted features.</p>
 <p>Simplifying the time to reach these resources and embedding them into
-one info-rich analysis report is <em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em>’s
+one info-rich analysis report is <em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em>’s
 proposal to streamline this as a whole.</p>
 <p>All of these (except ENSEMBL, using their internal identifier system)
-require gene symbols as the input. Currently, <em><a href="https://bioconductor.org/packages/3.21/mosdef" class="external-link">mosdef</a></em> has
+require gene symbols as the input. Currently, <em><a href="https://bioconductor.org/packages/3.22/mosdef" class="external-link">mosdef</a></em> has
 functions to create automated links to:</p>
 <ul>
 <li>ENSEMBL (<a href="https://www.ensembl.org/index.html" class="external-link uri">https://www.ensembl.org/index.html</a>)</li>
@@ -1105,9 +1105,9 @@ overview.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/geneinfo_to_html.html">geneinfo_to_html</a></span><span class="op">(</span><span class="st">"ACTB"</span><span class="op">)</span></span></code></pre></div>
 <b>ACTB</b><br>Link to the NCBI Gene database: <a href="http://www.ncbi.nlm.nih.gov/gene/?term=ACTB%5Bsym%5D" target="_blank" class="external-link btn btn-primary" style="color: #ffffff; background-color: #0092AC">ACTB@NCBI</a><br>Link to the GeneCards database: <a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=ACTB" target="_blank" class="external-link btn btn-primary" style="color: #ffffff; background-color: #0092AC">ACTB@GeneCards</a><br>Link to the GTEx Portal: <a href="https://www.gtexportal.org/home/gene/ACTB" target="_blank" class="external-link btn btn-primary" style="color: #ffffff; background-color: #0092AC"><i class="fa fa-dna"></i>ACTB@GTEX</a><br>Link to the UniProt Portal: <a href="https://www.uniprot.org/uniprot/?query=ACTB" target="_blank" class="external-link btn btn-primary" style="color: #ffffff; background-color: #0092AC"><i class="fa fa-spinner"></i>ACTB@UNIPROT</a><br>Link to related articles on Pubmed: <a href="https://pubmed.ncbi.nlm.nih.gov/?term=ACTB" target="_blank" class="external-link btn btn-primary" style="color: #ffffff; background-color: #0092AC">ACTB@Pubmed</a><br><p>This can be a practical way to generate some HTML content to be
 embedded e.g. in other contexts such as dashboards, as it is currently
-implemented in <em><a href="https://bioconductor.org/packages/3.21/pcaExplorer" class="external-link">pcaExplorer</a></em>,
-<em><a href="https://bioconductor.org/packages/3.21/ideal" class="external-link">ideal</a></em> and
-<em><a href="https://bioconductor.org/packages/3.21/GeneTonic" class="external-link">GeneTonic</a></em>.</p>
+implemented in <em><a href="https://bioconductor.org/packages/3.22/pcaExplorer" class="external-link">pcaExplorer</a></em>,
+<em><a href="https://bioconductor.org/packages/3.22/ideal" class="external-link">ideal</a></em> and
+<em><a href="https://bioconductor.org/packages/3.22/GeneTonic" class="external-link">GeneTonic</a></em>.</p>
 </div>
 <div class="section level3">
 <h3 id="more-information-on-go-terms">More information on GO terms<a class="anchor" aria-label="anchor" href="#more-information-on-go-terms"></a>
@@ -1132,7 +1132,7 @@ as HTML code.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/go_to_html.html">go_to_html</a></span><span class="op">(</span><span class="st">"GO:0001525"</span><span class="op">)</span></span></code></pre></div>
 <b>GO ID: </b><a href="http://amigo.geneontology.org/amigo/term/GO:0001525" target="_blank" class="external-link btn btn-primary" style="color: #ffffff; background-color: #0092AC">GO:0001525@AMIGO</a><br><b>Pubmed results: </b><a href="https://pubmed.ncbi.nlm.nih.gov/?term=angiogenesis" target="_blank" class="external-link btn btn-primary" style="color: #ffffff; background-color: #0092AC">angiogenesis@Pubmed</a><br><b>Term: </b>angiogenesis<br><b>Ontology: </b>BP<br><br><b>Definition: </b>Blood vessel formation when new vessels emerge from the proliferation of pre-existing blood vessels.<br><b>Synonym: </b>blood vessel formation from pre-existing blood vessels<br><p>This not only creates a link to the AmiGO database, but also extracts
-some information about the term itself from the <em><a href="https://bioconductor.org/packages/3.21/GO.db" class="external-link">GO.db</a></em>
+some information about the term itself from the <em><a href="https://bioconductor.org/packages/3.22/GO.db" class="external-link">GO.db</a></em>
 package.</p>
 <p>This approach can be extended to link to additional external
 resources on genesets, such as MSigDB or Reactome.</p>
@@ -1143,9 +1143,9 @@ resources on genesets, such as MSigDB or Reactome.</p>
 </h2>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R Under development (unstable) (2025-03-06 r87893)</span></span>
+<span><span class="co">#&gt; R version 4.5.0 (2025-04-11)</span></span>
 <span><span class="co">#&gt; Platform: aarch64-apple-darwin20</span></span>
-<span><span class="co">#&gt; Running under: macOS Sonoma 14.7.2</span></span>
+<span><span class="co">#&gt; Running under: macOS Sonoma 14.7.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
 <span><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib </span></span>
@@ -1162,77 +1162,76 @@ resources on genesets, such as MSigDB or Reactome.</p>
 <span><span class="co">#&gt; [8] base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt;  [1] ggplot2_3.5.1                           </span></span>
+<span><span class="co">#&gt;  [1] ggplot2_3.5.2                           </span></span>
 <span><span class="co">#&gt;  [2] TxDb.Hsapiens.UCSC.hg38.knownGene_3.21.0</span></span>
-<span><span class="co">#&gt;  [3] GenomicFeatures_1.59.1                  </span></span>
+<span><span class="co">#&gt;  [3] GenomicFeatures_1.61.0                  </span></span>
 <span><span class="co">#&gt;  [4] topGO_2.59.0                            </span></span>
 <span><span class="co">#&gt;  [5] SparseM_1.84-2                          </span></span>
 <span><span class="co">#&gt;  [6] GO.db_3.21.0                            </span></span>
-<span><span class="co">#&gt;  [7] graph_1.85.1                            </span></span>
+<span><span class="co">#&gt;  [7] graph_1.87.0                            </span></span>
 <span><span class="co">#&gt;  [8] org.Hs.eg.db_3.21.0                     </span></span>
-<span><span class="co">#&gt;  [9] AnnotationDbi_1.69.0                    </span></span>
-<span><span class="co">#&gt; [10] DESeq2_1.47.5                           </span></span>
-<span><span class="co">#&gt; [11] SummarizedExperiment_1.37.0             </span></span>
-<span><span class="co">#&gt; [12] Biobase_2.67.0                          </span></span>
-<span><span class="co">#&gt; [13] MatrixGenerics_1.19.1                   </span></span>
+<span><span class="co">#&gt;  [9] AnnotationDbi_1.71.0                    </span></span>
+<span><span class="co">#&gt; [10] DESeq2_1.49.0                           </span></span>
+<span><span class="co">#&gt; [11] SummarizedExperiment_1.39.0             </span></span>
+<span><span class="co">#&gt; [12] Biobase_2.69.0                          </span></span>
+<span><span class="co">#&gt; [13] MatrixGenerics_1.21.0                   </span></span>
 <span><span class="co">#&gt; [14] matrixStats_1.5.0                       </span></span>
-<span><span class="co">#&gt; [15] GenomicRanges_1.59.1                    </span></span>
-<span><span class="co">#&gt; [16] GenomeInfoDb_1.43.4                     </span></span>
-<span><span class="co">#&gt; [17] IRanges_2.41.3                          </span></span>
-<span><span class="co">#&gt; [18] S4Vectors_0.45.4                        </span></span>
-<span><span class="co">#&gt; [19] BiocGenerics_0.53.6                     </span></span>
+<span><span class="co">#&gt; [15] GenomicRanges_1.61.0                    </span></span>
+<span><span class="co">#&gt; [16] GenomeInfoDb_1.45.3                     </span></span>
+<span><span class="co">#&gt; [17] IRanges_2.43.0                          </span></span>
+<span><span class="co">#&gt; [18] S4Vectors_0.47.0                        </span></span>
+<span><span class="co">#&gt; [19] BiocGenerics_0.55.0                     </span></span>
 <span><span class="co">#&gt; [20] generics_0.1.3                          </span></span>
-<span><span class="co">#&gt; [21] macrophage_1.23.0                       </span></span>
-<span><span class="co">#&gt; [22] mosdef_1.3.1                            </span></span>
-<span><span class="co">#&gt; [23] BiocStyle_2.35.0                        </span></span>
+<span><span class="co">#&gt; [21] macrophage_1.25.0                       </span></span>
+<span><span class="co">#&gt; [22] mosdef_1.5.0                            </span></span>
+<span><span class="co">#&gt; [23] BiocStyle_2.37.0                        </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] splines_4.5.0            BiocIO_1.17.1            bitops_1.0-9            </span></span>
-<span><span class="co">#&gt;   [4] ggplotify_0.1.2          filelock_1.0.3           tibble_3.2.1            </span></span>
-<span><span class="co">#&gt;   [7] R.oo_1.27.0              BiasedUrn_2.0.12         polyclip_1.10-7         </span></span>
-<span><span class="co">#&gt;  [10] XML_3.99-0.18            lifecycle_1.0.4          httr2_1.1.0             </span></span>
-<span><span class="co">#&gt;  [13] lattice_0.22-6           MASS_7.3-65              crosstalk_1.2.1         </span></span>
-<span><span class="co">#&gt;  [16] magrittr_2.0.3           sass_0.4.9               rmarkdown_2.29          </span></span>
-<span><span class="co">#&gt;  [19] jquerylib_0.1.4          yaml_2.3.10              ggtangle_0.0.6          </span></span>
-<span><span class="co">#&gt;  [22] cowplot_1.1.3            DBI_1.2.3                RColorBrewer_1.1-3      </span></span>
-<span><span class="co">#&gt;  [25] abind_1.4-8              purrr_1.0.4              R.utils_2.13.0          </span></span>
-<span><span class="co">#&gt;  [28] RCurl_1.98-1.16          yulab.utils_0.2.0        tweenr_2.0.3            </span></span>
-<span><span class="co">#&gt;  [31] rappdirs_0.3.3           GenomeInfoDbData_1.2.13  enrichplot_1.27.4       </span></span>
-<span><span class="co">#&gt;  [34] ggrepel_0.9.6            tidytree_0.4.6           pkgdown_2.1.1.9000      </span></span>
-<span><span class="co">#&gt;  [37] codetools_0.2-20         DelayedArray_0.33.6      DOSE_4.1.0              </span></span>
-<span><span class="co">#&gt;  [40] DT_0.33                  xml2_1.3.7               ggforce_0.4.2           </span></span>
-<span><span class="co">#&gt;  [43] tidyselect_1.2.1         aplot_0.2.5              UCSC.utils_1.3.1        </span></span>
-<span><span class="co">#&gt;  [46] farver_2.1.2             goseq_1.59.0             BiocFileCache_2.15.1    </span></span>
-<span><span class="co">#&gt;  [49] GenomicAlignments_1.43.0 jsonlite_1.9.1           systemfonts_1.2.1       </span></span>
-<span><span class="co">#&gt;  [52] tools_4.5.0              progress_1.2.3           treeio_1.31.0           </span></span>
-<span><span class="co">#&gt;  [55] ragg_1.3.3               Rcpp_1.0.14              glue_1.8.0              </span></span>
-<span><span class="co">#&gt;  [58] SparseArray_1.7.6        xfun_0.51                geneLenDataBase_1.43.0  </span></span>
-<span><span class="co">#&gt;  [61] mgcv_1.9-1               qvalue_2.39.0            dplyr_1.1.4             </span></span>
-<span><span class="co">#&gt;  [64] withr_3.0.2              BiocManager_1.30.25      fastmap_1.2.0           </span></span>
-<span><span class="co">#&gt;  [67] digest_0.6.37            R6_2.6.1                 gridGraphics_0.5-1      </span></span>
-<span><span class="co">#&gt;  [70] textshaping_1.0.0        colorspace_2.1-1         biomaRt_2.63.1          </span></span>
-<span><span class="co">#&gt;  [73] RSQLite_2.3.9            R.methodsS3_1.8.2        tidyr_1.3.1             </span></span>
-<span><span class="co">#&gt;  [76] data.table_1.17.0        rtracklayer_1.67.1       prettyunits_1.2.0       </span></span>
-<span><span class="co">#&gt;  [79] httr_1.4.7               htmlwidgets_1.6.4        S4Arrays_1.7.3          </span></span>
-<span><span class="co">#&gt;  [82] pkgconfig_2.0.3          gtable_0.3.6             blob_1.2.4              </span></span>
-<span><span class="co">#&gt;  [85] XVector_0.47.2           clusterProfiler_4.15.1   htmltools_0.5.8.1       </span></span>
-<span><span class="co">#&gt;  [88] bookdown_0.42            fgsea_1.33.2             scales_1.3.0            </span></span>
-<span><span class="co">#&gt;  [91] png_0.1-8                ggfun_0.1.8              knitr_1.49              </span></span>
-<span><span class="co">#&gt;  [94] reshape2_1.4.4           rjson_0.2.23             nlme_3.1-167            </span></span>
-<span><span class="co">#&gt;  [97] curl_6.2.1               cachem_1.1.0             stringr_1.5.1           </span></span>
-<span><span class="co">#&gt; [100] parallel_4.5.0           restfulr_0.0.15          desc_1.4.3              </span></span>
-<span><span class="co">#&gt; [103] pillar_1.10.1            grid_4.5.0               vctrs_0.6.5             </span></span>
-<span><span class="co">#&gt; [106] dbplyr_2.5.0             evaluate_1.0.3           cli_3.6.4               </span></span>
-<span><span class="co">#&gt; [109] locfit_1.5-9.12          compiler_4.5.0           Rsamtools_2.23.1        </span></span>
-<span><span class="co">#&gt; [112] rlang_1.1.5              crayon_1.5.3             labeling_0.4.3          </span></span>
-<span><span class="co">#&gt; [115] plyr_1.8.9               fs_1.6.5                 stringi_1.8.4           </span></span>
-<span><span class="co">#&gt; [118] BiocParallel_1.41.2      txdbmaker_1.3.1          munsell_0.5.1           </span></span>
-<span><span class="co">#&gt; [121] Biostrings_2.75.4        lazyeval_0.2.2           GOSemSim_2.33.0         </span></span>
-<span><span class="co">#&gt; [124] Matrix_1.7-2             hms_1.1.3                patchwork_1.3.0         </span></span>
-<span><span class="co">#&gt; [127] bit64_4.6.0-1            KEGGREST_1.47.0          igraph_2.1.4            </span></span>
-<span><span class="co">#&gt; [130] memoise_2.0.1            bslib_0.9.0              ggtree_3.15.0           </span></span>
-<span><span class="co">#&gt; [133] fastmatch_1.1-6          bit_4.6.0                ape_5.8-1               </span></span>
-<span><span class="co">#&gt; [136] gson_0.1.0</span></span></code></pre></div>
+<span><span class="co">#&gt;   [1] RColorBrewer_1.1-3       jsonlite_2.0.0           magrittr_2.0.3          </span></span>
+<span><span class="co">#&gt;   [4] ggtangle_0.0.6           farver_2.1.2             rmarkdown_2.29          </span></span>
+<span><span class="co">#&gt;   [7] BiocIO_1.19.0            fs_1.6.6                 ragg_1.4.0              </span></span>
+<span><span class="co">#&gt;  [10] vctrs_0.6.5              Rsamtools_2.25.0         memoise_2.0.1           </span></span>
+<span><span class="co">#&gt;  [13] RCurl_1.98-1.17          ggtree_3.17.0            progress_1.2.3          </span></span>
+<span><span class="co">#&gt;  [16] htmltools_0.5.8.1        S4Arrays_1.9.0           curl_6.2.2              </span></span>
+<span><span class="co">#&gt;  [19] SparseArray_1.9.0        gridGraphics_0.5-1       sass_0.4.10             </span></span>
+<span><span class="co">#&gt;  [22] bslib_0.9.0              htmlwidgets_1.6.4        desc_1.4.3              </span></span>
+<span><span class="co">#&gt;  [25] httr2_1.1.2              plyr_1.8.9               cachem_1.1.0            </span></span>
+<span><span class="co">#&gt;  [28] GenomicAlignments_1.45.0 igraph_2.1.4             lifecycle_1.0.4         </span></span>
+<span><span class="co">#&gt;  [31] pkgconfig_2.0.3          Matrix_1.7-3             R6_2.6.1                </span></span>
+<span><span class="co">#&gt;  [34] fastmap_1.2.0            gson_0.1.0               digest_0.6.37           </span></span>
+<span><span class="co">#&gt;  [37] aplot_0.2.5              enrichplot_1.29.1        colorspace_2.1-1        </span></span>
+<span><span class="co">#&gt;  [40] patchwork_1.3.0          goseq_1.61.0             crosstalk_1.2.1         </span></span>
+<span><span class="co">#&gt;  [43] textshaping_1.0.1        RSQLite_2.3.9            labeling_0.4.3          </span></span>
+<span><span class="co">#&gt;  [46] filelock_1.0.3           mgcv_1.9-3               httr_1.4.7              </span></span>
+<span><span class="co">#&gt;  [49] polyclip_1.10-7          abind_1.4-8              compiler_4.5.0          </span></span>
+<span><span class="co">#&gt;  [52] bit64_4.6.0-1            withr_3.0.2              BiocParallel_1.43.0     </span></span>
+<span><span class="co">#&gt;  [55] DBI_1.2.3                BiasedUrn_2.0.12         ggforce_0.4.2           </span></span>
+<span><span class="co">#&gt;  [58] R.utils_2.13.0           biomaRt_2.65.0           MASS_7.3-65             </span></span>
+<span><span class="co">#&gt;  [61] geneLenDataBase_1.45.0   rappdirs_0.3.3           DelayedArray_0.35.1     </span></span>
+<span><span class="co">#&gt;  [64] rjson_0.2.23             tools_4.5.0              ape_5.8-1               </span></span>
+<span><span class="co">#&gt;  [67] R.oo_1.27.0              glue_1.8.0               restfulr_0.0.15         </span></span>
+<span><span class="co">#&gt;  [70] nlme_3.1-168             GOSemSim_2.35.0          grid_4.5.0              </span></span>
+<span><span class="co">#&gt;  [73] reshape2_1.4.4           fgsea_1.35.0             gtable_0.3.6            </span></span>
+<span><span class="co">#&gt;  [76] R.methodsS3_1.8.2        tidyr_1.3.1              hms_1.1.3               </span></span>
+<span><span class="co">#&gt;  [79] data.table_1.17.0        xml2_1.3.8               XVector_0.49.0          </span></span>
+<span><span class="co">#&gt;  [82] ggrepel_0.9.6            pillar_1.10.2            stringr_1.5.1           </span></span>
+<span><span class="co">#&gt;  [85] yulab.utils_0.2.0        splines_4.5.0            dplyr_1.1.4             </span></span>
+<span><span class="co">#&gt;  [88] tweenr_2.0.3             BiocFileCache_2.99.0     treeio_1.33.0           </span></span>
+<span><span class="co">#&gt;  [91] lattice_0.22-7           rtracklayer_1.69.0       bit_4.6.0               </span></span>
+<span><span class="co">#&gt;  [94] tidyselect_1.2.1         locfit_1.5-9.12          Biostrings_2.77.0       </span></span>
+<span><span class="co">#&gt;  [97] knitr_1.50               bookdown_0.43            xfun_0.52               </span></span>
+<span><span class="co">#&gt; [100] DT_0.33                  stringi_1.8.7            UCSC.utils_1.5.0        </span></span>
+<span><span class="co">#&gt; [103] lazyeval_0.2.2           ggfun_0.1.8              yaml_2.3.10             </span></span>
+<span><span class="co">#&gt; [106] evaluate_1.0.3           codetools_0.2-20         tibble_3.2.1            </span></span>
+<span><span class="co">#&gt; [109] qvalue_2.41.0            BiocManager_1.30.25      ggplotify_0.1.2         </span></span>
+<span><span class="co">#&gt; [112] cli_3.6.5                systemfonts_1.2.3        jquerylib_0.1.4         </span></span>
+<span><span class="co">#&gt; [115] Rcpp_1.0.14              dbplyr_2.5.0             png_0.1-8               </span></span>
+<span><span class="co">#&gt; [118] XML_3.99-0.18            parallel_4.5.0           pkgdown_2.1.2.9000      </span></span>
+<span><span class="co">#&gt; [121] blob_1.2.4               prettyunits_1.2.0        clusterProfiler_4.17.0  </span></span>
+<span><span class="co">#&gt; [124] DOSE_4.3.0               bitops_1.0-9             txdbmaker_1.5.0         </span></span>
+<span><span class="co">#&gt; [127] tidytree_0.4.6           scales_1.4.0             purrr_1.0.4             </span></span>
+<span><span class="co">#&gt; [130] crayon_1.5.3             rlang_1.1.6              cowplot_1.1.3           </span></span>
+<span><span class="co">#&gt; [133] fastmatch_1.1-6          KEGGREST_1.49.0</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -1265,7 +1264,7 @@ biology</span>.”</span> <em>Nature Genetics</em> 25 (1): 25–29. <a href="htt
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.9000.</p>
 </div>
 
     </footer>
