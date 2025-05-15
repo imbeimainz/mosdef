@@ -157,11 +157,17 @@ run_topGO <- function(de_container = NULL,
 
   # Check if de_type is used with vectors and if so stop the function to avoid false interpretation of the
   # results. de_type needs the L2FC to determine up/down regulation. It can't be used with vectors.
-  if ((de_type == "up" | de_type == "down") && !is.null(de_genes)) {
+  if ((de_type == "up" | de_type == "down") && is.null(res_de)) {
     stop(
       "The argument de_type can only be used if a de_container and a res_de object are provided:\n",
       "please either provide these objects or if you want to work with gene vectors set de_type to: 'up_and_down'"
     )
+  }
+
+  ## if all objects are provided, warn that it will go the de_container + res_de way
+  if (!is.null(de_container) & !is.null(res_de) &
+      !is.null(de_genes) & !is.null(bg_genes)) {
+    warning("You are providing all objects simultaneously - `run_topGO()` will still prioritize the `de_container` and `res_de` objects to extract autonomously `de_genes` and `bg_genes`. If this is intended, you can safely ignore this message.")
   }
 
   annot_to_map_to <- get(mapping)
@@ -453,11 +459,17 @@ run_goseq <- function(de_container = NULL,
 
   # Check if de_type is used with vectors and if so stop the function to avoid false interpretaion of the
   # results. de_type needs the L2FC to determine up/down regulation. It can't be used with vectors.
-    if ((de_type == "up" | de_type == "down") && !is.null(de_genes)) {
+  if ((de_type == "up" | de_type == "down") && is.null(res_de)) {
     stop(
       "The argument de_type can only be used if a de_container and a res_de object are provided:\n",
       "please either provide these objects or if you want to work with gene vectors set de_type to: 'up_and_down'"
     )
+  }
+
+  ## if all objects are provided, warn that it will go the de_container + res_de way
+  if (!is.null(de_container) & !is.null(res_de) &
+      !is.null(de_genes) & !is.null(bg_genes)) {
+    warning("You are providing all objects simultaneously - `run_goseq()` will still prioritize the `de_container` and `res_de` objects to extract autonomously `de_genes` and `bg_genes`. If this is intended, you can safely ignore this message.")
   }
 
   if (!is.null(res_de) && !is.null(de_container)) {
@@ -724,11 +736,17 @@ run_cluPro <- function(de_container = NULL,
 
   # Check if de_type is used with vectors and if so stop the function to avoid false interpretaion of the
   # results. de_type needs the L2FC to determine up/down regulation. It can't be used with vectors.
-  if ((de_type == "up" | de_type == "down") && !is.null(de_genes)) {
+  if ((de_type == "up" | de_type == "down") && is.null(res_de)) {
     stop(
       "The argument de_type can only be used if a de_container and a res_de object are provided:\n",
       "please either provide these objects or if you want to work with gene vectors set de_type to: 'up_and_down'"
     )
+  }
+
+  ## if all objects are provided, warn that it will go the de_container + res_de way
+  if (!is.null(de_container) & !is.null(res_de) &
+      !is.null(de_genes) & !is.null(bg_genes)) {
+    warning("You are providing all objects simultaneously - `run_cluPro()` will still prioritize the `de_container` and `res_de` objects to extract autonomously `de_genes` and `bg_genes`. If this is intended, you can safely ignore this message.")
   }
 
   annot_to_map_to <- get(mapping)
