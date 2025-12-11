@@ -71,6 +71,3 @@ pair_corr <- function(df, log = TRUE, method = "pearson", use_subset = TRUE) {
         xlim = c(rangeMin, rangeMax),
         ylim = c(rangeMin, rangeMax))
 }
-
-
-## couple more TODO

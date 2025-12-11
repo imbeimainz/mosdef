@@ -39,3 +39,14 @@ deresult_to_df <- function(res_de, FDR = NULL) {
   }
   res
 }
+
+.deresult_to_df.DESeq <- function() {
+
+}
+
+.deresult_to_df.edgeR <- function() {
+
+}
+
+
+

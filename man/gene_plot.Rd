@@ -15,7 +15,8 @@ gene_plot(
   labels_display = TRUE,
   labels_repel = TRUE,
   plot_type = "auto",
-  return_data = FALSE
+  return_data = FALSE,
+  color_by = NULL
 )
 }
 \arguments{
@@ -58,6 +59,8 @@ samples in the smallest group defined via \code{intgroup}}
 \item{return_data}{Logical, whether the function should just return the
 data.frame of expression values and covariates for custom plotting. Defaults
 to FALSE.}
+
+\item{color_by}{TODO - if we keep this in for the final version?}
 }
 \value{
 A \code{ggplot} object
