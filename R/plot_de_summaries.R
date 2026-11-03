@@ -202,7 +202,7 @@ plot_ma <- function(res_de,
 #' @importFrom utils head
 #' @importFrom AnnotationDbi mapIds
 #' @importFrom ggplot2 ggplot aes geom_vline geom_hline geom_point
-#' theme_classic scale_color_manual coord_cartesian scale_x_continuous
+#'   theme_classic scale_color_manual coord_cartesian scale_x_continuous
 #' @importFrom ggrepel geom_label_repel geom_text_repel
 #' @importFrom rlang .data
 #'
@@ -342,11 +342,11 @@ de_volcano <- function(res_de,
 #' @importFrom utils head
 #' @importFrom AnnotationDbi mapIds
 #' @importFrom ggplot2 ggplot aes geom_vline geom_hline geom_point
-#' theme_classic scale_color_manual coord_cartesian scale_x_continuous
+#'   theme_classic scale_color_manual coord_cartesian scale_x_continuous
 #' @importFrom ggrepel geom_label_repel geom_text_repel
 #' @importFrom rlang .data
 #' @importFrom topGO runTest GenTable score sigGenes genesInTerm showSigOfNodes
-#' annFUN annFUN.org
+#'   annFUN annFUN.org
 #'
 #' @examples
 #'

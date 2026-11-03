@@ -55,7 +55,7 @@
 #' @importFrom methods is new
 #' @importFrom AnnotationDbi mapIds Term
 #' @importFrom topGO runTest GenTable score sigGenes genesInTerm showSigOfNodes
-#' annFUN annFUN.org
+#'   annFUN annFUN.org
 #' @importFrom utils write.table
 #'
 #' @return A table containing the computed GO Terms and related enrichment scores
