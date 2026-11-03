@@ -109,8 +109,8 @@ head(mygo)
 \seealso{
 \code{\link[goseq:goseq]{goseq::goseq()}} for the underlying method
 
-Other Enrichment functions: 
-\code{\link{run_cluPro}()},
-\code{\link{run_topGO}()}
+Other Enrichment functions:
+\code{\link[=run_cluPro]{run_cluPro()}},
+\code{\link[=run_topGO]{run_topGO()}}
 }
 \concept{Enrichment functions}

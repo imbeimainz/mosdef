@@ -123,11 +123,11 @@ topgoDE_macrophage <- run_topGO(
 )
 }
 \seealso{
-\code{\link[topGO:topGOdata-class]{topGO::topGOdata-class()}} and \code{\link[topGO:getSigGroups]{topGO::runTest()}} for the
+\code{\link[topGO:topGOdata-class]{topGO::topGOdata-class()}} and \code{\link[topGO:runTest]{topGO::runTest()}} for the
 class objects and underlying methods
 
-Other Enrichment functions: 
-\code{\link{run_cluPro}()},
-\code{\link{run_goseq}()}
+Other Enrichment functions:
+\code{\link[=run_cluPro]{run_cluPro()}},
+\code{\link[=run_goseq]{run_goseq()}}
 }
 \concept{Enrichment functions}

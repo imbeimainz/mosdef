@@ -21,7 +21,7 @@ running your data through the \code{DESeq2} framework.}
 package which should be available in Bioconductor}
 
 \item{id_type}{Character, the ID type of the genes as in the row names of
-the \code{de_container}, to be used in the call to \code{\link[AnnotationDbi:AnnotationDb-class]{AnnotationDbi::mapIds()}}}
+the \code{de_container}, to be used in the call to \code{\link[AnnotationDbi:mapIds]{AnnotationDbi::mapIds()}}}
 
 \item{key_for_genenames}{Character, corresponding to the column name for the
 key in the orgDb package containing the official gene name (often called

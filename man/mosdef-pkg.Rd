@@ -30,6 +30,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Federico Marini \email{marinif@uni-mainz.de} (\href{https://orcid.org/0000-0003-3252-7758}{ORCID})
   \item Leon Dammer \email{lc.dammer@gmail.com} (\href{https://orcid.org/0009-0008-4132-7639}{ORCID})
 }
 
